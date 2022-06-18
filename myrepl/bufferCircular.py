@@ -27,6 +27,7 @@ class Buffer():
         self.size = size
         # the code for error
         self.null = null
+        # number of boucle of the ticks
         self.ticks_boucle = saveSensor.ticks_boucle
         # the byte array for data
         #self._data = null*(size*dataSize)   # each measure is stored in 2 bytes
@@ -55,7 +56,7 @@ class Buffer():
             self.ticks_boucle = saveSensor.ticks_boucle
 
     def getIndex(self, index):
-        # get all the data
+        # get all the data of a index (in accordance with the present data (index 0)) to the present data
         diffBoucle = saveSensor.ticks_boucle - self.ticks_boucle
         time_ns = saveSensor.time_ns - saveSensor.ticks_max * diffBoucle
         diff = self.dataIndex - index - 1
@@ -82,9 +83,11 @@ class Buffer():
             self.append(self.null, time - 1)
 
     def setTime(self, time):
+        # change the time
         self.time = time
 
     def clear(self):
+        # clear of the data (for the tampon)
         self.realIndex = 0
         self.dataIndex = 0
         self._data = bytearray()
@@ -131,6 +134,7 @@ class BufferCircular(Buffer):
         return text
 
     def array2str(array, separator = '\n'):
+        # change array to string
         return separator.join(array) + separator
 
     def getData(self, beforeIndex, i):
@@ -148,6 +152,7 @@ class BufferCircular(Buffer):
         return l
 
     def reverseBytearray(self, array):
+        # reverse the data of a sensor in a bytearray
         l = len(array)
         tempo = bytearray()
         for i in range(l, 0, -self.dataSize):
@@ -239,6 +244,7 @@ class Sensor():
                     tempo['times'] += next
 
     def time2write(self, time):
+        # is it time to write the data in the flash
         return self.dic[self.whenSave]['times'] <= time
 
     def wait(self):
@@ -246,14 +252,17 @@ class Sensor():
         return self.waiting
 
     def getIndex(self, time, index):
+        # get all data to a index
         tempo = self.dic[time]['buffer']
         return tempo.getIndex(index)
 
     def getTimeBuffer(self, time):
+        # current time of the index 0  of the buffer
         tempo = self.dic[time]['buffer']
         return tempo.time + saveSensor.time_ns
 
     def sum(self, byteArray, nmbByte):
+        # sum the data sensor in a bytearray
         s = 0
         for i in range(0, len(byteArray), nmbByte):
             y = i+nmbByte
@@ -265,6 +274,9 @@ class Sensor():
         return s
 
     def tampon2log(self):
+        # when we finish with tge tampon,
+        # we have to transfert all data from the tampon
+        # to the log and do the mean for the different time
         self.tamponArray.setTime(-1)
         lenArray = 30
 
@@ -303,9 +315,11 @@ class i2cSensor(Sensor):
         super().save(time, self.readI2C)
 
     def readI2C(self, error):
+        # read I2C sensor
         return self.function(self.i2c.readfrom(self.addr, self.byteReceive), error)
 
     def writeI2C(self):
+        # write I2C sensor
         self.i2c.writeto(self.addr, self.codeSend)
 
 
@@ -327,6 +341,7 @@ class AnalogSensor(Sensor):
         super().save(time, self.readAnalog)
 
     def readAnalog(self, error):
+        # read analog sensor
         Pin(0, mode=Pin.OUT).value(self.pin['p1'])
         Pin(2, mode=Pin.OUT).value(self.pin['p2'])
         Pin(15, mode=Pin.OUT).value(self.pin['p3'])
@@ -344,4 +359,5 @@ class DigitalSensor(Sensor):
         super().save(time, self.readDigital)
 
     def readDigital(self, error):
+        # read digital sensor
         return self.function(self.pin())

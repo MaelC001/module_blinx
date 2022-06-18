@@ -1,3 +1,5 @@
+#https://github.com/rdehuyss/micropython-ota-updater
+
 import usocket, os, gc
 class Response:
 
