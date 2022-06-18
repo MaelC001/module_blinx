@@ -1,0 +1,1678 @@
+{
+    "i2c": [
+        {
+            "name": "Three Axis Acceleration",
+            "categorie": "environnement",
+            "sensor": "ADXL345",
+            "url": "https://wiki.keyestudio.com/Ks0012_keyestudio_ADXL345_Three_Axis_Acceleration_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/fanday/adxl345_micropython",
+            "type": "in"
+        },
+        {
+            "name": "I2C 8x8 LED Matrix",
+            "categorie": "display",
+            "sensor": "HT16K33",
+            "url": "https://wiki.keyestudio.com/Ks0064_keyestudio_I2C_8x8_LED_Matrix_HT16K33",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/JanBednarik/micropython-matrix8x8",
+            "type": "ou"
+        },
+        {
+            "name": "16-channel 12-bit PWM/Servo Driver",
+            "categorie": "Motor",
+            "sensor": "motor_16_12",
+            "url": "https://wiki.keyestudio.com/Ks0065_keyestudio_16-channel_12-bit_PWM/Servo_Driver_-_I2C_Interface",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/mcauser/deshipu-micropython-pca9685",
+            "type": "ou"
+        },
+        {
+            "name": "Gyroscope and Accelerometer module",
+            "categorie": "environnement",
+            "sensor": "MPU6050",
+            "url": "https://wiki.keyestudio.com/Ks0170_keyestudio_MPU6050_Gyroscope_and_Accelerometer_module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/adamjezek98/MPU6050-ESP8266-MicroPython",
+            "type": "in"
+        },
+        {
+            "name": "Attitude Sensor",
+            "categorie": "environnement",
+            "sensor": "APDS9930",
+            "url": "https://wiki.keyestudio.com/Ks0267_keyestudio_APDS-9930_Attitude_Sensor_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/rlangoy/uPy_APDS9960",
+            "type": "in"
+        },
+        {
+            "name": "motion detection",
+            "categorie": "motion",
+            "sensor": "APDS9960",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/GuyCarver/MicroPython/blob/master/lib/APDS9960.py",
+            "type": "in"
+        },
+        {
+            "name": "OLED Display OLED",
+            "categorie": "Display",
+            "sensor": "SSD1306",
+            "url": "https://wiki.keyestudio.com/Ks0271_keyestudio_OLED_Display_OLED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "type": "ou"
+        },
+        {
+            "name": "Digital Light Intensity",
+            "categorie": "lumiere",
+            "sensor": "BH1750FVI",
+            "url": "https://wiki.keyestudio.com/Ks0278_keyestudio_BH1750FVI_Digital_Light_Intensity_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/catdog2/mpy_bh1750fvi_esp8266",
+            "type": "in"
+        },
+        {
+            "name": "temperature and air pressure sensor",
+            "categorie": "Air",
+            "sensor": "BMP280",
+            "url": "https://wiki.keyestudio.com/KS0405_Keyestudio_BMP280_Module_(Black_and_Eco-friendly)",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/dafvid/micropython-bmp280",
+            "type": "in"
+        },
+        {
+            "name": "Carbon Dioxide Air Quality",
+            "categorie": "Air",
+            "sensor": "CCS811",
+            "url": "https://wiki.keyestudio.com/KS0457_keyestudio_CCS811_Carbon_Dioxide_Air_Quality_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/Notthemarsian/CCS811",
+            "type": "in"
+        },
+        {
+            "name": "Digital Barometric Pressure Sensor",
+            "categorie": "Air",
+            "sensor": "BMP180",
+            "url": "https://wiki.keyestudio.com/Ks0054_keyestudio_BMP180_Digital_Barometric_Pressure_Sensor_Module_for_Arduino",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/micropython-IMU/micropython-bmp180",
+            "type": "in"
+        },
+        {
+            "name": "16-key Touch Sensor",
+            "categorie": "botton",
+            "sensor": "TTP229L",
+            "url": "https://wiki.keyestudio.com/Ks0260_keyestudio_TTP229L_16-key_Touch_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/alankrantas/micropython-TTP229-BSF",
+            "type": "in"
+        },
+        {
+            "name": "Non-contact Infrared Temperature Sensor",
+            "categorie": "air",
+            "sensor": "MLX90614",
+            "url": "https://wiki.keyestudio.com/Ks0276_keyestudio_MLX90614_Non-contact_Infrared_Temperature_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/mcauser/micropython-mlx90614, https://github.com/GuyCarver/MicroPython/blob/master/esp8266/mlx90614.py",
+            "type": "in"
+        },
+        {
+            "name": "Color Sensor",
+            "categorie": "Lumiere",
+            "sensor": "TCS34725",
+            "url": "https://wiki.keyestudio.com/KS0407_Keyestudio_TCS34725_Color_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://gitlab.com/robhamerling/micropython-tcs34725",
+            "type": "in"
+        },
+        {
+            "name": "Heart Rate Sensor",
+            "categorie": "",
+            "sensor": "MAX30102",
+            "url": "https://wiki.keyestudio.com/KS0462_Keyestudio_MAX30102_Heart_Rate_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/n-elia/MAX30102-MicroPython-driver",
+            "type": "in"
+        },
+        {
+            "name": "gps L76-L",
+            "categorie": "gps",
+            "sensor": "L76_L",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/tuupola/micropython-gnssl76l",
+            "type": "in"
+        },
+        {
+            "name": "joystick",
+            "categorie": "botton",
+            "sensor": "MEGA328P",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kfricke/micropython-nunchuck",
+            "type": "in"
+        },
+        {
+            "name": "joystick",
+            "categorie": "botton",
+            "sensor": "MEGA8A",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kfricke/micropython-nunchuck",
+            "type": "in"
+        },
+        {
+            "name": "acceleration, turn rate and the magnetic field in three axes",
+            "categorie": "environnement",
+            "sensor": "MPU9150",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/micropython-IMU/micropython-mpu9x50",
+            "type": "in"
+        },
+        {
+            "name": "acceleration, turn rate and the magnetic field in three axes",
+            "categorie": "environnement",
+            "sensor": "AK8963",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://gitlab.com/nnayo/micropython-mpu9250",
+            "type": "in"
+        },
+        {
+            "name": "acceleration, turn rate and the magnetic field in three axes",
+            "categorie": "environnement",
+            "sensor": "MPU9250",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/micropython-IMU/micropython-mpu9x50, https://gitlab.com/nnayo/micropython-mpu9250",
+            "type": "in"
+        },
+        {
+            "name": "acceleration, turn rate and the magnetic field in three axes",
+            "categorie": "environnement",
+            "sensor": "MPU6500",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/micropython-IMU/micropython-mpu9x50, https://gitlab.com/nnayo/micropython-mpu9250",
+            "type": "in"
+        },
+        {
+            "name": "diymall 9.6 oled",
+            "categorie": "display",
+            "sensor": "DIYMall_96",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/GuyCarver/MicroPython/blob/master/esp8266/oled.py",
+            "type": "ou"
+        },
+        {
+            "name": "Accelerometer",
+            "categorie": "environnement",
+            "sensor": "GY521",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/GuyCarver/MicroPython/blob/master/lib/GY521.py",
+            "type": "in"
+        },
+        {
+            "name": "Real Time Clock",
+            "categorie": "RTC",
+            "sensor": "PCF8523",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/adafruit/Adafruit_CircuitPython_PCF8523",
+            "type": "in"
+        }
+    ],
+    "Port": [
+        {
+            "name": "Joystick",
+            "categorie": "botton",
+            "sensor": "PS2_joystick",
+            "url": "https://wiki.keyestudio.com/Ks0008_keyestudio_Joystick_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "2"
+                },
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-2",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-3",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-4",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-5",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-6",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-7",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-8",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-9",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/kartun83/micropython-MQ",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "gas sensors",
+            "categorie": "Air",
+            "sensor": "MQ-135",
+            "url": "https://wiki.keyestudio.com/Ks0047_keyestudio_MQ135_Air_Quality_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/rubfi/MQ135",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "5V Stepper Motor",
+            "categorie": "Motor",
+            "sensor": "28BYJ-48, ULN2003",
+            "url": "https://wiki.keyestudio.com/Ks0140_keyestudio_5V_Stepper_Motor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/IDWizard/uln2003",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                },
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Stepper Motor",
+            "categorie": "Motor",
+            "sensor": "ULN2003",
+            "url": "https://wiki.keyestudio.com/Ks0208_keyestudio_ULN2003_Stepper_Motor_Drive",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                },
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "4"
+                }
+            ]
+        },
+        {
+            "name": "PM2.5 Shield",
+            "categorie": "Air",
+            "sensor": "GP2Y1014AU",
+            "url": "https://wiki.keyestudio.com/Ks0196_keyestudio_PM2.5_Shield",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/amigcamel/pyGP2Y",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                },
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "ECG Measurement Heart Monitor",
+            "categorie": "Heart",
+            "sensor": "AD8232",
+            "url": "https://wiki.keyestudio.com/Ks0261_keyestudio_AD8232_ECG_Measurement_Heart_Monitor_Sensor_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "2"
+                },
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Ultrasonic",
+            "categorie": "Motion",
+            "sensor": "SR01",
+            "url": "https://wiki.keyestudio.com/Ks0206_Keyestudio_SR01_Ultrasonic_Sensor, https://wiki.keyestudio.com/KS0375_keyestudio_SR01_Ultrasonic_Module_V2",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                },
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Quick Connectors Ultrasonic Module",
+            "categorie": "Motion",
+            "sensor": "CS100A",
+            "url": "https://wiki.keyestudio.com/KS0511_Keyestudio_Quick_Connectors_Ultrasonic_Module(CS100A_Chip/Black/Environment-friendly)",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                },
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Color Sensor",
+            "categorie": "Led",
+            "sensor": "TCS3200",
+            "url": "https://wiki.keyestudio.com/Ks0053_keyestudio_Color_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "3"
+                },
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Formaldehyde Benzene VOC Gas Sensor",
+            "categorie": "Air",
+            "sensor": "MS1100",
+            "url": "https://wiki.keyestudio.com/KS0451_Keyestudio_MS1100_Formaldehyde_Benzene_VOC_Gas_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "digital",
+                    "in_out": "in",
+                    "number": "1"
+                },
+                {
+                    "typePort": "analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Electromagnet Module",
+            "categorie": "magnet",
+            "sensor": "KS0320",
+            "url": "https://wiki.keyestudio.com/KS0320_Keyestudio_Electromagnet_Module_(Black_and_Environmental-friendly)",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "or",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                },
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Turbidity Sensor V1.0",
+            "categorie": "water",
+            "sensor": "4550NTU",
+            "url": "https://wiki.keyestudio.com/KS0414_Keyestudio_Turbidity_Sensor_V1.0",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "or",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                },
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Digital Buzzer",
+            "categorie": "sound",
+            "sensor": "buzzerD",
+            "url": "https://wiki.keyestudio.com/Ks0018_keyestudio_Digital_Buzzer_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Passive Buzzer",
+            "categorie": "sound",
+            "sensor": "buzzerP",
+            "url": "https://wiki.keyestudio.com/Ks0019_keyestudio_Passive_Buzzer_module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Dual Relay",
+            "categorie": "Relay",
+            "sensor": "relay2",
+            "url": "https://wiki.keyestudio.com/Ks0057_keyestudio_Dual_Relay_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "2"
+                }
+            ]
+        },
+        {
+            "name": "5V Relay",
+            "categorie": "Relay",
+            "sensor": "relay",
+            "url": "https://wiki.keyestudio.com/Ks0011_keyestudio_5V_Relay_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "4-channel Relay",
+            "categorie": "Relay",
+            "sensor": "relay4",
+            "url": "https://wiki.keyestudio.com/Ks0058_keyestudio_4-channel_Relay_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "4"
+                }
+            ]
+        },
+        {
+            "name": "L298N Motor Driver Board",
+            "categorie": "Motor",
+            "sensor": "L298N",
+            "url": "https://wiki.keyestudio.com/Ks0063_keyestudio_L298N_Motor_Driver_Board_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/GuyCarver/MicroPython/blob/master/lib/L298N.py",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Motor",
+            "categorie": "Motor",
+            "sensor": "TB6612FNG",
+            "url": "https://wiki.keyestudio.com/Ks0066_keyestudio_TB6612FNG_Motor_Driver",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "7"
+                }
+            ]
+        },
+        {
+            "name": "Reprap Stepper Motor Driver",
+            "categorie": "Motor",
+            "sensor": "A4988",
+            "url": "https://wiki.keyestudio.com/Ks0281_Keyestudio_Reprap_Stepper_Motor_Driver",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/jeffmer/micropython-upybbot",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "2"
+                }
+            ]
+        },
+        {
+            "name": "9G Servo Motor Blue 90°",
+            "categorie": "Motor",
+            "sensor": " MINI_SG90",
+            "url": "https://wiki.keyestudio.com/Ks0209_keyestudio_9G_Servo_Motor_Blue_90%C2%B0",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "3W LED",
+            "categorie": "Led",
+            "sensor": "led",
+            "url": "https://wiki.keyestudio.com/Ks0010_keyestudio_3W_LED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "RGB LED",
+            "categorie": "Led",
+            "sensor": "led3",
+            "url": "https://wiki.keyestudio.com/Ks0032_keyestudio_RGB_LED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "3"
+                }
+            ]
+        },
+        {
+            "name": "White LED",
+            "categorie": "Led",
+            "sensor": "led",
+            "url": "https://wiki.keyestudio.com/KS0016_Keyestudio_White_LED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Red LED",
+            "categorie": "Led",
+            "sensor": "led",
+            "url": "https://wiki.keyestudio.com/Ks0232_keyestudio_Red_LED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Green LED",
+            "categorie": "Led",
+            "sensor": "led",
+            "url": "https://wiki.keyestudio.com/Ks0233_keyestudio_Green_LED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Yellow LED",
+            "categorie": "Led",
+            "sensor": "led",
+            "url": "https://wiki.keyestudio.com/Ks0234_keyestudio_Yellow_LED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Blue LED",
+            "categorie": "Led",
+            "sensor": "led",
+            "url": "https://wiki.keyestudio.com/Ks0235_keyestudio_Blue_LED_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Traffic Light Module",
+            "categorie": "led",
+            "sensor": "led3",
+            "url": "https://wiki.keyestudio.com/KS0310_Keyestudio_Traffic_Light_Module_(Black_and_Eco-friendly)",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "3"
+                }
+            ]
+        },
+        {
+            "name": "RC522 RFID",
+            "categorie": "badge",
+            "sensor": "RC522_RFID",
+            "url": "https://wiki.keyestudio.com/Ks0067_keyestudio_RC522_RFID_Module_for_Arduino",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/wendlers/micropython-mfrc522",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Hall Magnetic Sensor",
+            "categorie": "magnet",
+            "sensor": "SFE_Reed_Switch",
+            "url": "https://wiki.keyestudio.com/Ks0020_keyestudio_Hall_Magnetic_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Rotary Encoder",
+            "categorie": "botton",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0013_keyestudio_Rotary_Encoder_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Reed Switch",
+            "categorie": "magnet",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0038_keyestudio_Reed_Switch_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "New Infrared IR Wireless Remote Control",
+            "categorie": "Telecommand",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0088_New_Infrared_IR_Wireless_Remote_Control_Module_Kits_for_Arduino",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "3-channel Line Tracking",
+            "categorie": "tracking",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/KS0453_Keyestudio_3-channel_Line_Tracking_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "3"
+                }
+            ]
+        },
+        {
+            "name": "AD KEY Button Module",
+            "categorie": "botton",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/KS0466_Keyestudio_AD_KEY_Button_Modu",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "Black_and_Eco-friendly)",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Knock Sensor",
+            "categorie": "motion",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0024_keyestudio_Knock_Sensor_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Digital Tilt",
+            "categorie": "environnement",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0025_keyestudio_Digital_Tilt_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Capacitive Touch",
+            "categorie": "botton",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0031_keyestudio_Capacitive_Touch_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Flame Sensor",
+            "categorie": "Air",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0036_keyestudio_Flame_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Vibration Sensor",
+            "categorie": "environnement",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0037_keyestudio_Vibration_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Infrared Obstacle Avoidance Sensor",
+            "categorie": "motion",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0051_keyestudio_Infrared_Obstacle_Avoidance_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Line Tracking Sensor",
+            "categorie": "tracking",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0050_keyestudio_Line_Tracking_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "PIR Motion Sensor",
+            "categorie": "motion",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0052_keyestudio_PIR_Motion_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Non-contact Liquid Level Sensor",
+            "categorie": "water",
+            "sensor": "XKC-Y25-T12V",
+            "url": "https://wiki.keyestudio.com/KS0346_Keyestudio_Non-contact_Liquid_Level_Sensor(Black_and_Friendly)",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Temperature and Humidity Sensor",
+            "categorie": "Air",
+            "sensor": "DHT11",
+            "url": "https://wiki.keyestudio.com/Ks0034_keyestudio_DHT11_Temperature_and_Humidity_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "https://github.com/micropython/micropython/blob/master/drivers/dht/dht.py",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Digital Push Button",
+            "categorie": "botton",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0029_keyestudio_Digital_Push_Button",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Digital",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Slide Potentiometer Module",
+            "categorie": "botton",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0279_keyestudio_Slide_Potentiometer_Module_for_Arduino",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Collision Sensor",
+            "categorie": "motion",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0021_keyestudio_Collision_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Pulse Rate Monitor",
+            "categorie": "Heart",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0015_keyestudio_Pulse_Rate_Monitor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Linear Temperature",
+            "categorie": "Air",
+            "sensor": "LM35",
+            "url": "https://wiki.keyestudio.com/Ks0022_keyestudio_LM35_Linear_Temperature_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "anlog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Photocell",
+            "categorie": "lumiere",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0028_keyestudio_Photocell_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Analog Temperature",
+            "categorie": "Air",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0033_keyestudio_Analog_Temperature_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Microphone Sound Sensor with Potentiometer",
+            "categorie": "sound",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/KS0035_Microphone_Sound_Sensor_with_Potentiometer",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Analog Gas Sensor",
+            "categorie": "Air",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Analog Alcohol Sensor",
+            "categorie": "alcohol",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0041_keyestudio_Analog_Alcohol_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Water Sensor",
+            "categorie": "water",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0048_keyestudio_Water_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Soil Humidity Sensor",
+            "categorie": "soil",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0049_keyestudio_Soil_Humidity_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Ambient Light Sensor",
+            "categorie": "lumiere",
+            "sensor": "TEMT6000",
+            "url": "https://wiki.keyestudio.com/Ks0098_keyestudio_TEMT6000_Ambient_Light_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Steam Sensor",
+            "categorie": "water",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0203_keyestudio_Steam_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Ultraviolet Sensor",
+            "categorie": "lumiere",
+            "sensor": "GUVA-S12SD 3528",
+            "url": "https://wiki.keyestudio.com/Ks0204_keyestudio_GUVA-S12SD_3528_Ultraviolet_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Analog Piezoelectric Ceramic Vibration Sensor",
+            "categorie": "motion",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0272_keyestudio_Analog_Piezoelectric_Ceramic_Vibration_Sensor",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Thin-film Pressure Sensor",
+            "categorie": "water",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0309_Keyestudio_Thin-film_Pressure_Sensor_(Black_and_Eco-friendly)",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "in",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Pulse Sensor",
+            "categorie": "Heart",
+            "sensor": "XD-58C",
+            "url": "https://wiki.keyestudio.com/Ks0171_keyestudio_XD-58C_Pulse_Sensor_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Ultraviolet Sensor",
+            "categorie": "lumiere",
+            "sensor": "GY-ML8511",
+            "url": "https://wiki.keyestudio.com/Ks0273_keyestudio_GY-ML8511_Ultraviolet_Sensor_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "Vibration Motor Module",
+            "categorie": "motor",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/KS0450_Keyestudio_Vibration_Motor_Module_(Black_and_Eco-friendly)",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "1"
+                }
+            ]
+        },
+        {
+            "name": "10mm Highlight Full-color LED RGB",
+            "categorie": "Led",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/KS0459_Keyestudio_10mm_Highlight_Full-color_LED_RGB_Module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "and",
+            "info": [
+                {
+                    "typePort": "Analog",
+                    "in_out": "ou",
+                    "number": "3"
+                }
+            ]
+        },
+        {
+            "name": "fan control",
+            "categorie": "motor",
+            "sensor": "L9110",
+            "url": "https://wiki.keyestudio.com/Ks0168_keyestudio_L9110_fan_control_module",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "",
+            "info": [
+                {
+                    "typePort": "PWM",
+                    "in_out": "",
+                    "number": ""
+                }
+            ]
+        },
+        {
+            "name": "Micro Servo",
+            "categorie": "motor",
+            "sensor": "",
+            "url": "https://wiki.keyestudio.com/Ks0194_keyestudio_Micro_Servo",
+            "image": "",
+            "url_code": "",
+            "url_code_example": "",
+            "liaison": "",
+            "info": [
+                {
+                    "typePort": "PWM",
+                    "in_out": "",
+                    "number": ""
+                }
+            ]
+        }
+    ],
+    "UART": [
+        {
+            "name": "",
+            "categorie": "GPS",
+            "sensor": "",
+            "url": "",
+            "image": "",
+            "url_code": "",
+            "url_code_example": ""
+        }
+    ],
+    "autre": [
+        {
+            "name": "awesome micropython",
+            "url": "https://awesome-micropython.com/",
+            "type": "list"
+        },
+        {
+            "name": "awesome circuitpython",
+            "url": "https://github.com/adafruit/awesome-circuitpython",
+            "type": "list"
+        },
+        {
+            "name": "radiation Geiger counter",
+            "url": "https://github.com/biemster/ESPGeiger",
+            "type": "projet"
+        },
+        {
+            "name": "BME680 Web Server",
+            "url": "https://microcontrollerslab.com/micropython-bme680-web-server-esp32-esp8266/",
+            "type": "projet"
+        },
+        {
+            "name": "Send Sensor Readings via Email",
+            "url": "https://microcontrollerslab.com/micropython-esp32-esp8266-send-sensor-readings-via-email-ifttt/",
+            "type": "projet"
+        },
+        {
+            "name": "website",
+            "url": "https://github.com/belyalov/tinyweb",
+            "type": "projet"
+        },
+        {
+            "name": "wifi manager",
+            "url": "https://github.com/tayfunulu/WiFiManager",
+            "type": "projet"
+        },
+        {
+            "name": "home assistant",
+            "url": "https://gitlab.com/aapjeisbaas/micropython-home-assistant",
+            "type": "projet"
+        },
+        {
+            "name": "tuto",
+            "url": "https://www.micropython.fr/",
+            "type": "tuto"
+        }
+    ]
+}

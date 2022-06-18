@@ -1,0 +1,134 @@
+https://github.com/GuyCarver/MicroPython/
+https://github.com/kartun83/micropython-MQ  (https://wiki.keyestudio.com/Ks0042_keyestudio_MQ-4_Gas_Sensor, https://wiki.keyestudio.com/Ks0043_keyestudio_MQ-5_Gas_Sensor, https://wiki.keyestudio.com/Ks0044_keyestudio_MQ-6_Gas_Sensor, https://wiki.keyestudio.com/Ks0045_keyestudio_MQ-7_Carbon_Monoxide_Gas_Sensor, https://wiki.keyestudio.com/Ks0046_keyestudio_MQ-8_Hydrogen_Gas_Sensor)
+
+Autre : Three Axis Acceleration (ADXL345) : I2C (https://wiki.keyestudio.com/Ks0012_keyestudio_ADXL345_Three_Axis_Acceleration_Module) (https://github.com/fanday/adxl345_micropython)
+Display : I2C 8x8 LED Matrix (HT16K33) : i2c (https://wiki.keyestudio.com/Ks0064_keyestudio_I2C_8x8_LED_Matrix_HT16K33) (https://github.com/JanBednarik/micropython-matrix8x8)
+Motor : 16-channel 12-bit PWM/Servo Driver : i2c / PWM (https://wiki.keyestudio.com/Ks0065_keyestudio_16-channel_12-bit_PWM/Servo_Driver_-_I2C_Interface) (https://github.com/mcauser/deshipu-micropython-pca9685)
+Autre : Gyroscope and Accelerometer module (MPU6050) : I2C (https://wiki.keyestudio.com/Ks0170_keyestudio_MPU6050_Gyroscope_and_Accelerometer_module) (https://github.com/adamjezek98/MPU6050-ESP8266-MicroPython)
+Autre : APDS-9930 Attitude Sensor: i2c (https://wiki.keyestudio.com/Ks0267_keyestudio_APDS-9930_Attitude_Sensor_Module) (https://github.com/rlangoy/uPy_APDS9960)
+Display : OLED Display OLED : i2c (https://wiki.keyestudio.com/Ks0271_keyestudio_OLED_Display_OLED_Module) SSD1306
+Autre : BH1750FVI Digital Light Intensity : i2c (https://wiki.keyestudio.com/Ks0278_keyestudio_BH1750FVI_Digital_Light_Intensity_Module) (https://github.com/catdog2/mpy_bh1750fvi_esp8266)
+Autre : BMP280 Module : i2c (https://wiki.keyestudio.com/KS0405_Keyestudio_BMP280_Module_(Black_and_Eco-friendly)) (https://github.com/dafvid/micropython-bmp280)
+Autre : CCS811 Carbon Dioxide Air Quality : i2c (https://wiki.keyestudio.com/KS0457_keyestudio_CCS811_Carbon_Dioxide_Air_Quality_Sensor) (https://github.com/Notthemarsian/CCS811)
+Autre : EASY Plug CCS811 CO2 Air Quality Sensor : i2c (https://wiki.keyestudio.com/KS2002_EASY_Plug_CCS811_CO2_Air_Quality_Sensor(Black_and_Eco-friendly)) (https://github.com/Ledbelly2142/CCS811, https://github.com/Notthemarsian/CCS811)
+Autre : BMP180 Digital Barometric Pressure Sensor Module : i2c (https://wiki.keyestudio.com/Ks0054_keyestudio_BMP180_Digital_Barometric_Pressure_Sensor_Module_for_Arduino) (https://github.com/micropython-IMU/micropython-bmp180, https://gitlab.com/flowolf/micropython-bmp180)
+Autre : TTP229L 16-key Touch Sensor : i2c (https://wiki.keyestudio.com/Ks0260_keyestudio_TTP229L_16-key_Touch_Sensor) (https://github.com/alankrantas/micropython-TTP229-BSF)
+temp : MLX90614 Non-contact Infrared Temperature Sensor : i2c (https://wiki.keyestudio.com/Ks0276_keyestudio_MLX90614_Non-contact_Infrared_Temperature_Sensor) (https://github.com/mcauser/micropython-mlx90614)
+Autre : PCF8591 AD Adapter : i2c (https://wiki.keyestudio.com/KS0508_Keyestudio_PCF8591_AD_Adapter_Module) (https://gitlab.com/cediddi/micropython-pcf8591)
+Led : TCS34725 Color Sensor : i2c (https://wiki.keyestudio.com/KS0407_Keyestudio_TCS34725_Color_Sensor) (https://gitlab.com/robhamerling/micropython-tcs34725)
+Autre : MAX30102 Heart Rate Sensor : i2c (https://wiki.keyestudio.com/KS0462_Keyestudio_MAX30102_Heart_Rate_Sensor) (https://github.com/n-elia/MAX30102-MicroPython-driver)
+Autre : PAJ7620 Gesture Recognition Sensor : i2c (https://wiki.keyestudio.com/KS0458_Keyestudio_PAJ7620_Gesture_Recognition_Sensor_Module)
+Autre : TMD27713 ALS Infrared LED Optical Proximity Detection : i2c (https://wiki.keyestudio.com/Ks0269_keyestudio_TMD27713_ALS_Infrared_LED_Optical_Proximity_Detection_Module)
+Dislpay : 1602 I2C : i2c (https://wiki.keyestudio.com/Ks0061_keyestudio_1602_I2C_Module)
+Dislpay : I2C LCD 2004 : i2c (https://wiki.keyestudio.com/Ks0062_keyestudio_I2C_LCD2004_Module)
+Autre : MMA8452Q Module Triaxial Digital Acceleration Tilt Sensor : i2c (https://wiki.keyestudio.com/Ks0270_keyestudio_MMA8452Q_Module_Triaxial_Digital_Acceleration_Tilt_Sensor)
+
+Autre : S Joystick : Analog x2, Digital in x1 (https://wiki.keyestudio.com/Ks0008_keyestudio_Joystick_Module)
+Motor : S 5V Stepper Motor : digital ou, analog in (https://wiki.keyestudio.com/Ks0140_keyestudio_5V_Stepper_Motor)
+Autre : PM2.5 Shield : analog ou, digital in (https://wiki.keyestudio.com/Ks0196_keyestudio_PM2.5_Shield)
+Motor : Stepper Motor (ULN2003) : digital in, analog in x4 (https://wiki.keyestudio.com/Ks0208_keyestudio_ULN2003_Stepper_Motor_Driver)
+Autre : AD8232 ECG Measurement Heart Monitor : digital ou x2, analog ou (https://wiki.keyestudio.com/Ks0261_keyestudio_AD8232_ECG_Measurement_Heart_Monitor_Sensor_Module)
+Autre : SR01 Ultrasonic : digital in and ou (https://wiki.keyestudio.com/KS0375_keyestudio_SR01_Ultrasonic_Module_V2))
+Autre : SR01 Ultrasonic Sensor : digital in and ou (https://wiki.keyestudio.com/Ks0206_Keyestudio_SR01_Ultrasonic_Sensor))
+Autre : Quick Connectors Ultrasonic Module(CS100A Chip/Black/Environment-friendly) : digital in and ou (https://wiki.keyestudio.com/KS0511_Keyestudio_Quick_Connectors_Ultrasonic_Module(CS100A_Chip/Black/Environment-friendly)))
+Led : Color Sensor : digital ou x3, digital in x1 (https://wiki.keyestudio.com/Ks0053_keyestudio_Color_Sensor)
+Autre : MS1100 Formaldehyde Benzene VOC Gas Sensor : digital in, analog in (https://wiki.keyestudio.com/KS0451_Keyestudio_MS1100_Formaldehyde_Benzene_VOC_Gas_Sensor)
+
+Autre : Electromagnet Module : digital or analog ou (https://wiki.keyestudio.com/KS0320_Keyestudio_Electromagnet_Module_(Black_and_Environmental-friendly))
+Autre : Turbidity Sensor V1.0 : digital or analog ou (https://wiki.keyestudio.com/KS0414_Keyestudio_Turbidity_Sensor_V1.0)
+
+
+Led : 3W LED : Digital ou (https://wiki.keyestudio.com/Ks0010_keyestudio_3W_LED_Module)
+Relay : 5V Relay : Digital ou (https://wiki.keyestudio.com/Ks0011_keyestudio_5V_Relay_Module)
+Led : White LED : Digital ou (https://wiki.keyestudio.com/KS0016_Keyestudio_White_LED_Module)
+Buzzer : Digital Buzzer : Digital ou (https://wiki.keyestudio.com/Ks0018_keyestudio_Digital_Buzzer_Module)
+Buzzer : Passive Buzzer : digital ou (https://wiki.keyestudio.com/Ks0019_keyestudio_Passive_Buzzer_module)
+Led : S RGB LED : digital ou x3 (https://wiki.keyestudio.com/Ks0032_keyestudio_RGB_LED_Module)
+Relay : S Dual Relay : digital ou x2 (https://wiki.keyestudio.com/Ks0057_keyestudio_Dual_Relay_Module)
+Relay : S 4-channel Relay : digital ou x4 (https://wiki.keyestudio.com/Ks0058_keyestudio_4-channel_Relay_Module)
+Relay : S 8-channel 5V Relay : digital ou x8 (https://wiki.keyestudio.com/Ks0059_keyestudio_8-channel_5V_Relay_Module)
+Motor : S L298N Motor Driver Board : digital ou (https://wiki.keyestudio.com/Ks0063_keyestudio_L298N_Motor_Driver_Board_Module) (https://github.com/GuyCarver/MicroPython/blob/master/lib/L298N.py)
+Motor : S Motor (TB6612FNG) : digital ou x7 (https://wiki.keyestudio.com/Ks0066_keyestudio_TB6612FNG_Motor_Driver)
+Autre : S RC522 RFID : digital ou (https://wiki.keyestudio.com/Ks0067_keyestudio_RC522_RFID_Module_for_Arduino) (https://github.com/wendlers/micropython-mfrc522)
+Motor : 9G Servo Motor Blue 90° : digital ou (https://wiki.keyestudio.com/Ks0209_keyestudio_9G_Servo_Motor_Blue_90%C2%B0)
+Led : Red LED : digital ou (https://wiki.keyestudio.com/Ks0232_keyestudio_Red_LED_Module)
+Led : Green LED : digital ou (https://wiki.keyestudio.com/Ks0233_keyestudio_Green_LED_Module)
+Led : Yellow LED : digital ou (https://wiki.keyestudio.com/Ks0234_keyestudio_Yellow_LED_Module)
+Led : Blue LED : digital ou (https://wiki.keyestudio.com/Ks0235_keyestudio_Blue_LED_Module)
+Motor : Reprap Stepper Motor Driver : digital ou x2 (https://wiki.keyestudio.com/Ks0281_Keyestudio_Reprap_Stepper_Motor_Driver)
+led : Traffic Light Module : digital ou x3 (https://wiki.keyestudio.com/KS0310_Keyestudio_Traffic_Light_Module_(Black_and_Eco-friendly))
+Autre : 3-Channel IRF540NS Large Current MOS : digital ou x3 (https://wiki.keyestudio.com/KS0449_keyestudio_3-Channel_IRF540NS_Large_Current_MOS_Module)
+Autre : Hall Magnetic Sensor : digital ou (https://wiki.keyestudio.com/Ks0020_keyestudio_Hall_Magnetic_Sensor)
+
+Autre : Rotary Encoder (+ parametre) : Digital in (https://wiki.keyestudio.com/Ks0013_keyestudio_Rotary_Encoder_Module)
+Autre : Reed Switch (+ led) : digital in (https://wiki.keyestudio.com/Ks0038_keyestudio_Reed_Switch_Module)
+Telecommand : New Infrared IR Wireless Remote Control : digital in (https://wiki.keyestudio.com/Ks0088_New_Infrared_IR_Wireless_Remote_Control_Module_Kits_for_Arduino)
+Autre : 3-channel Line Tracking : digital in x3 (https://wiki.keyestudio.com/KS0453_Keyestudio_3-channel_Line_Tracking_Module)
+Autre : AD KEY Button Module : digital in (https://wiki.keyestudio.com/KS0466_Keyestudio_AD_KEY_Button_Module(Black_and_Eco-friendly))
+Autre : Knock Sensor : digital in (https://wiki.keyestudio.com/Ks0024_keyestudio_Knock_Sensor_Module)
+Autre : Digital Tilt : digital in (https://wiki.keyestudio.com/Ks0025_keyestudio_Digital_Tilt_Sensor)
+Autre : Capacitive Touch : digital in (https://wiki.keyestudio.com/Ks0031_keyestudio_Capacitive_Touch_Sensor)
+Autre : Flame Sensor : digital in (https://wiki.keyestudio.com/Ks0036_keyestudio_Flame_Sensor)
+Autre : Vibration Sensor : digital in (https://wiki.keyestudio.com/Ks0037_keyestudio_Vibration_Sensor)
+Autre : Infrared Obstacle Avoidance Sensor : digital in (https://wiki.keyestudio.com/Ks0051_keyestudio_Infrared_Obstacle_Avoidance_Sensor)
+Autre : Line Tracking Sensor : digital in (https://wiki.keyestudio.com/Ks0050_keyestudio_Line_Tracking_Sensor)
+Autre : PIR Motion Sensor : digital in (https://wiki.keyestudio.com/Ks0052_keyestudio_PIR_Motion_Sensor)
+Autre : Non-contact Liquid Level Sensor (XKC-Y25-T12V) : digital in (https://wiki.keyestudio.com/KS0346_Keyestudio_Non-contact_Liquid_Level_Sensor(Black_and_Friendly))
+Autre : DHT11 Temperature and Humidity Sensor : digital in (https://wiki.keyestudio.com/Ks0034_keyestudio_DHT11_Temperature_and_Humidity_Sensor) (https://github.com/micropython/micropython/blob/master/drivers/dht/dht.py)
+Autre : Digital Push Button : digital in (https://wiki.keyestudio.com/Ks0029_keyestudio_Digital_Push_Button)
+
+Autre : Load Cell Pressure Sensor(HX711) : analog in x2 (https://wiki.keyestudio.com/Ks0167_keyestudio_HX711_Load_Cell_Pressure_Sensor_Module) (https://github.com/SergeyPiskunov/micropython-hx711)
+Autre : Slide Potentiometer Module : analog in (https://wiki.keyestudio.com/Ks0279_keyestudio_Slide_Potentiometer_Module_for_Arduino)
+Autre : Collision Sensor : analog in (https://wiki.keyestudio.com/Ks0021_keyestudio_Collision_Sensor)
+Autre : Pulse Rate Monitor : analog in (https://wiki.keyestudio.com/Ks0015_keyestudio_Pulse_Rate_Monitor)
+temp : LM35 Linear Temperature : anlog in (https://wiki.keyestudio.com/Ks0022_keyestudio_LM35_Linear_Temperature_Sensor)
+lumiere : Photocell : analog in (https://wiki.keyestudio.com/Ks0028_keyestudio_Photocell_Sensor)
+temp : Analog Temperature : analog in (https://wiki.keyestudio.com/Ks0033_keyestudio_Analog_Temperature_Sensor)
+Autre : Microphone Sound Sensor with Potentiometer : analog in (https://wiki.keyestudio.com/KS0035_Microphone_Sound_Sensor_with_Potentiometer)
+Autre : Analog Gas Sensor : analog in (https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor)
+Autre : Analog Alcohol Sensor : analog in (https://wiki.keyestudio.com/Ks0041_keyestudio_Analog_Alcohol_Sensor)
+Autre : MQ135 Air Quality Sensor : analog in (https://wiki.keyestudio.com/Ks0047_keyestudio_MQ135_Air_Quality_Sensor) (https://github.com/rubfi/MQ135)
+Autre : Water Sensor : analog in (https://wiki.keyestudio.com/Ks0048_keyestudio_Water_Sensor)
+Autre : Soil Humidity Sensor : analog in (https://wiki.keyestudio.com/Ks0049_keyestudio_Soil_Humidity_Sensor)
+Autre : TEMT6000 Ambient Light Sensor : analog in (https://wiki.keyestudio.com/Ks0098_keyestudio_TEMT6000_Ambient_Light_Sensor)
+Autre : ACS712-30A Current Sensor : analog in (https://wiki.keyestudio.com/Ks0185_keyestudio_ACS712-30A_Current_Sensor)
+Autre : ACS712-20A Current Sensor : analog in (https://wiki.keyestudio.com/Ks0186_keyestudio_ACS712-20A_Current_Sensor)
+Autre : ACS712-5A Current Sensor : analog in (https://wiki.keyestudio.com/Ks0187_keyestudio_ACS712-5A_Current_Sensor)
+Autre : Steam Sensor : analog in (https://wiki.keyestudio.com/Ks0203_keyestudio_Steam_Sensor)
+Autre : GUVA-S12SD 3528 Ultraviolet Sensor : analog in (https://wiki.keyestudio.com/Ks0204_keyestudio_GUVA-S12SD_3528_Ultraviolet_Sensor)
+Autre : Analog Piezoelectric Ceramic Vibration Sensor : analog in (https://wiki.keyestudio.com/Ks0272_keyestudio_Analog_Piezoelectric_Ceramic_Vibration_Sensor)
+Autre : Current Sensor Current Detection Sensor : analog in (https://wiki.keyestudio.com/Ks0274_keyestudio_Current_Sensor_Current_Detection_Sensor)
+Autre : Voltage Detection Module Voltage Sensor : analog in (https://wiki.keyestudio.com/Ks0275_keyestudio_Voltage_Detection_Module_Voltage_Sensor)
+Autre : Thin-film Pressure Sensor : analog in (https://wiki.keyestudio.com/Ks0309_Keyestudio_Thin-film_Pressure_Sensor_(Black_and_Eco-friendly))
+
+Autre : XD-58C Pulse Sensor : analog ou (https://wiki.keyestudio.com/Ks0171_keyestudio_XD-58C_Pulse_Sensor_Module)
+Autre : GY-ML8511 Ultraviolet Sensor : analog ou (https://wiki.keyestudio.com/Ks0273_keyestudio_GY-ML8511_Ultraviolet_Sensor_Module)
+Autre : Vibration Motor Module : analog ou (https://wiki.keyestudio.com/KS0450_Keyestudio_Vibration_Motor_Module_(Black_and_Eco-friendly))
+Led : 10mm Highlight Full-color LED RGB : analog ou x3 (https://wiki.keyestudio.com/KS0459_Keyestudio_10mm_Highlight_Full-color_LED_RGB_Module)
+
+Autre : high precision real time clock (DS3234) : digital x4 (https://wiki.keyestudio.com/Ks0166_keyestudio_DS3234_high_precision_real_time_clock_module) (https://github.com/notUnique/DS3231micro)
+Autre : DS1302 Clock Sensor : (https://wiki.keyestudio.com/KS0517_Keyestudio_DS1302_Clock_Sensor(Black_and_Eco-friendly)) (https://github.com/omarbenhamid/micropython-ds1302-rtc)
+DS1307 RTC
+MCP7940 RTC
+AT24C32N EEPROM
+
+
+Motor : fan control (L9110) : PWM (https://wiki.keyestudio.com/Ks0168_keyestudio_L9110_fan_control_module)
+Motor : Micro Servo : PWM (https://wiki.keyestudio.com/Ks0194_keyestudio_Micro_Servo)
+
+
+Display : 4-digit LED Display (TM1637) (https://wiki.keyestudio.com/KS0445_keyestudio_4-digit_LED_Display_Module) (https://github.com/mcauser/micropython-tm1637)
+Motor : S DRV8825 stepper motor driver for 3D printer (https://wiki.keyestudio.com/Ks0141_keyestudio_DRV8825_stepper_motor_driver_for_3D_printer)
+Autre : GPS Module (https://wiki.keyestudio.com/KS0319_keyestudio_GPS_Module)
+
+gps
+inclus dans micropython ? :
+18B20 Temperature (https://wiki.keyestudio.com/Ks0023_keyestudio_18B20_Temperature_Sensor)
+
+
+rtc https://snyk.io/advisor/python/adafruit-circuitpython-pcf8523
+
+
+TDS Meter V1.0 (https://wiki.keyestudio.com/KS0429_keyestudio_TDS_Meter_V1.0)
+SHT10 Digital Temperature Sensor (https://wiki.keyestudio.com/Ks0268_keyestudio_SHT10_Digital_Temperature_Sensor) (https://github.com/2black0/micropython-sht11)
+DS18b20 Temperature Detector Sensor : digital in (https://wiki.keyestudio.com/Ks0316_Keyestudio_DS18b20_Temperature_Detector_Sensor_(Black_and_Eco-friendly)) (https://github.com/micropython/micropython/tree/master/drivers/onewire, https://github.com/robert-hh/Onewire_DS18X20)
