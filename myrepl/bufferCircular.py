@@ -4,11 +4,6 @@ import saveSensor
 tampon = False
 
 
-def baseFunction(a, b):
-    return a
-
-def baseFunctionDigital(a, b):
-    return b'\x01' if a else b'\x00'
 
 class Buffer():
     def __init__(self, size, step = 1, time = 0, null = bytearray(b'\xff\xff'), dataSize = 2):
@@ -163,7 +158,7 @@ class BufferCircular(Buffer):
 
 
 class Sensor():
-    def __init__(self, sensorType, dic, save, waiting, error = bytearray(b'\xff\xfe')):
+    def __init__(self, sensorType, listChannel, dic, save, waiting, error = bytearray(b'\xff\xfe')):
         # the type of sensor
         self.sensorType = sensorType
         # when do we have to save in a file
@@ -171,14 +166,19 @@ class Sensor():
         # the waiting time between the request and the reply of the sensor
         self.waiting = waiting
         # the waiting time between the request and the reply of the sensor
-        self.tamponArray = Buffer(30)
         self.tamponArray.setTime(-1)
         # the error code
         self.error = error
         # number of byte for each data
         self.size = 1
         # the dictionary of information of each time (plus their circular buffer)
-        self.dic = self.to_dict(dic, error)
+        self.listChannel = listChannel
+        self.numberChannel = len(listChannel)
+        self.array = []
+        self.tamponArray = []
+        for i in range(self.numberChannel):
+            self.array.append(self.to_dict(listChannel[i],dic, error))
+            self.tamponArray.append(Buffer(30))
 
     def to_dict(self, dic, error):
         # create the dic with different information for each time to save
@@ -205,7 +205,7 @@ class Sensor():
             tempoDictonary[key] = tempo
         return tempoDictonary
 
-    def save(self, time, func):
+    def save(self, time):
         # save the reply of the sensor
 
         # is it time to save in a file ?
@@ -214,38 +214,41 @@ class Sensor():
         # if we are converting the data, we record the new data in a tampon (only each 1s)
         # when we finish the convert we will move the data from the tampon to the log
         if tampon:
-            if self.tamponArray.time == -1:
-                self.tamponArray.setTime(time)
-            value = func(self.error)
-            self.tamponArray.append(value, time)
+            if self.tamponArray[0].time == -1:
+                for i in range(self.numberChannel):
+                    self.tamponArray.setTime(time)
+            for i in range(self.numberChannel):
+                value = self.listChannel[i].read()
+                self.tamponArray[i].append(value, time)
         else:
             # if we write in the log, we will see each time (not only 1s)
             # if it is 1s (no data before), we will record the data
             # else we will do a mean form the data from before
-            for i in self.dic:
-                tempo = self.dic[i]
-                before = tempo['before']
-                next = tempo['next']
-                if (tempo['times'] + tempo['offset']) <= time:
-                    #if writable:
-                    #    tempo['buffer'].save()
+            for index in range(self.numberChannel):
+                for i in self.array[index]:
+                    tempo = self.array[i]
+                    before = tempo['before']
+                    next = tempo['next']
+                    if (tempo['times'] + tempo['offset']) <= time:
+                        #if writable:
+                        #    tempo['buffer'].save()
 
-                    # is it a mean of the reply of before ?
-                    if before == None :
-                        value = func(self.error)
-                    else:
-                        bufferBefore = self.dic[before]['buffer']
-                        lastTime = tempo['times'] - next
-                        array = bufferBefore.getPartial(lastTime)
-                        s = sum(array[0], bufferBefore.dataSize)
-                        value = int(s/array[1])
-                        value = value.to_bytes(2, 'big')
-                    tempo['buffer'].append(value, time)
-                    tempo['times'] += next
+                        # is it a mean of the reply of before ?
+                        if before == None :
+                            value = self.listChannel[index].read()
+                        else:
+                            bufferBefore = self.array[index][before]['buffer']
+                            lastTime = tempo['times'] - next
+                            array = bufferBefore.getPartial(lastTime)
+                            s = sum(array[0], bufferBefore.dataSize)
+                            value = int(s/array[1])
+                            value = value.to_bytes(2, 'big')
+                        tempo['buffer'].append(value, time)
+                        tempo['times'] += next
 
-    def time2write(self, time):
+    def time2write(self, time, index):
         # is it time to write the data in the flash
-        return self.dic[self.whenSave]['times'] <= time
+        return self.array[index][self.whenSave]['times'] <= time
 
     def wait(self):
         # the time to wait before retrieve the reply
@@ -253,13 +256,17 @@ class Sensor():
 
     def getIndex(self, time, index):
         # get all data to a index
-        tempo = self.dic[time]['buffer']
-        return tempo.getIndex(index)
+        result = []
+        for i in self.array:
+            tempo = i[time]['buffer']
+            result.append(tempo.getIndex(index))
+        return result
 
     def getTimeBuffer(self, time):
         # current time of the index 0  of the buffer
-        tempo = self.dic[time]['buffer']
-        return tempo.time + saveSensor.time_ns
+        tempo = self.array[0][time]['buffer']
+        diffBoucle = saveSensor.ticks_boucle - tempo.ticks_boucle
+        return tempo.time + saveSensor.time_ns - saveSensor.ticks_max * diffBoucle
 
     def sum(self, byteArray, nmbByte):
         # sum the data sensor in a bytearray
@@ -277,87 +284,28 @@ class Sensor():
         # when we finish with tge tampon,
         # we have to transfert all data from the tampon
         # to the log and do the mean for the different time
-        self.tamponArray.setTime(-1)
+        for i in self.tamponArray:
+            i.setTime(-1)
         lenArray = 30
 
         for index in range(lenArray):
-            valueBrut, time = self.tamponArray.getIndex(index)
-            for i in self.dic:
-                tempo = self.dic[i]
-                before = tempo['before']
-                next = tempo['next']
-                if (tempo['times'] + tempo['offset']) <= time:
-                    if before == None :
-                        value = valueBrut
-                    else:
-                        bufferBefore = self.dic[before]['buffer']
-                        lastTime = tempo['times'] - next
-                        array = bufferBefore.getPartial(lastTime)
-                        s = sum(array[0], bufferBefore.dataSize)
-                        value = int(s/array[1])
-                        value = value.to_bytes(2, 'big')
-                    tempo['buffer'].append(value, time)
-                    tempo['times'] += next
+            for iIndex in range(self.numberChannel):
+                valueBrut, time = self.tamponArray[iIndex].getIndex(index)
+                for i in self.array[iIndex]:
+                    tempo = self.array[i]
+                    before = tempo['before']
+                    next = tempo['next']
+                    if (tempo['times'] + tempo['offset']) <= time:
+                        if before == None :
+                            value = valueBrut
+                        else:
+                            bufferBefore = self.array[iIndex][before]['buffer']
+                            lastTime = tempo['times'] - next
+                            array = bufferBefore.getPartial(lastTime)
+                            s = sum(array[0], bufferBefore.dataSize)
+                            value = int(s/array[1])
+                            value = value.to_bytes(2, 'big')
+                        tempo['buffer'].append(value, time)
+                        tempo['times'] += next
         self.tamponArray.clear()
 
-
-class i2cSensor(Sensor):
-    def __init__(self, type_sensor, dic, i2c, save, waiting, addr, codeSend, byteReceive, function = baseFunction):
-        self.i2c = i2c
-        self.addr = addr
-        self.codeSend = codeSend
-        self.byteReceive = byteReceive
-        self.function = function
-        super().__init__(type_sensor, dic, save, waiting)
-
-    def save(self, time):
-        # retrieve the reply of the sensor
-        super().save(time, self.readI2C)
-
-    def readI2C(self, error):
-        # read I2C sensor
-        return self.function(self.i2c.readfrom(self.addr, self.byteReceive), error)
-
-    def writeI2C(self):
-        # write I2C sensor
-        self.i2c.writeto(self.addr, self.codeSend)
-
-
-class AnalogSensor(Sensor):
-    def __init__(self, type_sensor, dic, save, waiting, function = baseFunction):
-        # the pin to have access to the sensor
-        self.pin = {}
-        self.function = function
-        super().__init__(type_sensor, dic, save, waiting)
-
-    def to_dict(self, dic):
-        # the pin for the analogique
-        self.pin['p1'] = dic['p1']
-        self.pin['p2'] = dic['p1']
-        self.pin['p3'] = dic['p1']
-        return super().to_dict(dic)
-
-    def save(self, time):
-        super().save(time, self.readAnalog)
-
-    def readAnalog(self, error):
-        # read analog sensor
-        Pin(0, mode=Pin.OUT).value(self.pin['p1'])
-        Pin(2, mode=Pin.OUT).value(self.pin['p2'])
-        Pin(15, mode=Pin.OUT).value(self.pin['p3'])
-        adc = ADC(0)
-        return self.function(adc.read())
-
-class DigitalSensor(Sensor):
-    def __init__(self, type_sensor, dic, save, waiting, pin, error = bytearray(b'\x02'), function = baseFunctionDigital):
-        # the pin to have access to the sensor
-        self.pin = Pin(pin, Pin.IN)
-        self.function = function
-        super().__init__(type_sensor, dic, save, waiting, error = error)
-
-    def save(self, time):
-        super().save(time, self.readDigital)
-
-    def readDigital(self, error):
-        # read digital sensor
-        return self.function(self.pin())

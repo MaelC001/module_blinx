@@ -1,5 +1,10 @@
 import time
 
+# https://raw.githubusercontent.com/MaelC001/sensor_blinx/main/
+#
+# def function(value, error):
+#    return
+
 def repl():
     import repl
 

@@ -421,7 +421,7 @@ def configSensor(dictConfig):
       saveSensor.listSensorModify[newName] = {'name' : sensor}
       sensorsI2CCreate(sensor, created = True)
 
-def sensorsCreate(digital =  False):
+def sensorsCreateDict(digital =  False):
   """
   create the dictionary with the information for each time
   """
@@ -530,7 +530,7 @@ def verificationListSensor(listSensors):
     nameSensors.append(saveSensor.listSensorModify[sensor])
   return text, nameSensors
 
-def sensorsI2CCreate(sensor, index = 0, times = '1s', created = False):
+def sensorsI2CCreate(sensor, index = 0, times = '1s', created = False, info = None):
   """
   if created is True we begin to record the sensor
   else we return the bytearray of the data record it,
@@ -542,76 +542,20 @@ def sensorsI2CCreate(sensor, index = 0, times = '1s', created = False):
   """
   if times == '0s':
     if sensor in sensors.__listSensor:
-      sensors.__listSensor[sensor]['immediate'](i2c = i2c)
+      sensors.__listSensor[sensor]['immediate'](info = info) # i2c or array of pin
     else:
       raise Exception("le sensor n'existe pas")
   elif created:
-    tempoDict = sensorsCreate()
-    function = bufferCircular.baseFunction
-    if 'byte' in sensors.__listSensor[sensor]:
-      function = sensors.__listSensor[sensor]['byte']
+    tempoDict = sensorsCreateDict()
+    function = sensors.__listSensor[sensor]['byte']
     waitingTime = sensors.__listSensor[sensor]['waiting']
 
-    sensorI2C = bufferCircular.i2cSensor(sensor, tempoDict, i2c, None, waitingTime, function)
-    saveSensor.donnee['i2c']['function'][sensor] = sensorI2C
-    saveSensor.donnee['i2c']['name'].append(sensor)
-  elif sensor in saveSensor.donnee['i2c']['function']:
-    return saveSensor.donnee['i2c']['function'][sensor].getIndex(times, index)
-  else :
-    raise Exception("Sensor inconnu")
-
-def analogCreate(times = '1s', p1 = 0, p2 = 0, p3 = 0, index = 0, created = False):
-  """
-  if created is True we begin to record the sensor
-  else we return the bytearray of the data record it,
-  with the time and index of the present record
-  arg :
-    - temps : str
-    - p1 : int
-    - p2 : int (optional)
-    - p3 : int (optional)
-    - index : int
-    - created : boolean
-  """
-  name = nameAnalog(p1, p2, p3)
-  if times == '0s':
-    pinDic = {'p1' : p1, 'p2': p2, 'p3': p3}
-    sensors.__listSensor['analogique']['immediate'](pinDic = pinDic)
-  elif created:
-    tempoDict = sensorsCreate()
-    tempoDict['p1'] = p1
-    tempoDict['p2'] = p2
-    tempoDict['p3'] = p3
-
-    analog = bufferCircular.AnalogSensor(name, tempoDict, None, 0)
-    saveSensor.donnee['Analog']['function'][name] = analog
-  elif name in saveSensor.donnee['Analog']['function']:
-    return saveSensor.donnee['Analog']['function'][name].getIndex(times, index)
-  else :
-    raise Exception("Sensor inconnu")
-
-
-def digitalCreate(pin, times = '1s', index = 0, created = False):
-  """
-  if created is True we begin to record the sensor
-  else we return the bytearray of the data record it,
-  with the time and index of the present record
-  arg :
-    - temps : str
-    - pin : int
-    - index : int
-    - created : boolean
-  """
-  name = nameAnalog(p1, p2, p3)
-  if times == '0s':
-    sensors.__listSensor['digital']['immediate'](pin = pin)
-  elif created:
-    tempoDict = sensorsCreate(digital = True)
-
-    digital = bufferCircular.DigitalSensor(name, tempoDict, None, 0, pin)
-    saveSensor.donnee['digital']['function'][name] = digital
-  elif name in saveSensor.donnee['digital']['function']:
-    return saveSensor.donnee['digital']['function'][name].getIndex(times, index)
+    # sensorType, listChannel, dic, save, waiting
+    sensorI2C = bufferCircular.Sensor(sensor, ..., tempoDict, None, waitingTime)
+    saveSensor.donnee['function'][sensor] = sensorI2C
+    saveSensor.donnee['name'].append(sensor)
+  elif sensor in saveSensor.donnee['function']:
+    return saveSensor.donnee['function'][sensor].getIndex(times, index)
   else :
     raise Exception("Sensor inconnu")
 
