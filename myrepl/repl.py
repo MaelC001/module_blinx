@@ -17,7 +17,7 @@ except:
 import sys, json, io
 
 from machine import Pin, I2C, ADC, PWM, UART
-import ssd1306, saveSensor, sensors, bufferCircular
+import ssd1306, saveSensor, sensors, bufferCircular, channelClass
 
 #import sh1107, mpu9250
 #import dps310_simple as dps310
@@ -40,6 +40,8 @@ __register = {}
 # output message
 outputMessages = []
 functionNameOutput = 'output'
+
+dicOutputSensors = {}
 
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
@@ -106,6 +108,7 @@ async def receiver():
       j['error'] = {"code": -32700, "message": "Parse error"}#error}
       j['id'] = errorId
       sender(j)
+      continue
 
     # try to read the parameter of the json
     # then the parameter of the method
@@ -322,40 +325,44 @@ def getOutput():
   outputMessages.clear()
   return out
 
+"""
 @register('digital', "")
 def digital(pin, value = 0):
-  """
+  ""
   change value output for a digital sensor
   arg :
     - pin : int
     - value : int (0, 1)
-  """
+  ""
   verification(pin, int)
   verification(value, int, [0, 1])
   Pin(pin, mode=Pin.OUT).value(value)
   return ''
+"""
 
 # the function led use the function digital
 # so if a error occur in digital, led have to say it
+"""
 @register('led', "digital")
 def led(value = 0):
-  """
+  ""
   play with the led
   arg :
     - value : int (0, 1)
-  """
+  ""
   pin = 2 # the led have the pin 2
   return digital(pin, value, id=0)
-
+"""
+"""
 @register('PWMSensor', "")
 def PWMSensor(pin, value, freq = 50):
-  """
+  ""
   turn a servoMotor
   arg :
     - pin : int
     - value : int
     - freq : int (optional)
-  """
+  ""
   verification(pin, int)
   verification(value, int)
   verification(freq, int)
@@ -363,9 +370,11 @@ def PWMSensor(pin, value, freq = 50):
   servo.freq(freq)
   servo.duty(value)
   return servo
+"""
 
 @register('sensors_stop', "")
-def sensorStop(name, p1 = 0, p2 = 0, p3 = 0):
+def sensorStop(newName):
+  ... ..
   """
   stop record a sensor
   arg :
@@ -375,23 +384,19 @@ def sensorStop(name, p1 = 0, p2 = 0, p3 = 0):
           - p2 : int (optional)
           - p3 : int (optional)
   """
-  analog = ['analogique'] if saveSensor.donnee['analog']['function'] else []
-  digital = ['digital'] if saveSensor.donnee['digital']['function'] else []
-  verification(name, str, saveSensor.donnee['i2c']['name'] + analog + digital)
+  verification(newName, str, saveSensor.listSensorModify)
 
-  if name == 'analogique':
-    # the name of the analog sensor is : 'analog' + pin 1 + pin 2 + pin 3
-    name = nameAnalog(p1, p2, p3)
-    saveSensor.donnee['analog']['function'].pop(i)
-  elif name == 'digital':
-    # the name of the analog sensor is : 'analog' + pin 1 + pin 2 + pin 3
-    verification(p1, int)
-    name = name+str(p1)
-    saveSensor.donnee['digital']['function'].pop(name)
+  name = saveSensor.listSensorModify[newName]['name']
+
+  saveSensor.listSensorModify.pop(newName)
+  if name in saveSensor.donnee['name']:
+    i = saveSensor.donnee['name'].index(name)
+    saveSensor.donnee['name'].pop(i)
+    saveSensor.donnee['function'].pop(name)
+  elif name in dicOutputSensors:
+    dicOutputSensors['function'].pop(name)
   else:
-    i = saveSensor.donnee['i2c']['name'].index(name)
-    saveSensor.donnee['i2c']['name'].pop(i)
-    saveSensor.donnee['i2c']['function'].pop(name)
+    raise Exception('sensor not find')
   return ''
 
 @register('configSensor', "")
@@ -404,22 +409,11 @@ def configSensor(dictConfig):
   verification(dictConfig, dict)
 
   for sensor, config in dictConfig.items():
-    verification(sensor, str, saveSensor.listSensorModify)
+    verification(sensor, str)#, saveSensor.listSensorModify)
     newName = config['new']
-    if sensor == 'analogique':
-      p1 = config['p1']
-      p2 = config['p2']
-      p3 = config['p3']
-      newNameAnalog = nameAnalog(p1 = p1, p2 = p2, p3 = p3)
-      saveSensor.listSensorModify[newName] = {'name' : newNameAnalog, 'p1': p1, 'p2': p2, 'p3': p3}
-      analogCreate(p1 = p1, p2 = p2, p3 = p3, created = True)
-    elif sensor == 'digital':
-      pin = config['pin']
-      saveSensor.listSensorModify[newName] = {'name' : sensor+str(pin), 'pin': pin}
-      digitalCreate(pin = pin, created = True)
-    else:
-      saveSensor.listSensorModify[newName] = {'name' : sensor}
-      sensorsI2CCreate(sensor, created = True)
+    input = config['input']
+    saveSensor.listSensorModify[newName] = {'name' : sensor, 'channel': {}, "config": {}, "input" : input}
+    sensorsCreate(sensor, created = True, input = input)
 
 def sensorsCreateDict(digital =  False):
   """
@@ -475,7 +469,7 @@ def getSensors(listSensors, times = '1s'):
         pin = int(sensor[7:])
         text += ';' + str(digitalCreate(times = times, pin = pin))
       else:
-        text += ';' + str(sensorsI2CCreate(sensor, times))
+        text += ';' + str(sensorsCreate(sensor, times))
     return text
   else :
     # capture each sensor the user want the data
@@ -496,7 +490,7 @@ def getSensors(listSensors, times = '1s'):
           pin = int(sensor[7:])
           dataSensor, timeDataSensor = digitalCreate(times = times, pin = pin, index = indexData)
         else:
-          dataSensor, timeDataSensor = sensorsI2CCreate(sensor, times, index = indexData)
+          dataSensor, timeDataSensor = sensorsCreate(sensor, times, index = indexData)
         textTimeStamp += ';' + dataSensor
 
       dataAllSensor = timeDataSensor + ';' + textTimeStamp + dataAllSensor
@@ -527,10 +521,10 @@ def verificationListSensor(listSensors):
   for sensor in listSensors:
     verification(sensor, str, saveSensor.listSensorModify)
     text += ';' + sensor
-    nameSensors.append(saveSensor.listSensorModify[sensor])
+    nameSensors.append(saveSensor.listSensorModify[sensor]['name'])
   return text, nameSensors
 
-def sensorsI2CCreate(sensor, index = 0, times = '1s', created = False, info = None):
+def sensorsCreate(sensor, index = 0, times = '1s', created = False, channels = [], info = None, input= True):
   """
   if created is True we begin to record the sensor
   else we return the bytearray of the data record it,
@@ -542,49 +536,47 @@ def sensorsI2CCreate(sensor, index = 0, times = '1s', created = False, info = No
   """
   if times == '0s':
     if sensor in sensors.__listSensor:
-      sensors.__listSensor[sensor]['immediate'](info = info) # i2c or array of pin
+      sensors.__listSensor[sensor]['immediate']['func'](info = info) # i2c or array of pin
     else:
       raise Exception("le sensor n'existe pas")
   elif created:
     tempoDict = sensorsCreateDict()
-    function = sensors.__listSensor[sensor]['byte']
-    waitingTime = sensors.__listSensor[sensor]['waiting']
+    # create the channel
+    arrayChannel = []
+    for channel in channels:
+      if channel['type'] == "I2C":
+        id = channel['id']
+        function = sensors.__listSensor[sensor]['byte'+id]['func']
+        waitingTime = sensors.__listSensor[sensor]['byte'+id]['waiting']
 
-    # sensorType, listChannel, dic, save, waiting
-    sensorI2C = bufferCircular.Sensor(sensor, ..., tempoDict, None, waitingTime)
-    saveSensor.donnee['function'][sensor] = sensorI2C
-    saveSensor.donnee['name'].append(sensor)
+        addr = sensors.infoSensorI2C[sensor]['addr']
+        byteReceive = sensors.infoSensorI2C[sensor]['byteReceive']
+        codeSend = sensors.infoSensorI2C[sensor]['codeSend']
+        arrayChannel.append(channelClass.ChannelI2C(i2c, addr, byteReceive, codeSend, waitingTime, function))
+      elif channel['type'] == "Analog":
+        id = channel['id']
+        function = sensors.__listSensor[sensor]['byte'+id]['func']
+
+        pin = channel['pin']
+        p1 = channel['p1']
+        p2 = channel['p2']
+        p3 = channel['p3']
+        freq = channel['freq']
+        arrayChannel.append(channelClass.ChannelAnalog(pin, p1, p2, p3, function, freq = freq))
+      elif channel['type'] == "Digital":
+        pin = channel['pin']
+        arrayChannel.append(channelClass.ChannelDigital(pin))
+
+    if input:
+      sensorBuffer = bufferCircular.Sensor(sensor, arrayChannel, tempoDict, waitingTime)
+      saveSensor.donnee['function'][sensor] = sensorBuffer
+      saveSensor.donnee['name'].append(sensor)
+    else :
+      dicOutputSensors[sensor] = arrayChannel
   elif sensor in saveSensor.donnee['function']:
     return saveSensor.donnee['function'][sensor].getIndex(times, index)
   else :
     raise Exception("Sensor inconnu")
-
-def nextTime(arrayTime):
-  """
-  calculate the next we have each time, for example :
-  if it is 12s, the next time we have 10s it is 20s
-  if it is 96s, the next time we have 60s it is 120s
-  """
-  arrayNextTime = []
-  present = time.time()
-  for i in arrayTime:
-    tempoTime = present + (i - (present % i))
-    arrayNextTime.append(tempoTime)
-
-  return arrayNextTime
-
-def nameAnalog(p1, p2 = 0, p3 = 0):
-  """
-  the name of the analog sensors and verify the pin
-  if (with p2=0 and p3 =0)
-      p1 = 0 then analog is in pin 12
-      p1 = 1 then analog is in pin 13
-  """
-  verification(p1, int, [0, 1])
-  verification(p2, int, [0, 1])
-  verification(p3, int, [0, 1])
-  name = 'analogique'+str(p1)+str(p2)+str(p3)
-  return name
 
 
 

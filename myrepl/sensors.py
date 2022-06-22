@@ -1,28 +1,21 @@
 # list of the different function for all the sensor
 __listSensor = {}
 
+infoSensorI2C = {}
+
 # register for function who calculate the brut donnee
 def register(fn, name, etape, waiting = 0, channel = []):
   def wrapper(fn):
-    def innerWrapper(*args, **kwargs):
-      if 'i2c' in __listSensor[name]:
-        return fn(*args, addr = __listSensor[name]['i2c']['addr'], code = __listSensor[name]['i2c']['code'], nmbBytes = __listSensor[name]['i2c']['nmbBytes'], **kwargs)
-      return fn(*args, **kwargs)
-
-    func = fn
-    if etape == 'immediate':
-      func = innerWrapper
 
     if name in __listSensor:
-      __listSensor[name][etape] = func
+      __listSensor[name][etape] = {'func' : fn, 'waiting' : waiting}
     else :
-      __listSensor[name] = {etape : func}
+      __listSensor[name] = {etape : {'func' : fn, 'waiting' : waiting}}
 
     if etape == 'immediate':
-      __listSensor[name]['waiting'] = waiting
       __listSensor[name]['channel'] = channel
 
-    return func
+    return fn
   return wrapper(fn)
 
 # https://github.com/ralf1070/Adafruit_Python_SHT31/
@@ -54,8 +47,14 @@ def getAllFunctionSensor():
     a = __import__(i)
     info = a.info
     name = info['name']
-    waiting = info['waiting']
     channel = info['channel']
-    register(a.functionByte, name, "byte")
-    register(a.functionTranslate, name, "readable")
-    register(a.functionImmediate, name, "immediate", waiting, channel)
+    functions = info['functions']
+    for id, infoFunction in functions.items():
+      waiting = infoFunction['waiting']
+      dictFunctions = infoFunction['dictFunctions']
+      for type, function in dictFunctions.items():
+        register(function, name, type+id, waiting=waiting)
+
+    functionImmediate = info['immediate']
+    waiting = info['waiting']
+    register(functionImmediate, name, 'immediate', waiting=waiting, channel=channel)

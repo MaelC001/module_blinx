@@ -10,7 +10,7 @@ class Channel():
         raise Exception('not configure')
 
 class ChannelDigital(Channel):
-    def __init__(self, pin, error, translateFunction = lambda x,y : b'\x01' if x else b'\x00'):
+    def __init__(self, pin, error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y : b'\x01' if x else b'\x00'):
         self.pin = Pin(pin, Pin.OUT)
 
         self.oldData = 0
@@ -22,7 +22,7 @@ class ChannelDigital(Channel):
         self.pin.value(value)
 
 class ChannelAnalog(Channel):
-    def __init__(self, pin, p1, p2, p3, translateFunction, error, freq = 1000):
+    def __init__(self, pin, p1, p2, p3, translateFunction, error = bytearray(b'\xff\xfe'), freq = 1000):
         self.pin = Pin(pin, Pin.OUT)
         self.pwm = PWM(pin)
         self.pwm.freq(freq)
@@ -43,7 +43,7 @@ class ChannelAnalog(Channel):
         self.pwm.duty(value)
 
 class ChannelI2C(Channel):
-    def __init__(self, i2c, addr, byteReceive, codeSend, wait, translateFunction, error):
+    def __init__(self, i2c, addr, byteReceive, codeSend, wait, translateFunction, error = bytearray(b'\xff\xfe')):
         self.i2c = i2c
         self.addr = addr
         self.byteReceive = byteReceive
