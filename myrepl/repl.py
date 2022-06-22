@@ -17,7 +17,7 @@ except:
 import sys, json, io
 
 from machine import Pin, I2C, ADC, PWM, UART
-import ssd1306, blinx, sensors, display
+import blinxSensor, sensors, display
 
 #import sh1107, mpu9250
 #import dps310_simple as dps310

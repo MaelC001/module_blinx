@@ -1,3 +1,4 @@
+import ssd1306
 
 @register('display_create', "")
 def displayCreate(self, typeDisplay, x, y):

@@ -2,7 +2,9 @@ from machine import Pin, ADC, PWM, I2C
 from time import sleep_ms
 import sensors, time
 
+# do we do a conversion
 tampon = False
+# number of boucle
 ticks_boucle = 0
 time_ns = time.time_ns() - time.ticks_ms()
 ticks_max = 2**30
@@ -526,6 +528,7 @@ def diffTicks(self, before, after, diffMax = 2000):
         return diff
 
 def resetTicks():
+    """reset ticks"""
     global ticks_boucle, time_ns
     ticks_boucle += 1
     time_ns = time.time_ns() - time.ticks_ms()
