@@ -4,7 +4,7 @@ __listSensor = {}
 infoSensorI2C = {}
 
 # register for function who calculate the brut donnee
-def register(fn, name, etape, waiting = 0, channel = []):
+def register(fn, name, etape, waiting = 0, args = {}):
   def wrapper(fn):
 
     if name in __listSensor:
@@ -13,7 +13,7 @@ def register(fn, name, etape, waiting = 0, channel = []):
       __listSensor[name] = {etape : {'func' : fn, 'waiting' : waiting}}
 
     if etape == 'immediate':
-      __listSensor[name]['channel'] = channel
+      __listSensor[name]['args'] = args
 
     return fn
   return wrapper(fn)
@@ -33,12 +33,9 @@ def crc8_sht3(buffer):
 				crc = (crc << 1)
 	return crc & 0xFF
 
-def clearDict():
-  global __listSensor
-  __listSensor= {}
 
 def getAllFunctionSensor():
-  clearDict()
+  __listSensor.clear()
   try:
     import listSensorUser
   except:
@@ -47,7 +44,7 @@ def getAllFunctionSensor():
     a = __import__(i)
     info = a.info
     name = info['name']
-    channel = info['channel']
+    infoSensor = info['info']
     functions = info['functions']
     for id, infoFunction in functions.items():
       waiting = infoFunction['waiting']
@@ -57,4 +54,4 @@ def getAllFunctionSensor():
 
     functionImmediate = info['immediate']
     waiting = info['waiting']
-    register(functionImmediate, name, 'immediate', waiting=waiting, channel=channel)
+    register(functionImmediate, name, 'immediate', waiting=waiting, args=infoSensor)

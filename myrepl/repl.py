@@ -17,10 +17,13 @@ except:
 import sys, json, io
 
 from machine import Pin, I2C, ADC, PWM, UART
-import ssd1306, saveSensor, sensors, bufferCircular, channelClass
+import ssd1306, blinx, sensors, display
 
 #import sh1107, mpu9250
 #import dps310_simple as dps310
+
+# the class with all the sensor
+Blinx = blinxSensor.Blinx()
 
 # connection to i2c
 i2c=I2C(sda=Pin(4),scl=Pin(5))
@@ -28,20 +31,14 @@ i2c=I2C(sda=Pin(4),scl=Pin(5))
 # serial port
 uart = UART(0, 115200)
 
+
 loop = None
 
-# display info, can only connect to 1 display
-display=None
-displayType = None
+# display in the micro controller
+display = display.DisplayBlinx()
 
 # function register
 __register = {}
-
-# output message
-outputMessages = []
-functionNameOutput = 'output'
-
-dicOutputSensors = {}
 
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
@@ -55,14 +52,13 @@ class DUP(io.IOBase):
   def readAll(self):
     return str(self.s)
 
+# the register for the user function
 def register(name, subFunction=""):
   def wrapper(fn):
     def inner_wrapper(*args, id, **kwargs):
       error = ""
       output = ""
       message = ""
-      j = {}
-      #returnResult = {}
       # execute the function and capture the error
       try:
         output = fn(*args, **kwargs)
@@ -73,6 +69,8 @@ def register(name, subFunction=""):
         if error :
           message = "error"
           output = {"code": -32000, "message": error}
+
+        # if the function use a user function, then we have to check the other function as well
         elif subFunction and type(output) == dict:
           if 'error' in output:
             message = 'error'
@@ -85,13 +83,16 @@ def register(name, subFunction=""):
     return inner_wrapper
   return wrapper
 
-# send message to serial port in json
 def sender(j):
+  """send message to serial port in json"""
   uart.write(json.dumps(j))
 
-# receive information by the serial port in json
-# and execute the function with the given argument
+
 async def receiver():
+  """
+    receive information by the serial port in json
+    and execute the function with the given argument
+  """
   sreader = asyncio.StreamReader(uart)
   while True:
     data=await sreader.readline()
@@ -238,166 +239,16 @@ def execute(cmd):
   os.dupterm(None)
   return dupTempo.readAll()
 
-@register('display_create', "")
-def displayCreate(typeDisplay, x, y):
-  """
-  connect to a display
-  arg :
-    - typeDisplay : str # sh1107 (grand, 128, 64) or ssd1306 (petit, 128, 32)
-    - x : int
-    - y : int
-  """
-  global display, displayType
-  verification(typeDisplay, str, ['sh1107', 'ssd1306'])
-  verification(x, int)
-  verification(y, int)
-  if display:
-    clear()
-  if typeDisplay != displayType or not display:
-    displayType = typeDisplay
-    if typeDisplay == 'sh1107':
-      display = sh1107.SH1107_I2C(x, y, i2c)
-    elif typeDisplay == 'sh1107':
-      display = ssd1306.SSD1306_I2C(x,y,i2c)
-  return ''
-
-@register('display_text', "displayCreate")
-def displayText(typeDisplay, x, y, show):
-  """
-  show text in the display
-  arg :
-    - typeDisplay : str #  sh1107 (grand, 128, 64) or ssd1306 (petit, 128, 32)
-    - x : int
-    - y : int
-    - show :
-        - text : str
-        - x : int
-        - y : int
-        - taille : int
-  """
-  verification(typeDisplay, str, ['sh1107', 'ssd1306'])
-  verification(show, dict)
-  if typeDisplay != displayType or not display:
-    displayCreate(typeDisplay, x, y)
-  for i in show :
-    text = i['text']
-    x = i['x']
-    y = i['y']
-    t = i['taille']
-    verification(text, str)
-    verification(x, int)
-    verification(y, int)
-    verification(t, int)
-    display.text(text, x, y, t)
-  display.show()
-  return ''
-
-@register('display_clear', "displayCreate")
-def displayClear(typeDisplay, y, x):
-  """
-  clear display
-  arg :
-    - typeDisplay : str # sh1107 (grand, 128, 64) or ssd1306 (petit, 128, 32)
-    - x : int
-    - y : int
-  """
-  verification(typeDisplay, str, ['sh1107', 'ssd1306'])
-  if typeDisplay != displayType or not display:
-    displayCreate(typeDisplay, y, x)
-  clear()
-  return ''
-
-def clear():
-  """
-  clear display
-  """
-  display.fill(0)
-  display.show()
-
-
-@register(functionNameOutput, "")
-def getOutput():
-  """
-  return all the message output
-  and remove it all
-  """
-  out = outputMessages
-  outputMessages.clear()
-  return out
-
-"""
-@register('digital', "")
-def digital(pin, value = 0):
-  ""
-  change value output for a digital sensor
-  arg :
-    - pin : int
-    - value : int (0, 1)
-  ""
-  verification(pin, int)
-  verification(value, int, [0, 1])
-  Pin(pin, mode=Pin.OUT).value(value)
-  return ''
-"""
-
-# the function led use the function digital
-# so if a error occur in digital, led have to say it
-"""
-@register('led', "digital")
-def led(value = 0):
-  ""
-  play with the led
-  arg :
-    - value : int (0, 1)
-  ""
-  pin = 2 # the led have the pin 2
-  return digital(pin, value, id=0)
-"""
-"""
-@register('PWMSensor', "")
-def PWMSensor(pin, value, freq = 50):
-  ""
-  turn a servoMotor
-  arg :
-    - pin : int
-    - value : int
-    - freq : int (optional)
-  ""
-  verification(pin, int)
-  verification(value, int)
-  verification(freq, int)
-  servo = PWM(Pin(pin))
-  servo.freq(freq)
-  servo.duty(value)
-  return servo
-"""
-
 @register('sensors_stop', "")
-def sensorStop(newName):
-  ... ..
+def sensorStop():
   """
-  stop record a sensor
-  arg :
-    - name : str
-        # if it is a analog sensor we need the pin
-          - p1 : int
-          - p2 : int (optional)
-          - p3 : int (optional)
+  stop all sensor
+  arg : none
   """
-  verification(newName, str, saveSensor.listSensorModify)
+  global Blinx
+  Blinx = blinxSensor.Blinx()
+  sensors.__listSensor.clear()
 
-  name = saveSensor.listSensorModify[newName]['name']
-
-  saveSensor.listSensorModify.pop(newName)
-  if name in saveSensor.donnee['name']:
-    i = saveSensor.donnee['name'].index(name)
-    saveSensor.donnee['name'].pop(i)
-    saveSensor.donnee['function'].pop(name)
-  elif name in dicOutputSensors:
-    dicOutputSensors['function'].pop(name)
-  else:
-    raise Exception('sensor not find')
-  return ''
 
 @register('configSensor', "")
 def configSensor(dictConfig):
@@ -406,91 +257,40 @@ def configSensor(dictConfig):
   arg :
     - dictConfig : dict
   """
+  global Blinx
   verification(dictConfig, dict)
-
-  for sensor, config in dictConfig.items():
-    verification(sensor, str)#, saveSensor.listSensorModify)
-    newName = config['new']
-    input = config['input']
-    saveSensor.listSensorModify[newName] = {'name' : sensor, 'channel': {}, "config": {}, "input" : input}
-    sensorsCreate(sensor, created = True, input = input)
-
-def sensorsCreateDict(digital =  False):
-  """
-  create the dictionary with the information for each time
-  """
-  arrayTimeValue = [1, 10, 60, 600, 3600]
-  arrayTimeName = ['1s', '10s', '1m', '10m', '1h']
-  arrayTimeSize = [300] * 5
-  arrayTimeOffset = [0, 0, 1, 2, 3]
-  arrayNextTime = nextTime(arrayTimeValue)
-  before = None
-
-  tempoDict = {}
-
-  for i in range(len(arrayTimeValue)):
-    nameTime = arrayTimeName[i]
-    tempoDict[nameTime] = {
-        'size' : arrayTimeSize[i],
-        'times' : arrayNextTime[i],
-        'value' : arrayTimeValue[i],
-        'offset' : arrayTimeOffset[i],
-        'before' : before,
-      }
-    if digital:
-      tempoDict[nameTime]['dataSize'] = 1
-    before = nameTime
-  return tempoDict
-
+  Blinx = blinxSensor.Blinx(dictConfig, i2c)
+  sensors.getAllFunctionSensor()
 
 
 @register('get_sensors', "")
 def getSensors(listSensors, times = '1s'):
   """
-  get the data form the sensors
+  get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
-  bufferCircular.tampon = True
+  blinxSensor.tampon = True
   timeBefore = time.time()
 
-  text, nameSensors = verificationListSensor(listSensors)
+  text, nameSensors, functionSensors = verificationListSensor(listSensors)
   # immedate data of the sensor
   if times == '0s':
     text += '\n' + str(time.time())
     for sensor in nameSensors:
       timeBefore = saveSensorWhileRequest(timeBefore)
-
-      if sensor[:-3] == 'annalogique':
-        p1 = int(sensor[-3])
-        p2 = int(sensor[-2])
-        p3 = int(sensor[-1])
-        text += ';' + str(analogCreate(times = times, p1 = p1, p2 = p2, p3 = p3))
-      elif sensor[:7] == 'digital':
-        pin = int(sensor[7:])
-        text += ';' + str(digitalCreate(times = times, pin = pin))
-      else:
-        text += ';' + str(sensorsCreate(sensor, times))
+      sensorInfo = sensors.__listSensor[sensor]['immediate']
+      text += ';' + str(sensorInfo['func'](i2c, **sensorInfo['args']))
     return text
   else :
-    # capture each sensor the user want the data
+    # capture all the data from each sensor the user want the data
     dataAllSensor = ''
     indexData = 0
     sizeBuffer = 300
     while indexData < sizeBuffer:
       textTimeStamp = ''
-      for sensor in nameSensors:
+      for func in functionSensors:
         timeBefore = saveSensorWhileRequest(timeBefore)
-
-        if sensor[:-3] == 'annalogique':
-          p1 = int(sensor[-3])
-          p2 = int(sensor[-2])
-          p3 = int(sensor[-1])
-          dataSensor, timeDataSensor = analogCreate(times = times, p1 = p1, p2 = p2, p3 = p3, index = indexData)
-        elif sensor[:7] == 'digital':
-          pin = int(sensor[7:])
-          dataSensor, timeDataSensor = digitalCreate(times = times, pin = pin, index = indexData)
-        else:
-          dataSensor, timeDataSensor = sensorsCreate(sensor, times, index = indexData)
+        dataSensor, timeDataSensor = func.getIndex(times, indexData)
         textTimeStamp += ';' + dataSensor
 
       dataAllSensor = timeDataSensor + ';' + textTimeStamp + dataAllSensor
@@ -498,17 +298,17 @@ def getSensors(listSensors, times = '1s'):
       indexData += 1
     text += '\n' + dataAllSensor
 
-  bufferCircular.tampon = False
+  blinxSensor.tampon = False
   return text
 
 def saveSensorWhileRequest(timeBefore):
+  """
+  when we get the data form the sensors for the user,
+  we have to continue to capture the data
+  """
   if timeBefore < time.time()+1:
     timeBefore = time.time()+1
-    timeWait, finishWait, finishDonnee, l_donneeAnalog, indexAnalog = saveSensor.recordDataPart1()
-    if not finishWait:
-      time.sleep_ms(timeWait - time.time())
-
-    saveSensor.recordDataPart2(finishDonnee, l_donneeAnalog, indexAnalog)
+    Blinx.save()
   return timeBefore
 
 def verificationListSensor(listSensors):
@@ -518,65 +318,13 @@ def verificationListSensor(listSensors):
   """
   text = 'Time'
   nameSensors = []
+  functionSensors = []
   for sensor in listSensors:
-    verification(sensor, str, saveSensor.listSensorModify)
+    verification(sensor, str, Blinx.sensors_input)
     text += ';' + sensor
-    nameSensors.append(saveSensor.listSensorModify[sensor]['name'])
-  return text, nameSensors
-
-def sensorsCreate(sensor, index = 0, times = '1s', created = False, channels = [], info = None, input= True):
-  """
-  if created is True we begin to record the sensor
-  else we return the bytearray of the data record it,
-  with the time and index of the present record
-  arg :
-    - sensor : str
-    - temps : str
-    - created : boolean
-  """
-  if times == '0s':
-    if sensor in sensors.__listSensor:
-      sensors.__listSensor[sensor]['immediate']['func'](info = info) # i2c or array of pin
-    else:
-      raise Exception("le sensor n'existe pas")
-  elif created:
-    tempoDict = sensorsCreateDict()
-    # create the channel
-    arrayChannel = []
-    for channel in channels:
-      if channel['type'] == "I2C":
-        id = channel['id']
-        function = sensors.__listSensor[sensor]['byte'+id]['func']
-        waitingTime = sensors.__listSensor[sensor]['byte'+id]['waiting']
-
-        addr = sensors.infoSensorI2C[sensor]['addr']
-        byteReceive = sensors.infoSensorI2C[sensor]['byteReceive']
-        codeSend = sensors.infoSensorI2C[sensor]['codeSend']
-        arrayChannel.append(channelClass.ChannelI2C(i2c, addr, byteReceive, codeSend, waitingTime, function))
-      elif channel['type'] == "Analog":
-        id = channel['id']
-        function = sensors.__listSensor[sensor]['byte'+id]['func']
-
-        pin = channel['pin']
-        p1 = channel['p1']
-        p2 = channel['p2']
-        p3 = channel['p3']
-        freq = channel['freq']
-        arrayChannel.append(channelClass.ChannelAnalog(pin, p1, p2, p3, function, freq = freq))
-      elif channel['type'] == "Digital":
-        pin = channel['pin']
-        arrayChannel.append(channelClass.ChannelDigital(pin))
-
-    if input:
-      sensorBuffer = bufferCircular.Sensor(sensor, arrayChannel, tempoDict, waitingTime)
-      saveSensor.donnee['function'][sensor] = sensorBuffer
-      saveSensor.donnee['name'].append(sensor)
-    else :
-      dicOutputSensors[sensor] = arrayChannel
-  elif sensor in saveSensor.donnee['function']:
-    return saveSensor.donnee['function'][sensor].getIndex(times, index)
-  else :
-    raise Exception("Sensor inconnu")
+    nameSensors.append(Blinx.sensors_input[sensor]['name'])
+    functionSensors.append(Blinx.sensors_input[sensor]['sensor'])
+  return text, nameSensors, functionSensors
 
 
 
@@ -592,22 +340,25 @@ def verification(value, type_value, possible = [], inPossible = True):
     raise TypeError(message)
 
 
+async def saveAllSensor():
+  while True:
+    # we will wait a minimum of 1 secondes before we recommence
+    timeBefore = time.ticks_ms()
+
+    Blinx.save()
+
+    present= time.ticks_ms()
+    diffTime = 1000 - blinxSensor.diffTicks(timeBefore, present)
+    if diffTime > 0:
+      await asyncio.sleep_ms(diffTime)
+
 def launch():
   os.dupterm(uart, 1)
   os.dupterm(None, 1)
-  set_loop()
-  loop.run_forever()
-
-def set_loop():
   loop = asyncio.get_event_loop()
   loop.create_task(receiver())
-  loop.create_task(saveSensor.saveAllSensor())
-
-@register('loop', "")
-def stop_loop():
-  loop.stop()
-  loop.close()
-
+  loop.create_task(saveAllSensor())
+  loop.run_forever()
 
 def debug(json):
   """

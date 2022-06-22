@@ -74,3 +74,7 @@ def clear():
   """
   display.fill(0)
   display.show()
+
+
+class DisplayBlinx():
+    pass
