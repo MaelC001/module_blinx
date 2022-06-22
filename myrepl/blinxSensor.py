@@ -9,7 +9,8 @@ ticks_boucle = 0
 time_ns = time.time_ns() - time.ticks_ms()
 ticks_max = 2**30
 
-
+# import blinxC
+# a = blinxC.Blinx(configs = {'A' : {'new' : 'B', 'input' : False, 'channels' : [{'type':'Digital', 'pin':2}]}})
 
 class Blinx():
     def __init__(self, configs = {}, i2c = None):
@@ -88,7 +89,7 @@ class Sensor():
                 addr = sensors.infoSensorI2C[sensor]['addr']
                 byteReceive = sensors.infoSensorI2C[sensor]['byteReceive']
                 codeSend = sensors.infoSensorI2C[sensor]['codeSend']
-                self.arrayChannel.append(ChannelI2C(self.i2c, addr, byteReceive, codeSend, waitingTime, function))
+                self.arrayChannel.append(ChannelI2C(self.i2c, addr, byteReceive, codeSend, waitingTime, name = sensor, translateFunction = function))
             elif channel['type'] == "Analog":
                 id = channel['id']
                 function = sensors.__listSensor[sensor]['byte'+id]['func']
@@ -98,7 +99,7 @@ class Sensor():
                 p2 = channel['p2']
                 p3 = channel['p3']
                 freq = channel['freq']
-                self.arrayChannel.append(ChannelAnalog(pin, p1, p2, p3, function, freq = freq))
+                self.arrayChannel.append(ChannelAnalog(pin, p1, p2, p3, name = sensor, translateFunction = function, freq = freq))
             elif channel['type'] == "Digital":
                 pin = channel['pin']
                 self.arrayChannel.append(ChannelDigital(pin))
@@ -138,7 +139,7 @@ class Sensor():
 
 # Channels
 class Channel():
-    def __init__(self, translateFunction, error = bytearray(b'\xff\xfe')):
+    def __init__(self, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x):
 
         # the tampon for when we convert the data
         self.tampon = Buffer(30)
@@ -156,10 +157,9 @@ class Channel():
             size = config['size']
             times = config['times']
             step = config['value']
-            name = config['name']
 
             tempo = {}
-            self.buffer = self.createBuffer(name, size, step, times, error)
+            tempo['buffer'] = self.createBuffer(name, size, step, times, error)
             tempo['before'] = config['before']
             tempo['offset'] = config['offset']
             tempo['times'] = times
@@ -262,11 +262,11 @@ class Channel():
 
 
 class ChannelDigital(Channel):
-    def __init__(self, pin, error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : b'\x01' if x else b'\x00'):
+    def __init__(self, pin, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : b'\x01' if x else b'\x00'):
         # the pin for the sensor
         self.pin = Pin(pin, Pin.OUT)
 
-        super().__init__(translateFunction, error)
+        super().__init__(name = name, error = error, translateFunction = translateFunction)
 
     def createBuffer(self, name, size, step, times, error):
         return BufferCircular(name, size, step, times, error = error, dataSize = 1)
@@ -277,7 +277,7 @@ class ChannelDigital(Channel):
         self.pin.value(value)
 
 class ChannelAnalog(Channel):
-    def __init__(self, pin, p1, p2, p3, error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x, freq = 1000):
+    def __init__(self, pin, p1, p2, p3, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x, freq = 1000):
         # the pin for the output
         self.pin = Pin(pin, Pin.OUT)
         self.pwm = PWM(pin)
@@ -288,7 +288,7 @@ class ChannelAnalog(Channel):
         self.p2 = p2
         self.p3 = p3
 
-        super().__init__(translateFunction, error)
+        super().__init__(name = name, error = error, translateFunction = translateFunction)
     def read(self):
         Pin(0, mode=Pin.OUT).value(self.p1)
         Pin(2, mode=Pin.OUT).value(self.p2)
@@ -298,7 +298,7 @@ class ChannelAnalog(Channel):
         self.pwm.duty(value)
 
 class ChannelI2C(Channel):
-    def __init__(self, i2c, addr, byteReceive, codeSend, wait, error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x):
+    def __init__(self, i2c, addr, byteReceive, codeSend, wait, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x):
         # the i2c bus
         self.i2c = i2c
         # the i2c addr for the sensor
@@ -310,7 +310,7 @@ class ChannelI2C(Channel):
         # the time to wait
         self.wait = wait
 
-        super().__init__(translateFunction, error)
+        super().__init__(name = name, error = error, translateFunction = translateFunction)
     def read(self):
         self.write(self.codeSend)
         sleep_ms(self.wait)
