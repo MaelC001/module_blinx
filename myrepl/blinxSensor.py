@@ -10,6 +10,7 @@ time_ns = time.time_ns() - time.ticks_ms()
 ticks_max = 2**30
 
 
+
 class Blinx():
     def __init__(self, configs = {}, i2c = None):
         # list of all the sensor
