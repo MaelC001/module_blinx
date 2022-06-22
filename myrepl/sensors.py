@@ -1,7 +1,7 @@
 # list of the different function for all the sensor
 __listSensor = {}
 
-infoSensorI2C = {}
+info_sensor_I2C = {}
 
 # register for function who calculate the brut donnee
 def register(fn, name, etape, waiting = 0, args = {}):

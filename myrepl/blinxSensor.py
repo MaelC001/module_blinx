@@ -24,44 +24,44 @@ class Blinx():
         # list of all the output sensor
         self.sensors_output = {}
         for sensor, config in configs.items():
-            newName = config['new']
+            new_name = config['new']
             input = config['input']
             channels = config['channels']
             temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  input, i2c)}
-            self.sensors[newName] = temp
+            self.sensors[new_name] = temp
             if input :
-                self.sensors_input[newName] = temp
+                self.sensors_input[new_name] = temp
             else:
-                self.sensors_output[newName] = temp
+                self.sensors_output[new_name] = temp
 
     def save(self, time):
         # save the reply of all the sensor
         for i in self.sensors.values():
             i['sensor'].save(time)
 
-    def getIndex(self, time, index):
+    def get_index(self, time, index):
         # get the data from a index for all the sensor
         result = []
         for i in self.sensors.values():
-            result.append(i['sensor'].getIndex(time, index))
+            result.append(i['sensor'].get_index(time, index))
         return result
 
-    def getTimeBuffer(self, time):
+    def get_time_buffer(self, time):
         # current time of the buffer
         tempo = next(iter(a.keys()))
-        return self.sensors[tempo]['sensor'].getTimeBuffer(time)
+        return self.sensors[tempo]['sensor'].get_time_buffer(time)
 
-    def tampon2log(self):
+    def tampon_to_log(self):
         # move the tampon to the log
         for i in self.sensors.values():
-            i['sensor'].tampon2log(time)
+            i['sensor'].tampon_to_log(time)
 
 
 # Sensors
 class Sensor():
-    def __init__(self, sensorType, channels = [], input= True, error = bytearray(b'\xff\xfe'), i2c = None):
+    def __init__(self, sensor_type, channels = [], input= True, error = bytearray(b'\xff\xfe'), i2c = None):
         # the type of sensor
-        self.sensorType = sensorType
+        self.sensor_type = sensor_type
         # the error code
         self.error = error
         # number of byte for each data
@@ -71,108 +71,104 @@ class Sensor():
         # the i2c bus
         self.i2c = i2c
         # the list of the channel of each pin for the sensor
-        self.arrayChannel = []
+        self.array_channel = []
         # the number of channel
-        self.numberChannel = len(channels)
+        self.number_channel = len(channels)
         # the waiting time
         self.waiting = 0
         # create all the channel
-        self._createChannel(sensorType, channels, input)
+        self._create_channel(channels, input)
 
-    def _createChannel(self, sensor, channels = [], input= True):
+    def _create_channel(self, channels = [], input= True):
         """create all the channel"""
         for channel in channels:
             if channel['type'] == "I2C":
                 id = channel['id']
-                function = sensors.__listSensor[sensor]['byte'+id]['func']
-                waitingTime = sensors.__listSensor[sensor]['byte'+id]['waiting']
-                if self.waiting < waitingTime:
-                    self.waiting = waitingTime
+                function = sensors.__listSensor[self.sensor_type]['byte'+id]['func']
+                waiting_time = sensors.__listSensor[self.sensor_type]['byte'+id]['waiting']
+                if self.waiting < waiting_time:
+                    self.waiting = waiting_time
 
-                addr = sensors.infoSensorI2C[sensor]['addr']
-                byteReceive = sensors.infoSensorI2C[sensor]['byteReceive']
-                codeSend = sensors.infoSensorI2C[sensor]['codeSend']
-                self.arrayChannel.append(ChannelI2C(self.i2c, addr, byteReceive, codeSend, waitingTime, name = sensor, translateFunction = function))
+                addr = sensors.info_sensor_I2C[self.sensor_type]['addr']
+                byte_receive = sensors.info_sensor_I2C[self.sensor_type]['byteReceive']
+                code_send = sensors.info_sensor_I2C[self.sensor_type]['codeSend']
+                self.array_channel.append(ChannelI2C(self.i2c, addr, byte_receive, code_send, waiting_time, name = self.sensor_type, translate_function = function))
             elif channel['type'] == "Analog":
                 id = channel['id']
-                function = sensors.__listSensor[sensor]['byte'+id]['func']
+                function = sensors.__listSensor[self.sensor_type]['byte'+id]['func']
 
                 pin = channel['pin']
                 p1 = channel['p1']
                 p2 = channel['p2']
                 p3 = channel['p3']
                 freq = channel['freq']
-                self.arrayChannel.append(ChannelAnalog(pin, p1, p2, p3, name = sensor, translateFunction = function, freq = freq))
+                self.array_channel.append(ChannelAnalog(pin, p1, p2, p3, name = self.sensor_type, translate_function = function, freq = freq))
             elif channel['type'] == "Digital":
                 pin = channel['pin']
-                self.arrayChannel.append(ChannelDigital(pin))
+                self.array_channel.append(ChannelDigital(pin))
 
     def read(self):
         temp = []
-        for i in self.arrayChannel:
+        for i in self.array_channel:
             temp.append(i.read())
         return temp
 
-    def write(self, arrayValue):
-        for i in range(self.numberChannel):
-            self.arrayChannel[i].write(arrayValue[i])
+    def write(self, array_value):
+        for i in range(self.number_channel):
+            self.array_channel[i].write(array_value[i])
 
     def save(self, time):
         # save the reply of the sensor
         # if we are converting the data, we record the new data in a tampon (only each 1s)
         # when we finish the convert we will move the data from the tampon to the log
         if tampon:
-            for i in self.arrayChannel:
-                i.tamponSave(time)
+            for i in self.array_channel:
+                i.tampon_save(time)
         else:
-            for i in self.arrayChannel:
+            for i in self.array_channel:
                 i.save(time)
 
-    def wait(self):
-        # the time to wait before retrieve the reply
-        return self.waiting
-
-    def getIndex(self, time, index):
+    def get_index(self, time, index):
         # get the data from a index of all channel
         result = []
-        for i in self.arrayChannel:
-            result.append(i.getIndex(time, index))
+        for i in self.array_channel:
+            result.append(i.get_index(time, index))
         return result
 
-    def getTimeBuffer(self, time):
+    def get_time_buffer(self, time):
         # current time of the buffer
-        return self.arrayChannel[0].getTimeBuffer(time)
+        return self.array_channel[0].get_time_buffer(time)
 
 
-    def tampon2log(self):
+    def tampon_to_log(self):
         # move the tampon to log
-        for i in self.arrayChannel:
-            i.tampon2log(time)
+        for i in self.array_channel:
+            i.tampon_to_log(time)
 
 
 # Channels
 class Channel():
-    def __init__(self, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x):
+    def __init__(self, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : x):
 
         # the tampon for when we convert the data
         self.tampon = Buffer(30)
 
         # the data for the last reply
-        self.oldData = 0
+        self.old_data = 0
         # the function to translate the byte
-        self.translateFunction = translateFunction
+        self.translate_function = translate_function
         # the error code
         self.error = error
 
         # the dic of information of the channel + their buffer
         self.dic = {}
-        for key, config in sensorsCreateDict().items():
+        for key, config in sensors_create_dict().items():
             size = config['size']
             times = config['times']
             step = config['value']
 
             tempo = {}
-            tempo['buffer'] = self.createBuffer(name, size, step, times, error)
+            tempo['buffer'] = self.create_buffer(name, size, step, times, error)
             tempo['before'] = config['before']
             tempo['offset'] = config['offset']
             tempo['times'] = times
@@ -182,8 +178,8 @@ class Channel():
                 self.size = size
 
             self.dic[key] = tempo
-    def createBuffer(self, name, size, step, times, error):
-        return BufferCircular(name, size, step, times, error = error)
+    def create_buffer(self, name, size, step, times, error):
+        return CircularBuffer(name, size, step, times, error = error)
 
     def read(self):
         pass
@@ -204,21 +200,21 @@ class Channel():
                     value = self.read()
                 else:
                     print(tempo)
-                    bufferBefore = self.dic[before]['buffer']
-                    lastTime = tempo['times'] - next
-                    array = bufferBefore.getPartial(lastTime)
-                    s = self.sumByte(array[0], bufferBefore.dataSize)
+                    buffer_before = self.dic[before]['buffer']
+                    last_time = tempo['times'] - next
+                    array = buffer_before.getPartial(last_time)
+                    s = self.sum_byte(array[0], buffer_before.dataSize)
                     value = int(s/array[1])
                     value = value.to_bytes(2, 'big')
                 tempo['buffer'].append(value, time)
                 tempo['times'] += next
-    def tamponSave(self, time):
+    def tampon_save(self, time):
         """
             we are converting the data, we record the new data in a tampon (only each 1s)
             when we finish the convert we will move the data from the tampon to the log
         """
         if self.tampon.time == -1:
-            self.tampon.setTime(time)
+            self.tampon.set_time(time)
         value = self.read()
         self.tampon.append(value, time)
 
@@ -228,11 +224,11 @@ class Channel():
             we have to transfert all data from the tampon
             to the log and do the mean for the different time
         """
-        self.tampon.setTime(-1)
+        self.tampon.set_time(-1)
         lenArray = 30
 
         for index in range(lenArray):
-                valueBrut, time = self.tampon.getIndex(index)
+                valueBrut, time = self.tampon.get_index(index)
                 for i in self.dic:
                     tempo = self.dic[i]
                     before = tempo['before']
@@ -242,8 +238,8 @@ class Channel():
                             value = valueBrut
                         else:
                             bufferBefore = self.dic[before]['buffer']
-                            lastTime = tempo['times'] - next
-                            array = bufferBefore.getPartial(lastTime)
+                            last_time = tempo['times'] - next
+                            array = bufferBefore.getPartial(last_time)
                             s = sum(array[0], bufferBefore.dataSize)
                             value = int(s/array[1])
                             value = value.to_bytes(2, 'big')
@@ -251,47 +247,47 @@ class Channel():
                         tempo['times'] += next
         self.tampon.clear()
 
-    def sumByte(self, byteArray, nmbByte):
+    def sum_byte(self, byte_array, number_byte):
         """ sum the data sensor in a bytearray """
         s = 0
-        for i in range(0, len(byteArray), nmbByte):
-            y = i+nmbByte
-            sub = byteArray[i:y]
-            if nmbByte > 1:
+        for i in range(0, len(byte_array), number_byte):
+            y = i+number_byte
+            sub = byte_array[i:y]
+            if number_byte > 1:
                 s += int.from_bytes(sub, 'big')
             else :
                 s += int.from_bytes(sub, 'big')
         return s
 
-    def getTimeBuffer(self, time):
+    def get_time_buffer(self, time):
         """ current time of the buffer """
         tempo = self.dic[time]['buffer']
         diffBoucle = ticks_boucle - tempo.ticks_boucle
         return tempo.time + time_ns - ticks_max * diffBoucle
 
-    def getIndex(self, time, index):
+    def get_index(self, time, index):
         """ get the data for a index """
         tempo = self.dic[time]['buffer']
         return tempo.getIndex(index)
 
 
 class ChannelDigital(Channel):
-    def __init__(self, pin, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : b'\x01' if x else b'\x00'):
+    def __init__(self, pin, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : b'\x01' if x else b'\x00'):
         # the pin for the sensor
         self.pin = Pin(pin, Pin.OUT)
 
-        super().__init__(name = name, error = error, translateFunction = translateFunction)
+        super().__init__(name = name, error = error, translate_function = translate_function)
 
-    def createBuffer(self, name, size, step, times, error):
-        return BufferCircular(name, size, step, times, error = error, dataSize = 1)
+    def create_buffer(self, name, size, step, times, error):
+        return CircularBuffer(name, size, step, times, error = error, data_size = 1)
 
     def read(self):
-        return self.translateFunction(self.pin(), self.error, self.oldData)
+        return self.translate_function(self.pin(), self.error, self.old_data)
     def write(self, value):
         self.pin.value(value)
 
 class ChannelAnalog(Channel):
-    def __init__(self, pin, p1, p2, p3, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x, freq = 1000):
+    def __init__(self, pin, p1, p2, p3, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : x, freq = 1000):
         # the pin for the output
         self.pin = Pin(pin, Pin.OUT)
         self.pwm = PWM(pin)
@@ -302,52 +298,52 @@ class ChannelAnalog(Channel):
         self.p2 = p2
         self.p3 = p3
 
-        super().__init__(name = name, error = error, translateFunction = translateFunction)
+        super().__init__(name = name, error = error, translate_function = translate_function)
     def read(self):
         Pin(0, mode=Pin.OUT).value(self.p1)
         Pin(2, mode=Pin.OUT).value(self.p2)
         Pin(15, mode=Pin.OUT).value(self.p3)
-        return self.translateFunction(ADC(0).read(), self.error, self.oldData)
+        return self.translate_function(ADC(0).read(), self.error, self.old_data)
     def write(self, value):
         self.pwm.duty(value)
 
 class ChannelI2C(Channel):
-    def __init__(self, i2c, addr, byteReceive, codeSend, wait, name = '', error = bytearray(b'\xff\xfe'), translateFunction = lambda x,y,z : x):
+    def __init__(self, i2c, addr, byte_receive, code_send, wait, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : x):
         # the i2c bus
         self.i2c = i2c
         # the i2c addr for the sensor
         self.addr = addr
         # the byte to receive from the sensor
-        self.byteReceive = byteReceive
+        self.byte_receive = byte_receive
         # the code to send to the sensor
-        self.codeSend = codeSend
+        self.code_send = code_send
         # the time to wait
         self.wait = wait
 
-        super().__init__(name = name, error = error, translateFunction = translateFunction)
+        super().__init__(name = name, error = error, translate_function = translate_function)
     def read(self):
-        self.write(self.codeSend)
+        self.write(self.code_send)
         sleep_ms(self.wait)
         return self.read_i2c()
     def write(self, value):
         self.i2c.writeto(self.addr, value)
     def read_i2c(self):
-        return self.translateFunction(self.i2c.readfrom(self.addr, self.byteReceive), self.error, self.oldData)
+        return self.translate_function(self.i2c.readfrom(self.addr, self.byte_receive), self.error, self.old_data)
 
 # Buffers
 class Buffer():
-    def __init__(self, size, step = 1, time = 0, null = bytearray(b'\xff\xff'), dataSize = 2):
+    def __init__(self, size, step = 1, time = 0, null = bytearray(b'\xff\xff'), data_size = 2):
         # the real index in the byte array
-        self.realIndex = 0
+        self.real_index = 0
         # the index for the each data, it is not equal to the realIndex,
         # if the data is stock in multiple byte
-        self.dataIndex = 0
+        self.data_index = 0
         # value index is the value of one index
         # if the index is 2, and step=1, then we are at 2s
         # if the index is 2, and step=10, then we are at 20s ...
         self.step = step
         # it is the number of byte to stock the data
-        self.dataSize = dataSize
+        self.data_size = data_size
         # it is the number of data stock
         self.size = size
         # the code for error
@@ -357,7 +353,7 @@ class Buffer():
         # the byte array for data
         #self._data = null*(size*dataSize)   # each measure is stored in 2 bytes
         self._data = bytearray()
-        for _ in range(size*dataSize) :
+        for _ in range(size*data_size) :
             self._data += null
         # the timestamp in index 0
         self.time = time
@@ -368,84 +364,84 @@ class Buffer():
         then add the 2 bytes of information
         """
         self.fix_missing_data(time)
-        self.resetIndex(time)
-        for i in range(self.dataSize):
-            self._data[self.realIndex] = value[i]
-            self.realIndex += 1
-        self.dataIndex += 1
+        self.reset_index(time)
+        for i in range(self.data_size):
+            self._data[self.real_index] = value[i]
+            self.real_index += 1
+        self.data_index += 1
 
-    def resetIndex(self, time):
+    def reset_index(self, time):
         """reset the index"""
-        if self.dataIndex == self.size:
-            self.realIndex = 0
-            self.dataIndex = 0
+        if self.data_index == self.size:
+            self.real_index = 0
+            self.data_index = 0
             self.time = time
             self.ticks_boucle = ticks_boucle
 
-    def getIndex(self, index):
+    def get_index(self, index):
         """get all the data of a index (in accordance with the present data (index 0)) to the present data"""
-        diffBoucle = ticks_boucle - self.ticks_boucle
-        time_ns = time_ns - ticks_max * diffBoucle
-        diff = self.dataIndex - index - 1
-        if self.dataIndex == 0:
-            timeData = self.size * self.step
-        elif self.dataIndex > index:
-            timeData = self.time + diff
-        elif self.dataIndex <= index:
-            timeData = self.time - (diff - self.dataIndex)
-        indexData = diff*self.dataSize
-        return self._data[indexData : indexData+self.dataSize], timeData + time_ns
+        diff_boucle = ticks_boucle - self.ticks_boucle
+        time_ns = time_ns - ticks_max * diff_boucle
+        diff = self.data_index - index - 1
+        if self.data_index == 0:
+            time_data = self.size * self.step
+        elif self.data_index > index:
+            time_data = self.time + diff
+        elif self.data_index <= index:
+            time_data = self.time - (diff - self.data_index)
+        index_data = diff*self.data_size
+        return self._data[index_data : index_data+self.data_size], time_data + time_ns
 
-    def lastTime(self):
+    def last_time(self):
         """last time we stock a data"""
-        return self.time + (self.dataIndex-1) * self.step
+        return self.time + (self.data_index-1) * self.step
 
     def missing(self, time):
         """do we have missing data"""
-        return int(diffTicks(self.lastTime() + self.step, time)/1000) > 0
+        return int(diff_ticks(self.last_time() + self.step, time)/1000) > 0
 
     def fix_missing_data(self, time):
         """correct the missing data : put the 'null' bytes in missing data"""
         if self.missing(time):
             self.append(self.null, time - 1)
 
-    def setTime(self, time):
+    def set_time(self, time):
         """change the time"""
         self.time = time
 
     def clear(self):
         """clear of the data (for the tampon)"""
-        self.realIndex = 0
-        self.dataIndex = 0
+        self.real_index = 0
+        self.data_index = 0
         self._data = bytearray()
-        for _ in range(self.size*self.dataSize) :
+        for _ in range(self.size*self.data_size) :
             self._data += self.null
         self.time = -1
 
-class BufferCircular(Buffer):
-    def __init__(self, name, size, step = 1, time = 0, null = bytearray(b'\xff\xff'), error = bytearray(b'\xff\xfe'), dataSize = 2):
+class CircularBuffer(Buffer):
+    def __init__(self, name, size, step = 1, time = 0, null = bytearray(b'\xff\xff'), error = bytearray(b'\xff\xfe'), data_size = 2):
         # the code for error
         self.error = error
         # the nam of the sensor
         self.name = name
-        super().__init__(size, step, time, null, dataSize)
+        super().__init__(size, step = step, time = time, null = null, data_size = data_size)
 
-    def getPartial(self, timeStamp):
+    def get_partial(self, time_stamp):
         """get partial data, with the timeStamp"""
-        i = round((timeStamp - self.time) / self.step)
-        l = self.getData(timeStamp >= self.time, i)
-        return self.getListModify(l)
+        i = round((time_stamp - self.time) / self.step)
+        l = self.get_data(time_stamp >= self.time, i)
+        return self.get_list_modify(l)
 
-    def getAll(self):
+    def get_all(self):
         """get all the data"""
         return self._data
 
-    def getListModify(self, l):
+    def get_list_modify(self, l):
         """remove the error and the missing data of the list"""
         array = bytearray()
         s = 0
-        for i in range(0, len(l), self.dataSize):
-            y = i+self.dataSize
+        for i in range(0, len(l), self.data_size):
+            y = i+self.data_size
             sub = l[i:y]
             if sub != self.null and sub != self.error:
                 s += 1
@@ -454,38 +450,38 @@ class BufferCircular(Buffer):
 
     def save(self, nmb):
         """save a number of the data"""
-        i = self.dataIndex - nmb
-        l = self.getData(self.dataIndex >= nmb, i)
+        i = self.data_index - nmb
+        l = self.get_data(self.data_index >= nmb, i)
 
-        text = self.array2str(l)
+        text = self.array_to_str(l)
         return text
 
-    def array2str(array, separator = '\n'):
+    def array_to_str(array, separator = '\n'):
         """change array to string"""
         return separator.join(array) + separator
 
-    def getData(self, beforeIndex, i):
+    def get_data(self, before_index, i):
         """
         beforeIndex : is the information we want begin
         before or after the current index
         """
-        if beforeIndex :
-            l = self._data[i*self.dataSize:self.realIndex*self.dataSize]
-            l = self.reverseBytearray(l)
+        if before_index :
+            l = self._data[i*self.data_size:self.real_index*self.data_size]
+            l = self.reverse_bytearray(l)
         else:
-            l1 = self._data[:self.realIndex*self.dataSize]
-            l1 = self.reverseBytearray(l1)
-            l2 = self._data[i*self.dataSize:]
-            l2 = self.reverseBytearray(l2)
+            l1 = self._data[:self.real_index*self.data_size]
+            l1 = self.reverse_bytearray(l1)
+            l2 = self._data[i*self.data_size:]
+            l2 = self.reverse_bytearray(l2)
             l = l1 + l2
         return l
 
-    def reverseBytearray(self, array):
+    def reverse_bytearray(self, array):
         """reverse the data of a sensor in a bytearray"""
         l = len(array)
         tempo = bytearray()
-        for i in range(l, 0, -self.dataSize):
-            y = i-self.dataSize
+        for i in range(l, 0, -self.data_size):
+            y = i-self.data_size
             sub = array[y:i]
             tempo += sub
         return tempo
@@ -493,56 +489,56 @@ class BufferCircular(Buffer):
 
 
 
-def sensorsCreateDict():
+def sensors_create_dict():
     """
     create the dic of the info for the buffer
     """
-    arrayTimeValue = [1, 10, 60, 600, 3600]
-    arrayTimeName = ['1s', '10s', '1m', '10m', '1h']
-    arrayTimeSize = [300] * 5
-    arrayTimeOffset = [0, 0, 1, 2, 3]
-    arrayNextTime = nextTime(arrayTimeValue)
+    array_time_value = [1, 10, 60, 600, 3600]
+    array_time_name = ['1s', '10s', '1m', '10m', '1h']
+    array_time_size = [300] * 5
+    array_time_offset = [0, 0, 1, 2, 3]
+    array_next_time = next_time(array_time_value)
     before = None
 
-    tempoDict = {}
+    temp_dict = {}
 
-    for i in range(len(arrayTimeValue)):
-        nameTime = arrayTimeName[i]
-        tempoDict[nameTime] = {
-            'size' : arrayTimeSize[i],
-            'times' : arrayNextTime[i],
-            'value' : arrayTimeValue[i],
-            'offset' : arrayTimeOffset[i],
+    for i in range(len(array_time_value)):
+        name_time = array_time_name[i]
+        temp_dict[name_time] = {
+            'size' : array_time_size[i],
+            'times' : array_next_time[i],
+            'value' : array_time_value[i],
+            'offset' : array_time_offset[i],
             'before' : before,
         }
-        before = nameTime
-    return tempoDict
+        before = name_time
+    return temp_dict
 
 
-def nextTime(arrayTime):
+def next_time(arrayTime):
     """
     calculate the next we have each time, for example :
     if it is 12s, the next time we have 10s it is 20s
     if it is 96s, the next time we have 60s it is 120s
     """
-    arrayNextTime = []
+    array_next_time = []
     present = time.time()
     for i in arrayTime:
         tempoTime = present + (i - (present % i))
-        arrayNextTime.append(tempoTime)
+        array_next_time.append(tempoTime)
 
-    return arrayNextTime
+    return array_next_time
 
-def diffTicks(self, before, after, diffMax = 2000):
+def diff_ticks(self, before, after):
     """calcul the difference between to ticks"""
     diff = time.ticks_diff(after, before)
     if after >= before:
         return diff
     else :
-        resetTicks()
+        reset_ticks()
         return diff
 
-def resetTicks():
+def reset_ticks():
     """reset ticks"""
     global ticks_boucle, time_ns
     ticks_boucle += 1

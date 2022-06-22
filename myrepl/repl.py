@@ -348,7 +348,7 @@ async def saveAllSensor():
     Blinx.save()
 
     present= time.ticks_ms()
-    diffTime = 1000 - blinxSensor.diffTicks(timeBefore, present)
+    diffTime = 1000 - blinxSensor.diff_ticks(timeBefore, present)
     if diffTime > 0:
       await asyncio.sleep_ms(diffTime)
 
