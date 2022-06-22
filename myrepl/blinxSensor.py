@@ -11,6 +11,9 @@ ticks_max = 2**30
 
 # import blinxC
 # a = blinxC.Blinx(configs = {'A' : {'new' : 'B', 'input' : False, 'channels' : [{'type':'Digital', 'pin':2}]}})
+# b = a.sensors['B']['sensor']
+# c = b.arrayChannel[0]
+# d = c.dic['1s']['buffer']
 
 class Blinx():
     def __init__(self, configs = {}, i2c = None):
@@ -190,6 +193,7 @@ class Channel():
                 if before == None :
                     value = self.read()
                 else:
+                    print(tempo)
                     bufferBefore = self.dic[before]['buffer']
                     lastTime = tempo['times'] - next
                     array = bufferBefore.getPartial(lastTime)
