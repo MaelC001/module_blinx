@@ -107,6 +107,16 @@ class Sensor():
                 pin = channel['pin']
                 self.arrayChannel.append(ChannelDigital(pin))
 
+    def read(self):
+        temp = []
+        for i in self.arrayChannel:
+            temp.append(i.read())
+        return temp
+
+    def write(self, arrayValue):
+        for i in range(self.numberChannel):
+            self.arrayChannel[i].write(arrayValue[i])
+
     def save(self, time):
         # save the reply of the sensor
         # if we are converting the data, we record the new data in a tampon (only each 1s)
