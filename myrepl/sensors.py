@@ -1,5 +1,5 @@
 # list of the different function for all the sensor
-__listSensor = {}
+__list_sensors = {}
 
 info_sensor_I2C = {}
 
@@ -7,13 +7,13 @@ info_sensor_I2C = {}
 def register(fn, name, etape, waiting = 0, args = {}):
   def wrapper(fn):
 
-    if name in __listSensor:
-      __listSensor[name][etape] = {'func' : fn, 'waiting' : waiting}
+    if name in __list_sensors:
+      __list_sensors[name][etape] = {'func' : fn, 'waiting' : waiting}
     else :
-      __listSensor[name] = {etape : {'func' : fn, 'waiting' : waiting}}
+      __list_sensors[name] = {etape : {'func' : fn, 'waiting' : waiting}}
 
     if etape == 'immediate':
-      __listSensor[name]['args'] = args
+      __list_sensors[name]['args'] = args
 
     return fn
   return wrapper(fn)
@@ -35,7 +35,7 @@ def crc8_sht3(buffer):
 
 
 def getAllFunctionSensor():
-  __listSensor.clear()
+  __list_sensors.clear()
   try:
     import listSensorUser
   except:

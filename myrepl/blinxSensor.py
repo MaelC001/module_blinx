@@ -3,36 +3,36 @@ from time import sleep_ms
 import sensors, time
 
 # do we do a conversion
-tampon = False
+buffer = False
 # number of boucle
 ticks_boucle = 0
 time_ns = time.time_ns() - time.ticks_ms()
 ticks_max = 2**30
 
 # import blinxC
-# a = blinxC.Blinx(configs = {'A' : {'new' : 'B', 'input' : False, 'channels' : [{'type':'Digital', 'pin':2}]}})
+# a = blinxC.Blinx(configs = {'A' : {'new_name' : 'B', 'input' : False, 'channels' : [{'type':'Digital', 'pin':2}]}})
 # b = a.sensors['B']['sensor']
-# c = b.arrayChannel[0]
+# c = b.channels[0]
 # d = c.dic['1s']['buffer']
 
 class Blinx():
-    def __init__(self, configs = {}, i2c = None):
+    def __init__(self, configs, i2c):
         # list of all the sensor
         self.sensors = {}
         # list of all the input sensor
-        self.sensors_input = {}
+        self.input_sensors = {}
         # list of all the output sensor
-        self.sensors_output = {}
+        self.output_sensors = {}
         for sensor, config in configs.items():
-            new_name = config['new']
-            input = config['input']
+            new_name = config['new_name']
+            is_input = config['is_input']
             channels = config['channels']
-            temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  input, i2c)}
+            temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  is_input, i2c)}
             self.sensors[new_name] = temp
-            if input :
-                self.sensors_input[new_name] = temp
+            if is_input :
+                self.input_sensors[new_name] = temp
             else:
-                self.sensors_output[new_name] = temp
+                self.output_sensors[new_name] = temp
 
     def save(self, time):
         # save the reply of all the sensor
@@ -48,18 +48,18 @@ class Blinx():
 
     def get_time_buffer(self, time):
         # current time of the buffer
-        tempo = next(iter(a.keys()))
-        return self.sensors[tempo]['sensor'].get_time_buffer(time)
+        temp = next(iter(self.sensors.keys()))
+        return self.sensors[temp]['sensor'].get_time_buffer(time)
 
-    def tampon_to_log(self):
-        # move the tampon to the log
+    def buffer_to_log(self):
+        # move the buffer to the log
         for i in self.sensors.values():
-            i['sensor'].tampon_to_log(time)
+            i['sensor'].buffer_to_log(time)
 
 
 # Sensors
 class Sensor():
-    def __init__(self, sensor_type, channels = [], input= True, error = bytearray(b'\xff\xfe'), i2c = None):
+    def __init__(self, sensor_type, channels, input= True, error = b'\xff\xfe', i2c = None):
         # the type of sensor
         self.sensor_type = sensor_type
         # the error code
@@ -71,92 +71,93 @@ class Sensor():
         # the i2c bus
         self.i2c = i2c
         # the list of the channel of each pin for the sensor
-        self.array_channel = []
-        # the number of channel
-        self.number_channel = len(channels)
+        self.channels = []
         # the waiting time
         self.waiting = 0
         # create all the channel
-        self._create_channel(channels, input)
+        self._create_channels(channels)
 
-    def _create_channel(self, channels = [], input= True):
+    def _create_channels(self, channels):
         """create all the channel"""
         for channel in channels:
             if channel['type'] == "I2C":
                 id = channel['id']
-                function = sensors.__listSensor[self.sensor_type]['byte'+id]['func']
-                waiting_time = sensors.__listSensor[self.sensor_type]['byte'+id]['waiting']
+                function = sensors.__list_sensors[self.sensor_type]['byte'+id]['func']
+                waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+id]['waiting']
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
 
+                # the address of the sensor I2C
                 addr = sensors.info_sensor_I2C[self.sensor_type]['addr']
-                byte_receive = sensors.info_sensor_I2C[self.sensor_type]['byteReceive']
-                code_send = sensors.info_sensor_I2C[self.sensor_type]['codeSend']
-                self.array_channel.append(ChannelI2C(self.i2c, addr, byte_receive, code_send, waiting_time, name = self.sensor_type, translate_function = function))
+                # the number of byte to receive form the sensor
+                number_byte_receive = sensors.info_sensor_I2C[self.sensor_type]['byteReceive']
+                # the code to send to the sensor to tell him we want the data
+                code_to_send = sensors.info_sensor_I2C[self.sensor_type]['codeSend']
+                self.channels.append(I2CChannel(self.i2c, addr, number_byte_receive, code_to_send, waiting_time, name = self.sensor_type, translation_byte_function = function))
             elif channel['type'] == "Analog":
                 id = channel['id']
-                function = sensors.__listSensor[self.sensor_type]['byte'+id]['func']
+                function = sensors.__list_sensors[self.sensor_type]['byte'+id]['func']
 
                 pin = channel['pin']
                 p1 = channel['p1']
                 p2 = channel['p2']
                 p3 = channel['p3']
                 freq = channel['freq']
-                self.array_channel.append(ChannelAnalog(pin, p1, p2, p3, name = self.sensor_type, translate_function = function, freq = freq))
+                self.channels.append(AnalogChannel(pin, p1, p2, p3, name = self.sensor_type, translation_byte_function = function, freq = freq))
             elif channel['type'] == "Digital":
                 pin = channel['pin']
-                self.array_channel.append(ChannelDigital(pin))
+                self.channels.append(DigitalChannel(pin, name = self.sensor_type))
 
     def read(self):
         temp = []
-        for i in self.array_channel:
+        for i in self.channels:
             temp.append(i.read())
         return temp
 
     def write(self, array_value):
-        for i in range(self.number_channel):
-            self.array_channel[i].write(array_value[i])
+        for i in range(len(self.channels)):
+            self.channels[i].write(array_value[i])
 
     def save(self, time):
         # save the reply of the sensor
-        # if we are converting the data, we record the new data in a tampon (only each 1s)
-        # when we finish the convert we will move the data from the tampon to the log
-        if tampon:
-            for i in self.array_channel:
-                i.tampon_save(time)
+        # if we are converting the data, we record the new data in a buffer (only each 1s)
+        # when we finish the convert we will move the data from the buffer to the log
+        if buffer: # buffer is a global variable difine in the begin of the code
+            for i in self.channels:
+                i.buffer_save(time)
         else:
-            for i in self.array_channel:
+            for i in self.channels:
                 i.save(time)
 
     def get_index(self, time, index):
         # get the data from a index of all channel
         result = []
-        for i in self.array_channel:
+        for i in self.channels:
             result.append(i.get_index(time, index))
         return result
 
     def get_time_buffer(self, time):
         # current time of the buffer
-        return self.array_channel[0].get_time_buffer(time)
+        return self.channels[0].get_time_buffer(time)
 
 
-    def tampon_to_log(self):
-        # move the tampon to log
-        for i in self.array_channel:
-            i.tampon_to_log(time)
+    def buffer_to_log(self):
+        # move the buffer to log
+        for i in self.channels:
+            i.buffer_to_log(time)
 
 
 # Channels
 class Channel():
-    def __init__(self, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : x):
+    def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x):
 
-        # the tampon for when we convert the data
-        self.tampon = Buffer(30)
+        # the buffer for when we convert the data
+        self.buffer = Buffer(30)
 
         # the data for the last reply
         self.old_data = 0
         # the function to translate the byte
-        self.translate_function = translate_function
+        self.translation_byte_function = translation_byte_function
         # the error code
         self.error = error
 
@@ -167,93 +168,92 @@ class Channel():
             times = config['times']
             step = config['value']
 
-            tempo = {}
-            tempo['buffer'] = self.create_buffer(name, size, step, times, error)
-            tempo['before'] = config['before']
-            tempo['offset'] = config['offset']
-            tempo['times'] = times
-            tempo['next'] = step
+            temp = {}
+            temp['buffer'] = self.create_buffer(name, size, step, times, error)
+            temp['before'] = config['before']
+            temp['offset'] = config['offset']
+            temp['times'] = times
+            temp['next'] = step
 
             if key == '1s':
                 self.size = size
 
-            self.dic[key] = tempo
+            self.dic[key] = temp
     def create_buffer(self, name, size, step, times, error):
         return CircularBuffer(name, size, step, times, error = error)
 
     def read(self):
-        pass
+        raise NotImplementedError
     def write(self, value):
-        pass
+        raise NotImplementedError
 
     def save(self, time):
         """
             save the reply of the sensor
         """
         for i in self.dic:
-            tempo = self.dic[i]
-            before = tempo['before']
-            next = tempo['next']
-            if (tempo['times'] + tempo['offset']) <= time:
+            temp = self.dic[i]
+            before = temp['before']
+            next = temp['next']
+            if (temp['times'] + temp['offset']) <= time:
                 # is it a mean of the reply of before ?
                 if before == None :
                     value = self.read()
                 else:
-                    print(tempo)
                     buffer_before = self.dic[before]['buffer']
-                    last_time = tempo['times'] - next
+                    last_time = temp['times'] - next
                     array = buffer_before.getPartial(last_time)
-                    s = self.sum_byte(array[0], buffer_before.dataSize)
+                    s = self.sum_bytes(array[0], buffer_before.dataSize)
                     value = int(s/array[1])
                     value = value.to_bytes(2, 'big')
-                tempo['buffer'].append(value, time)
-                tempo['times'] += next
-    def tampon_save(self, time):
+                temp['buffer'].append(value, time)
+                temp['times'] += next
+    def buffer_save(self, time):
         """
-            we are converting the data, we record the new data in a tampon (only each 1s)
-            when we finish the convert we will move the data from the tampon to the log
+            we are converting the data, we record the new data in a buffer (only each 1s)
+            when we finish the convert we will move the data from the buffer to the log
         """
-        if self.tampon.time == -1:
-            self.tampon.set_time(time)
+        if self.buffer.time == -1:
+            self.buffer.set_time(time)
         value = self.read()
-        self.tampon.append(value, time)
+        self.buffer.append(value, time)
 
-    def tampon2log(self):
+    def buffer_to_log(self):
         """
-            when we finish with tge tampon,
-            we have to transfert all data from the tampon
+            when we finish with tge buffer,
+            we have to transfert all data from the buffer
             to the log and do the mean for the different time
         """
-        self.tampon.set_time(-1)
+        self.buffer.set_time(-1)
         lenArray = 30
 
         for index in range(lenArray):
-                valueBrut, time = self.tampon.get_index(index)
+                valueBrut, time = self.buffer.get_index(index)
                 for i in self.dic:
-                    tempo = self.dic[i]
-                    before = tempo['before']
-                    next = tempo['next']
-                    if (tempo['times'] + tempo['offset']) <= time:
+                    temp = self.dic[i]
+                    before = temp['before']
+                    next = temp['next']
+                    if (temp['times'] + temp['offset']) <= time:
                         if before == None :
                             value = valueBrut
                         else:
                             bufferBefore = self.dic[before]['buffer']
-                            last_time = tempo['times'] - next
+                            last_time = temp['times'] - next
                             array = bufferBefore.getPartial(last_time)
                             s = sum(array[0], bufferBefore.dataSize)
                             value = int(s/array[1])
                             value = value.to_bytes(2, 'big')
-                        tempo['buffer'].append(value, time)
-                        tempo['times'] += next
-        self.tampon.clear()
+                        temp['buffer'].append(value, time)
+                        temp['times'] += next
+        self.buffer.clear()
 
-    def sum_byte(self, byte_array, number_byte):
+    def sum_bytes(self, byte_array, bytes_amount):
         """ sum the data sensor in a bytearray """
         s = 0
-        for i in range(0, len(byte_array), number_byte):
-            y = i+number_byte
+        for i in range(0, len(byte_array), bytes_amount):
+            y = i+bytes_amount
             sub = byte_array[i:y]
-            if number_byte > 1:
+            if bytes_amount > 1:
                 s += int.from_bytes(sub, 'big')
             else :
                 s += int.from_bytes(sub, 'big')
@@ -261,33 +261,42 @@ class Channel():
 
     def get_time_buffer(self, time):
         """ current time of the buffer """
-        tempo = self.dic[time]['buffer']
-        diffBoucle = ticks_boucle - tempo.ticks_boucle
-        return tempo.time + time_ns - ticks_max * diffBoucle
+        temp = self.dic[time]['buffer']
+        diffBoucle = ticks_boucle - temp.ticks_boucle
+        return temp.time + time_ns - ticks_max * diffBoucle
 
     def get_index(self, time, index):
         """ get the data for a index """
-        tempo = self.dic[time]['buffer']
-        return tempo.getIndex(index)
+        temp = self.dic[time]['buffer']
+        return temp.getIndex(index)
 
 
-class ChannelDigital(Channel):
-    def __init__(self, pin, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : b'\x01' if x else b'\x00'):
+class DigitalChannel(Channel):
+    def __init__(self, pin, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : b'\x01' if x else b'\x00'):
+        # a digital sensor will give us a boolean (true or false) when we read it
+        # It is the fact that there is power or not
+        # but the buffer use the byte array, so we will transform the boolean to byte
+        # b'\x01' for True and b'\x00' for False
+        # it is the role of the translation_byte_function
+
         # the pin for the sensor
         self.pin = Pin(pin, Pin.OUT)
 
-        super().__init__(name = name, error = error, translate_function = translate_function)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function)
 
     def create_buffer(self, name, size, step, times, error):
         return CircularBuffer(name, size, step, times, error = error, data_size = 1)
 
     def read(self):
-        return self.translate_function(self.pin(), self.error, self.old_data)
+        return self.translation_byte_function(self.pin(), self.error, self.old_data)
     def write(self, value):
         self.pin.value(value)
 
-class ChannelAnalog(Channel):
-    def __init__(self, pin, p1, p2, p3, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : x, freq = 1000):
+class AnalogChannel(Channel):
+    def __init__(self, pin, p1, p2, p3, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, freq = 1000):
+        # here we don't have a specific transformation to do to the sensor data, so we will return the data
+        # but, some sensors may have some transformations to do
+
         # the pin for the output
         self.pin = Pin(pin, Pin.OUT)
         self.pwm = PWM(pin)
@@ -298,17 +307,20 @@ class ChannelAnalog(Channel):
         self.p2 = p2
         self.p3 = p3
 
-        super().__init__(name = name, error = error, translate_function = translate_function)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function)
     def read(self):
         Pin(0, mode=Pin.OUT).value(self.p1)
         Pin(2, mode=Pin.OUT).value(self.p2)
         Pin(15, mode=Pin.OUT).value(self.p3)
-        return self.translate_function(ADC(0).read(), self.error, self.old_data)
+        return self.translation_byte_function(ADC(0).read(), self.error, self.old_data)
     def write(self, value):
         self.pwm.duty(value)
 
-class ChannelI2C(Channel):
-    def __init__(self, i2c, addr, byte_receive, code_send, wait, name = '', error = bytearray(b'\xff\xfe'), translate_function = lambda x,y,z : x):
+class I2CChannel(Channel):
+    def __init__(self, i2c, addr, byte_receive, code_send, wait, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x):
+        # here we don't have a specific transformation to do to the sensor data, so we will return the data
+        # but, some sensors may have some transformations to do
+
         # the i2c bus
         self.i2c = i2c
         # the i2c addr for the sensor
@@ -320,7 +332,7 @@ class ChannelI2C(Channel):
         # the time to wait
         self.wait = wait
 
-        super().__init__(name = name, error = error, translate_function = translate_function)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function)
     def read(self):
         self.write(self.code_send)
         sleep_ms(self.wait)
@@ -328,11 +340,11 @@ class ChannelI2C(Channel):
     def write(self, value):
         self.i2c.writeto(self.addr, value)
     def read_i2c(self):
-        return self.translate_function(self.i2c.readfrom(self.addr, self.byte_receive), self.error, self.old_data)
+        return self.translation_byte_function(self.i2c.readfrom(self.addr, self.byte_receive), self.error, self.old_data)
 
 # Buffers
 class Buffer():
-    def __init__(self, size, step = 1, time = 0, null = bytearray(b'\xff\xff'), data_size = 2):
+    def __init__(self, size, step = 1, time = 0, null = b'\xff\xff', data_size = 2):
         # the real index in the byte array
         self.real_index = 0
         # the index for the each data, it is not equal to the realIndex,
@@ -410,7 +422,7 @@ class Buffer():
         self.time = time
 
     def clear(self):
-        """clear of the data (for the tampon)"""
+        """clear of the data (for the buffer)"""
         self.real_index = 0
         self.data_index = 0
         self._data = bytearray()
@@ -419,7 +431,7 @@ class Buffer():
         self.time = -1
 
 class CircularBuffer(Buffer):
-    def __init__(self, name, size, step = 1, time = 0, null = bytearray(b'\xff\xff'), error = bytearray(b'\xff\xfe'), data_size = 2):
+    def __init__(self, name, size, step = 1, time = 0, null = b'\xff\xff', error = b'\xff\xfe', data_size = 2):
         # the code for error
         self.error = error
         # the nam of the sensor
@@ -479,12 +491,12 @@ class CircularBuffer(Buffer):
     def reverse_bytearray(self, array):
         """reverse the data of a sensor in a bytearray"""
         l = len(array)
-        tempo = bytearray()
+        temp = bytearray()
         for i in range(l, 0, -self.data_size):
             y = i-self.data_size
             sub = array[y:i]
-            tempo += sub
-        return tempo
+            temp += sub
+        return temp
 
 
 
@@ -524,8 +536,8 @@ def next_time(arrayTime):
     array_next_time = []
     present = time.time()
     for i in arrayTime:
-        tempoTime = present + (i - (present % i))
-        array_next_time.append(tempoTime)
+        temp_time = present + (i - (present % i))
+        array_next_time.append(temp_time)
 
     return array_next_time
 

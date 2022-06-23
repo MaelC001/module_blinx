@@ -247,7 +247,7 @@ def sensorStop():
   """
   global Blinx
   Blinx = blinxSensor.Blinx()
-  sensors.__listSensor.clear()
+  sensors.__list_sensors.clear()
 
 
 @register('configSensor', "")
@@ -269,7 +269,7 @@ def getSensors(listSensors, times = '1s'):
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
-  blinxSensor.tampon = True
+  blinxSensor.buffer = True
   timeBefore = time.time()
 
   text, nameSensors, functionSensors = verificationListSensor(listSensors)
@@ -278,7 +278,7 @@ def getSensors(listSensors, times = '1s'):
     text += '\n' + str(time.time())
     for sensor in nameSensors:
       timeBefore = saveSensorWhileRequest(timeBefore)
-      sensorInfo = sensors.__listSensor[sensor]['immediate']
+      sensorInfo = sensors.__list_sensors[sensor]['immediate']
       text += ';' + str(sensorInfo['func'](i2c, **sensorInfo['args']))
     return text
   else :
@@ -298,7 +298,7 @@ def getSensors(listSensors, times = '1s'):
       indexData += 1
     text += '\n' + dataAllSensor
 
-  blinxSensor.tampon = False
+  blinxSensor.buffer = False
   return text
 
 def saveSensorWhileRequest(timeBefore):
@@ -320,10 +320,10 @@ def verificationListSensor(listSensors):
   nameSensors = []
   functionSensors = []
   for sensor in listSensors:
-    verification(sensor, str, Blinx.sensors_input)
+    verification(sensor, str, Blinx.input_sensors)
     text += ';' + sensor
-    nameSensors.append(Blinx.sensors_input[sensor]['name'])
-    functionSensors.append(Blinx.sensors_input[sensor]['sensor'])
+    nameSensors.append(Blinx.input_sensors[sensor]['name'])
+    functionSensors.append(Blinx.input_sensors[sensor]['sensor'])
   return text, nameSensors, functionSensors
 
 
