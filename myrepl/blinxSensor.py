@@ -10,7 +10,7 @@ time_ns = time.time_ns() - time.ticks_ms()
 ticks_max = 2**30
 
 # import blinxC
-# a = blinxC.Blinx(configs = {'A' : {'new_name' : 'B', 'input' : False, 'channels' : [{'type':'Digital', 'pin':2}]}})
+# a = blinxC.Blinx(configs = {'A' : {'new_name' : 'B', 'is_input' : False, 'channels' : [{'type':'Digital', 'pin':2}]}}, i2c = None)
 # b = a.sensors['B']['sensor']
 # c = b.channels[0]
 # d = c.dic['1s']['buffer']
@@ -191,23 +191,8 @@ class Channel():
         """
             save the reply of the sensor
         """
-        for i in self.dic:
-            temp = self.dic[i]
-            before = temp['before']
-            next = temp['next']
-            if (temp['times'] + temp['offset']) <= time:
-                # is it a mean of the reply of before ?
-                if before == None :
-                    value = self.read()
-                else:
-                    buffer_before = self.dic[before]['buffer']
-                    last_time = temp['times'] - next
-                    array = buffer_before.getPartial(last_time)
-                    s = self.sum_bytes(array[0], buffer_before.dataSize)
-                    value = int(s/array[1])
-                    value = value.to_bytes(2, 'big')
-                temp['buffer'].append(value, time)
-                temp['times'] += next
+        self.save_value_in_log(time, self.read())
+
     def buffer_save(self, time):
         """
             we are converting the data, we record the new data in a buffer (only each 1s)
@@ -228,24 +213,28 @@ class Channel():
         lenArray = 30
 
         for index in range(lenArray):
-                valueBrut, time = self.buffer.get_index(index)
-                for i in self.dic:
-                    temp = self.dic[i]
-                    before = temp['before']
-                    next = temp['next']
-                    if (temp['times'] + temp['offset']) <= time:
-                        if before == None :
-                            value = valueBrut
-                        else:
-                            bufferBefore = self.dic[before]['buffer']
-                            last_time = temp['times'] - next
-                            array = bufferBefore.getPartial(last_time)
-                            s = sum(array[0], bufferBefore.dataSize)
-                            value = int(s/array[1])
-                            value = value.to_bytes(2, 'big')
-                        temp['buffer'].append(value, time)
-                        temp['times'] += next
+                value_brut, time = self.buffer.get_index(index)
+                self.save_value_in_log(time, value_brut)
         self.buffer.clear()
+
+    def save_value_in_log(self, time, value_brut):
+        for i in self.dic:
+            temp = self.dic[i]
+            before = temp['before']
+            next = temp['next']
+            if (temp['times'] + temp['offset']) <= time:
+                # is it a mean of the reply of before ?
+                if before == None :
+                    value = value_brut
+                else:
+                    buffer_before = self.dic[before]['buffer']
+                    last_time = temp['times'] - next
+                    array = buffer_before.get_partial(last_time)
+                    s = sum(array[0], buffer_before.data_size)
+                    value = int(s/array[1])
+                    value = value.to_bytes(2, 'big')
+                temp['buffer'].append(value, time)
+                temp['times'] = time + next
 
     def sum_bytes(self, byte_array, bytes_amount):
         """ sum the data sensor in a bytearray """
@@ -363,7 +352,7 @@ class Buffer():
         # number of boucle of the ticks
         self.ticks_boucle = ticks_boucle
         # the byte array for data
-        #self._data = null*(size*dataSize)   # each measure is stored in 2 bytes
+        #self._data = null*(size*data_size)   # each measure is stored in 2 bytes
         self._data = bytearray()
         for _ in range(size*data_size) :
             self._data += null
@@ -410,7 +399,7 @@ class Buffer():
 
     def missing(self, time):
         """do we have missing data"""
-        return int(diff_ticks(self.last_time() + self.step, time)/1000) > 0
+        return diff_ticks(self.last_time() + self.step, time) > 0
 
     def fix_missing_data(self, time):
         """correct the missing data : put the 'null' bytes in missing data"""
@@ -541,7 +530,7 @@ def next_time(arrayTime):
 
     return array_next_time
 
-def diff_ticks(self, before, after):
+def diff_ticks(before, after):
     """calcul the difference between to ticks"""
     diff = time.ticks_diff(after, before)
     if after >= before:
