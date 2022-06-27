@@ -290,7 +290,7 @@ def getSensors(listSensors, times = '1s'):
       textTimeStamp = ''
       for func in functionSensors:
         timeBefore = saveSensorWhileRequest(timeBefore)
-        dataSensor, timeDataSensor = func.getIndex(times, indexData)
+        dataSensor, timeDataSensor = func.get_index(times, indexData)
         textTimeStamp += ';' + dataSensor
 
       dataAllSensor = timeDataSensor + ';' + textTimeStamp + dataAllSensor
