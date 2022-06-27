@@ -10,29 +10,35 @@ let infoUserSensor = [{}]*nmbPort;
 // which port have i2c
 let PortsI2C = [1];
 // list of sensor for each different port
-let listSensors = {
-    "I2C" : [
-        {
-            "id" : "temp-sht3x",
+let listAllSensors = {
+    "I2C" : {
+        "temp-sht3x" : {
             "text" : "temperature (in micro controller)",
-        }, {
-            "id" : "humid-sht3x",
-            "text" : "humidity (in micro controller)",
+            "addr" : "",
+            "file" : "",
         },
-    ],
-    "DigiAnalog" : [
-        {
-            "id" : "",
+        "humid-sht3x" : {
+            "text" : "humidity (in micro controller)",
+            "addr" : "",
+            "file" : "",
+        },
+    },
+    "DigiAnalog" : {
+        "" : {
             "text" : "",
-        }, {
-            "id" : "led pin2",
+            "file" : "",
+        },
+        "led pin2" : {
             "text" : "led (in micro controller) (pin 2)",
-        }, {
-            "id" : "custom",
+            "file" : "",
+        },
+        "custom" : {
             "text" : "custom",
+            "file" : "",
         }
-    ],
+    },
 };
+let listSensors = {};
 let listPortAfficher = [0,0,0];
 
 textPopup = "\
@@ -57,6 +63,8 @@ idPopup = [1, 2, 3];
 
 
 function loadSelectPort(){
+    create_dic();
+
     // load the different element in the html page
     let htmlItem =  _("selectorPorts");
     let textHTML = '';
@@ -79,7 +87,7 @@ function loadSelectPort(){
             textHTML += " <p>I2C Port</p>"
             textHTML += " <select class='singleSensorI2C' id='"+nameResultID+"'";
             textHTML += "     name='sensorsPort' onchange='changeSensor(\""+y+"\")'></select>";
-            textHTML += " <button type='button' class='btn' onclick='verify_i2c()'>Scan I2C</button>";
+            textHTML += " <button type='button' class='btn' onclick='verify_i2c("+y+")'>Scan I2C</button>";
             textHTML += " <button type='button' onclick='openForm("+y+")'> Config the sensor </button>";
             textHTML += "</div>";
         } else{
@@ -182,7 +190,24 @@ function saveConfig(){
     console.log(infoUserSensor);
 }
 
-function verify_i2c(){}
+function verify_i2c(port){
+    let cmd = "scan_i2c";
+    write(cmd, idCmd = 0);
+    return read().then(e => verify_json(e, verify));
+
+    function verify(json){
+        let error = []
+        let values = _('sensorsPort'+port).value;
+        values.forEach(test);
+        return error;
+
+        function test(name){
+            if (!json['result'].includes(listAllSensors['I2C'][name]['addr'])){
+                error.push(name);
+            }
+        }
+    }
+}
 
 function config_sensor(){
     if (!verify_i2c()){
@@ -190,7 +215,22 @@ function config_sensor(){
     }
     var json_config = {};
     var json_sensor = {};
+
+    var port1 = _('sensorsPort1').value;
+    var port2 = _('sensorsPort2').value;
+    var port3 = _('sensorsPort3').value;
 }
 
+function create_dic(){
+    for(var key1 in listAllSensors) {
+        listSensors[key1] = []
+        for(var key2 in listAllSensors[key1]) {
+            listSensors[key1].push({
+                'id' : key2,
+                'text' : listAllSensors[key1][key2]['text'],
+            })
+        }
+    }
+}
 
 loadSelectPort();

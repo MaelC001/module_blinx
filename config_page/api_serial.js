@@ -62,7 +62,6 @@ async function read_all_file(callback){
         if (!json['error']){
             if (id == json['id']){
                 return verify_json(e, json => {return Promise.all(json['result'].map(read_file)).then(callback);});
-                
             } else{
                 return 'no corresponding in id';
             }
