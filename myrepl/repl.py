@@ -309,7 +309,6 @@ def sensor_stop():
   Blinx = blinxSensor.Blinx()
   #sensors.__listSensor.clear()
 
-
 @register('configSensor', "")
 def config_sensor(dictConfig):
   """
@@ -333,6 +332,11 @@ def remove_all_function_sensor():
     remove_file(i+'.py')
   remove_file("listSensorUser.py")
   del sys.modules['listSensorUser']
+
+@register('sensors_output', "")
+def output_sensors(sensor_name, array_value):
+  verification(sensor_name, str, Blinx.sensors_output)
+  Blinx.sensors_output[sensor_name]['sensor'].write(array_value)
 
 @register('get_sensors', "")
 def get_sensors(list_sensors, times = '1s'):
