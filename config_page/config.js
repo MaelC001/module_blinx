@@ -96,7 +96,7 @@ function loadSelectPort() {
             textHTML += "<div class='grid-item itemPortSensor" + y + "' id='div_" + nameResultID + "'>";
             textHTML += " <p>I2C Port</p>"
             textHTML += " <select class='singleSensorI2C' id='" + nameResultID + "'";
-            textHTML += "     name='sensorsPort' onchange='changeSensor(\"" + y + "\")'></select>";
+            textHTML += "     name='sensorsPort' onchange='changeSensorI2C(\"" + y + "\")'></select>";
             textHTML += " <button type='button' class='btn' onclick='verify_i2c(" + y + ")'>Scan I2C</button>";
             textHTML += " <button type='button' onclick='openForm(" + y + ")'> Config the sensor </button>";
             textHTML += "</div>";
@@ -143,15 +143,39 @@ function loadSelectPort() {
 }
 
 function changeSensor(port) {
-    value = _('sensorsPort' + port).value;
+    let value = _('sensorsPort' + port).value;
     let tempo = {
         "name": value,
         "userName": "",
         "port": port,
+        "channels": [],
         "borne inferieure": -1,
         "borne supeieure": -1,
     };
     infoUserSensor[port - 1] = tempo;
+}
+
+function changeSensorI2C(port) {
+    let values = _('sensorsPort' + port).value;
+    values.forEach(getInfoI2C);
+    let tempoGlobal = {};
+    function getInfoI2C(name){
+        if (infoUserSensor[port - 1][name]){
+            tempoGlobal[name] = infoUserSensor[port - 1][name];
+        }else{
+            let tempo = {
+                "name": value,
+                "userName": "",
+                "port": port,
+                "channels": [],
+                "borne inferieure": -1,
+                "borne supeieure": -1,
+            };
+            tempoGlobal[name] = tempo;
+        }
+    }
+
+    infoUserSensor[port - 1] = tempoGlobal;
 }
 
 function format(option) {
@@ -234,11 +258,14 @@ function config_sensor() {
         if (name != "" && name != "costum") {
             json_push(name, 'DigiAnalog');
             let info = infoUserSensor[i];
-            json_sensor[info['name']] = {
-                'new_name': info['userName'],
-                'is_input': listAllSensors['DigiAnalog'][name]['is_input'],
-                'is_display': listAllSensors['DigiAnalog'][name]['is_display'],
-                'channels': info['channels'],
+            if (listAllSensors['DigiAnalog'][name]['is_display']){
+            } else{
+                json_sensor[info['name']] = {
+                    'new_name': info['userName'],
+                    'is_input': listAllSensors['DigiAnalog'][name]['is_input'],
+                    'is_display': listAllSensors['DigiAnalog'][name]['is_display'],
+                    'channels': info['channels'],
+                }
             }
             i = 2;
         }
@@ -247,12 +274,18 @@ function config_sensor() {
     port2.forEach(I2CFunction);
     function I2CFunction(name) {
         json_push(name, 'I2C');
-        let info = infoUserSensor[1];
-        json_sensor[info['name']] = {
-            'new_name': info['userName'],
-            'is_input': listAllSensors['I2C'][name]['is_input'],
-            'is_display': listAllSensors['I2C'][name]['is_display'],
-            'channels': info['channels'],
+        let infos = infoUserSensor[1];
+        infos.forEach(setConfigJson);
+        function setConfigJson(info){
+            if (listAllSensors['I2C'][name]['is_display']){
+            } else{
+                json_sensor[info['name']] = {
+                    'new_name': info['userName'],
+                    'is_input': listAllSensors['I2C'][name]['is_input'],
+                    'is_display': listAllSensors['I2C'][name]['is_display'],
+                    'channels': info['channels'],
+                }
+            }
         }
     }
 
