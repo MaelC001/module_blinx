@@ -79,7 +79,7 @@ function loadSelectPort(){
             textHTML += " <p>I2C Port</p>"
             textHTML += " <select class='singleSensorI2C' id='"+nameResultID+"'";
             textHTML += "     name='sensorsPort' onchange='changeSensor(\""+y+"\")'></select>";
-            textHTML += " <button type='button' class='btn' onclick='alert(\"TO DO\")'>Scan I2C</button>";
+            textHTML += " <button type='button' class='btn' onclick='verify_i2c()'>Scan I2C</button>";
             textHTML += " <button type='button' onclick='openForm("+y+")'> Config the sensor </button>";
             textHTML += "</div>";
         } else{
@@ -98,7 +98,7 @@ function loadSelectPort(){
     });
     textHTML += '</div>';
     textHTML += '<div id="Save">';
-    textHTML += " <button type='button' onclick='alert(\"To Do\")'>Save configuration</button>";
+    textHTML += " <button type='button' onclick='config_sensor()'>Save configuration</button>";
     textHTML += '</div>';
 
     htmlItem.innerHTML = textHTML;
@@ -182,7 +182,15 @@ function saveConfig(){
     console.log(infoUserSensor);
 }
 
+function verify_i2c(){}
 
+function config_sensor(){
+    if (!verify_i2c()){
+        alert('i2c not correct');
+    }
+    var json_config = {};
+    var json_sensor = {};
+}
 
 
 loadSelectPort();
