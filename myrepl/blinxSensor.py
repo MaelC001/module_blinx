@@ -94,35 +94,10 @@ class Sensor():
         """create all the channel"""
         for channel in channels:
             if channel['type'] == "I2C":
-                id = channel['id']
-                function_byte = sensors.__list_sensors[self.sensor_type]['byte'+id]['func']
-                function_data = sensors.__list_sensors[self.sensor_type]['data'+id]['func']
-                waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+id]['waiting']
+                waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+channel['id']]['waiting']
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
-
-                # the address of the sensor I2C
-                addr = sensors.info_sensor_I2C[self.sensor_type]['addr']
-                # the number of byte to receive form the sensor
-                number_byte_receive = sensors.info_sensor_I2C[self.sensor_type]['byteReceive']
-                # the code to send to the sensor to tell him we want the data
-                code_to_send = sensors.info_sensor_I2C[self.sensor_type]['codeSend']
-                self.channels.append(I2CChannel(self.i2c, addr, number_byte_receive, code_to_send, waiting_time, name = self.sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, id=id))
-            elif channel['type'] == "Analog":
-                id = channel['id']
-                function_byte = sensors.__list_sensors[self.sensor_type]['byte'+id]['func']
-                function_data = sensors.__list_sensors[self.sensor_type]['data'+id]['func']
-
-                pin = channel['pin']
-                p1 = channel['p1']
-                p2 = channel['p2']
-                p3 = channel['p3']
-                freq = channel['freq']
-                self.channels.append(AnalogChannel(pin, p1, p2, p3, name = self.sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id=id))
-            elif channel['type'] == "Digital":
-                id = channel['id']
-                pin = channel['pin']
-                self.channels.append(DigitalChannel(pin, name = self.sensor_type, id=id))
+            self.channels.append(Channel._configure(channel, self.sensor_type, self.i2c))
 
     def read(self):
         temp = []
@@ -201,6 +176,35 @@ class Channel():
             self.dic[key] = temp
     def create_buffer(self, name, size, step, times, error):
         return CircularBuffer(name, size, step, times, error = error)
+
+    def _configure(channel, sensor_type, i2c):
+        if channel['type'] == "I2C":
+            id = channel['id']
+            function_byte = sensors.__list_sensors[sensor_type]['byte'+id]['func']
+            function_data = sensors.__list_sensors[sensor_type]['data'+id]['func']
+
+            # the address of the sensor I2C
+            addr = sensors.info_sensor_I2C[sensor_type]['addr']
+            # the number of byte to receive form the sensor
+            number_byte_receive = sensors.info_sensor_I2C[sensor_type]['byteReceive']
+            # the code to send to the sensor to tell him we want the data
+            code_to_send = sensors.info_sensor_I2C[sensor_type]['codeSend']
+            return I2CChannel(i2c, addr, number_byte_receive, code_to_send, waiting_time, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, id=id)
+        elif channel['type'] == "Analog":
+            id = channel['id']
+            function_byte = sensors.__list_sensors[sensor_type]['byte'+id]['func']
+            function_data = sensors.__list_sensors[sensor_type]['data'+id]['func']
+
+            pin = channel['pin']
+            p1 = channel['p1']
+            p2 = channel['p2']
+            p3 = channel['p3']
+            freq = channel['freq']
+            return AnalogChannel(pin, p1, p2, p3, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id=id)
+        elif channel['type'] == "Digital":
+            id = channel['id']
+            pin = channel['pin']
+            return DigitalChannel(pin, name = sensor_type, id=id)
 
     def read(self):
         raise NotImplementedError
