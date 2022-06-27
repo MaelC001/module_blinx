@@ -17,7 +17,7 @@ except:
 import sys, json, io
 
 from machine import Pin, I2C, ADC, PWM, UART
-import blinxSensor, sensors, display, network
+import blinxSensor, sensors, network
 
 #import sh1107, mpu9250
 #import dps310_simple as dps310
@@ -33,9 +33,6 @@ uart = UART(0, 115200)
 
 
 loop = None
-
-# display in the micro controller
-display = display.DisplayBlinx()
 
 # function register
 __register = {}
@@ -337,6 +334,11 @@ def remove_all_function_sensor():
 def output_sensors(sensor_name, array_value):
   verification(sensor_name, str, Blinx.sensors_output)
   Blinx.sensors_output[sensor_name]['sensor'].write(array_value)
+
+@register('diplay', "")
+def output_sensors(sensor_name, func_name, *array_value):
+  verification(sensor_name, str, Blinx.sensors_display)
+  Blinx.sensors_display[sensor_name]['sensor'].function(func_name, *array_value)
 
 @register('get_sensors', "")
 def get_sensors(list_sensors, times = '1s'):
