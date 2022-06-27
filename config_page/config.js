@@ -213,12 +213,32 @@ function config_sensor(){
     if (!verify_i2c()){
         alert('i2c not correct');
     }
-    var json_config = {};
+    var json_config = [];
     var json_sensor = {};
 
-    var port1 = _('sensorsPort1').value;
+    var port = [_('sensorsPort1').value, _('sensorsPort3').value];
     var port2 = _('sensorsPort2').value;
-    var port3 = _('sensorsPort3').value;
+
+    port.forEach(DigiAnalogFunction);
+    function DigiAnalogFunction(name){
+        if(name != "" && name != "costum"){
+            json_push(name, 'DigiAnalog');
+        }
+    }
+
+    port2.forEach(I2CFunction);
+    function I2CFunction(name){
+        json_push(name, 'I2C');
+    }
+
+    config_sensor_serial(json_config, json_sensor);
+
+    function json_push(name, type){
+        json_config.push({
+            'name' : name,
+            'file' : listAllSensors[type][name]['file'],
+        });
+    }
 }
 
 function create_dic(){

@@ -96,7 +96,7 @@ function verify_json(e, func){
     }
 }
 
-async function config_sensor(json_config, json_sensor){
+async function config_sensor_serial(json_config, json_sensor){
     var cmd = 'remove_config';
     write(cmd, idCmd = id);
     read().then( e => etape2(e));
