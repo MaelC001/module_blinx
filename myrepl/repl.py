@@ -380,6 +380,11 @@ def get_sensors(list_sensors, times = '1s'):
 
   blinxSensor.tampon = False
   return text
+@register('scan_i2c', "")
+def scan_i2c(addr = None):
+  if addr == None:
+    return i2c.scan()
+  return addr in i2c.scan()
 
 def save_sensor_while_request(time_before):
   """
