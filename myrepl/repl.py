@@ -17,7 +17,7 @@ except:
 import sys, json, io
 
 from machine import Pin, I2C, ADC, PWM, UART
-import blinxSensor, sensors, display
+import blinxSensor, sensors, display, network
 
 #import sh1107, mpu9250
 #import dps310_simple as dps310
@@ -39,6 +39,11 @@ display = display.DisplayBlinx()
 
 # function register
 __register = {}
+
+wlan_sta=network.WLAN(network.STA_IF)
+wlan_sta.active(True)
+wlan_ap=network.WLAN(network.AP_IF)
+wlan_ap.active(False)
 
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
@@ -238,6 +243,61 @@ def execute(cmd):
   exec(cmd)#, {"print":write})
   os.dupterm(None)
   return dupTempo.readAll()
+
+@register('wifi', "")
+def wifi():
+  return {
+    'wlan_sta' : {
+      'active' : wlan_sta.active(),
+      'isconnected' : wlan_sta.isconnected(),
+      'scan' : wlan_sta.scan() if wlan_sta.active() else [],
+      'config' : {
+        "ifcongif" : wlan_sta.ifconfig(),
+        "mac" : wlan_sta.config('mac'),
+        "ssid" : wlan_sta.config('essid'),
+        "dhcp_hostname" : wlan_sta.config('dhcp_hostname'),
+      },
+    },
+    'wlan_ap' : {
+      'active' : wlan_ap.active(),
+      'isconnected' : wlan_ap.isconnected(),
+      'config' : {
+        "ifcongif" : wlan_ap.ifconfig(),
+        "mac" : wlan_ap.config('mac'),
+        "ssid" : wlan_ap.config('essid'),
+        "channel" : wlan_ap.config('channel'),
+        "hidden" : wlan_ap.config('hidden'),
+        "authmode" : wlan_ap.config('authmode'),
+      },
+    },
+  }
+
+@register('wifi_connect', "")
+def wifi_connect(ssid = '', password = '', active = True):
+  wlan_sta.active(active)
+  if active:
+    if not wlan_sta.isconnected():
+      wlan_sta.connect(ssid, password)
+
+      status = wlan_sta.status()
+      if status == network.STAT_NO_AP_FOUND:
+        return "no AP found"
+      elif status == network.STAT_WRONG_PASSWORD:
+        return "wrong password"
+      elif status == network.STAT_CONNECT_FAIL:
+        return "connection fail"
+
+      time.sleep(0.1)
+      return wlan_sta.isconnected()
+  else :
+    wlan_sta.disconnect()
+
+@register('wifi_server', "")
+def wifi_server(ssid = '', password = '', auth = 3, active = True):
+  wlan_ap.active(False)
+  if active:
+    wlan_ap.config(essid=ssid, password=password, authmode=auth)
+    wlan_ap.active(True)
 
 @register('sensors_stop', "")
 def sensorStop():
