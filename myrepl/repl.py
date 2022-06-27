@@ -363,8 +363,9 @@ def get_sensors(list_sensors, times = '1s'):
         func = function_sensors[i]
         sensor = name_sensors[i]
         time_before = save_sensor_while_request(time_before)
-        data_sensor, time_data_sensor = func.getIndex(times, index_data)
-        text_time_stamp += ';' + data_sensor
+        for y in func.getIndex(times, index_data, True):
+          data_sensor, time_data_sensor = y
+          text_time_stamp += ';' + data_sensor
 
       data_all_sensor = time_data_sensor + ';' + text_time_stamp + data_all_sensor
 
@@ -395,7 +396,9 @@ def verification_list_sensor(list_sensors):
   for sensor in list_sensors:
     verification(sensor, str, Blinx.sensors_input)
     text += ';' + sensor
-    name_sensors.append(Blinx.sensors_input[sensor]['name'])
+    name = Blinx.sensors_input[sensor]['name']
+    for i in Blinx.sensors_input[sensor]['sensor'].arrayChannel:
+      name_sensors.append(name+i.id)
     function_sensors.append(Blinx.sensors_input[sensor]['sensor'])
   return text, name_sensors, function_sensors
 
