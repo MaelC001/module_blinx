@@ -58,7 +58,7 @@ class DUP(io.IOBase):
     return str(self.s)
 
 # the register for the user function
-def register(name, subFunction=""):
+def register(name, sub_function=""):
   def wrapper(fn):
     def inner_wrapper(*args, id, **kwargs):
       error = ""
@@ -76,7 +76,7 @@ def register(name, subFunction=""):
           output = {"code": -32000, "message": error}
 
         # if the function use a user function, then we have to check the other function as well
-        elif subFunction and type(output) == dict:
+        elif sub_function and type(output) == dict:
           if 'error' in output:
             message = 'error'
             output = output['error']
@@ -109,10 +109,10 @@ async def receiver():
       j=json.loads(line)
     except Exception as e:
       #error = str(e)
-      errorId = None
+      error_id = None
       j={}
       j['error'] = {"code": -32700, "message": "Parse error"}#error}
-      j['id'] = errorId
+      j['id'] = error_id
       sender(j)
       continue
 
@@ -153,16 +153,16 @@ async def receiver():
     except Exception as e:
       #error = str(e)
       if id:
-        errorId = id
+        error_id = id
       else:
-        errorId = None
+        error_id = None
       j={}
       j['error'] = {"code": -32600, "message": "Invalid Request"}#error}
-      j['id'] = errorId
+      j['id'] = error_id
       sender(j)
 
 @register('write', "")
-def writeFile(name, text, format = 'w', doVerification=True):
+def write_file(name, text, format = 'w', do_verification=True):
   """
   write in a file
   arg :
@@ -170,7 +170,7 @@ def writeFile(name, text, format = 'w', doVerification=True):
     - text : str
     - format : str (optional)
   """
-  if doVerification:
+  if do_verification:
     verification(name, str)
     verification(text, str)
     verification(format, str, ['w','w+','a','a+'])
@@ -180,7 +180,7 @@ def writeFile(name, text, format = 'w', doVerification=True):
   return ''
 
 @register('read', "")
-def readFile(name):
+def read_file(name):
   """
   read a file
   arg :
@@ -193,7 +193,7 @@ def readFile(name):
   return r
 
 @register('create', "")
-def createFile(name):
+def create_file(name):
   """
   create a file
   arg :
@@ -205,7 +205,7 @@ def createFile(name):
   return ''
 
 @register('remove', "")
-def removeFile(name):
+def remove_file(name):
   """
   remove a file
   arg :
@@ -216,7 +216,7 @@ def removeFile(name):
   return ''
 
 @register('liste', "")
-def listFile():
+def list_file():
   """
   do the list of the file
   arg : none
@@ -300,18 +300,18 @@ def wifi_server(ssid = '', password = '', auth = 3, active = True):
     wlan_ap.active(True)
 
 @register('sensors_stop', "")
-def sensorStop():
+def sensor_stop():
   """
   stop all sensor
   arg : none
   """
   global Blinx
   Blinx = blinxSensor.Blinx()
-  sensors.__listSensor.clear()
+  #sensors.__listSensor.clear()
 
 
 @register('configSensor', "")
-def configSensor(dictConfig):
+def config_sensor(dictConfig):
   """
   for config the sensors with custom names
   arg :
@@ -320,95 +320,108 @@ def configSensor(dictConfig):
   global Blinx
   verification(dictConfig, dict)
   Blinx = blinxSensor.Blinx(dictConfig, i2c)
-  sensors.getAllFunctionSensor()
+  sensors.get_all_function_sensor()
 
+@register('remove_config', "remove_file")
+def remove_all_function_sensor():
+  sensors.__listSensor.clear()
+  try:
+    import listSensorUser
+  except:
+    return
+  for i in listSensorUser.array:
+    remove_file(i+'.py')
+  remove_file("listSensorUser.py")
+  del sys.modules['listSensorUser']
 
 @register('get_sensors', "")
-def getSensors(listSensors, times = '1s'):
+def get_sensors(list_sensors, times = '1s'):
   """
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
   blinxSensor.tampon = True
-  timeBefore = time.time()
+  time_before = time.time()
 
-  text, nameSensors, functionSensors = verificationListSensor(listSensors)
+  text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
   # immedate data of the sensor
   if times == '0s':
     text += '\n' + str(time.time())
-    for sensor in nameSensors:
-      timeBefore = saveSensorWhileRequest(timeBefore)
-      sensorInfo = sensors.__listSensor[sensor]['immediate']
-      text += ';' + str(sensorInfo['func'](i2c, **sensorInfo['args']))
+    for sensor in name_sensors:
+      time_before = save_sensor_while_request(time_before)
+      sensor_info = sensors.__listSensor[sensor]['immediate']
+      text += ';' + str(sensor_info['func'](i2c, **sensor_info['args']))
     return text
   else :
     # capture all the data from each sensor the user want the data
-    dataAllSensor = ''
-    indexData = 0
-    sizeBuffer = 300
-    while indexData < sizeBuffer:
-      textTimeStamp = ''
-      for func in functionSensors:
-        timeBefore = saveSensorWhileRequest(timeBefore)
-        dataSensor, timeDataSensor = func.getIndex(times, indexData)
-        textTimeStamp += ';' + dataSensor
+    data_all_sensor = ''
+    index_data = 0
+    size_buffer = 300
+    while index_data < size_buffer:
+      text_time_stamp = ''
+      for i in range(len(function_sensors)):
+        func = function_sensors[i]
+        sensor = name_sensors[i]
+        time_before = save_sensor_while_request(time_before)
+        data_sensor, time_data_sensor = func.getIndex(times, index_data)
+        text_time_stamp += ';' + data_sensor
 
-      dataAllSensor = timeDataSensor + ';' + textTimeStamp + dataAllSensor
+      data_all_sensor = time_data_sensor + ';' + text_time_stamp + data_all_sensor
 
-      indexData += 1
-    text += '\n' + dataAllSensor
+      index_data += 1
+    text += '\n' + data_all_sensor
 
   blinxSensor.tampon = False
   return text
 
-def saveSensorWhileRequest(timeBefore):
+def save_sensor_while_request(time_before):
   """
   when we get the data form the sensors for the user,
   we have to continue to capture the data
   """
-  if timeBefore < time.time()+1:
-    timeBefore = time.time()+1
+  if time_before < time.time()+1:
+    time_before = time.time()+1
     Blinx.save()
-  return timeBefore
+  return time_before
 
-def verificationListSensor(listSensors):
+def verification_list_sensor(list_sensors):
   """
   verification of the sensors : exist or not
   and capture the information
   """
   text = 'Time'
-  nameSensors = []
-  functionSensors = []
-  for sensor in listSensors:
+  name_sensors = []
+  function_sensors = []
+  for sensor in list_sensors:
     verification(sensor, str, Blinx.sensors_input)
     text += ';' + sensor
-    nameSensors.append(Blinx.sensors_input[sensor]['name'])
-    functionSensors.append(Blinx.sensors_input[sensor]['sensor'])
-  return text, nameSensors, functionSensors
+    name_sensors.append(Blinx.sensors_input[sensor]['name'])
+    function_sensors.append(Blinx.sensors_input[sensor]['sensor'])
+  return text, name_sensors, function_sensors
 
 
 
-def verification(value, type_value, possible = [], inPossible = True):
+def verification(value, type_value, possible = [], in_possible = True):
   """
   verify the value the user give us is correct
   """
   if not isinstance(value, type_value):
     message = f"the type of {value} isn't {type_value}"
     raise TypeError(message)
-  if possible != [] and not ( (value not in possible) ^ inPossible ):
+  if possible != [] and not ( (value not in possible) ^ in_possible ):
     message = f"{value} don't have a correct value"
     raise TypeError(message)
 
 
-async def saveAllSensor():
+async def save_all_sensor():
   while True:
     # we will wait a minimum of 1 secondes before we recommence
-    timeBefore = time.ticks_ms()
+    time_before = time.ticks_ms()
 
     Blinx.save()
 
     present= time.ticks_ms()
-    diffTime = 1000 - blinxSensor.diffTicks(timeBefore, present)
+    diffTime = 1000 - blinxSensor.diffTicks(time_before, present)
     if diffTime > 0:
       await asyncio.sleep_ms(diffTime)
 
@@ -417,7 +430,7 @@ def launch():
   os.dupterm(None, 1)
   loop = asyncio.get_event_loop()
   loop.create_task(receiver())
-  loop.create_task(saveAllSensor())
+  loop.create_task(save_all_sensor())
   loop.run_forever()
 
 def debug(json):

@@ -34,7 +34,7 @@ def crc8_sht3(buffer):
 	return crc & 0xFF
 
 
-def getAllFunctionSensor():
+def get_all_function_sensor():
   __listSensor.clear()
   try:
     import listSensorUser
@@ -51,6 +51,8 @@ def getAllFunctionSensor():
       dictFunctions = infoFunction['dictFunctions']
       for type, function in dictFunctions.items():
         register(function, name, type+id, waiting=waiting)
+
+    # type of function : byte, data, immediate
 
     functionImmediate = info['immediate']
     waiting = info['waiting']
