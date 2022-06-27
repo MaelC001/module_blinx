@@ -95,7 +95,7 @@ class Sensor():
                 number_byte_receive = sensors.info_sensor_I2C[self.sensor_type]['byteReceive']
                 # the code to send to the sensor to tell him we want the data
                 code_to_send = sensors.info_sensor_I2C[self.sensor_type]['codeSend']
-                self.channels.append(I2CChannel(self.i2c, addr, number_byte_receive, code_to_send, waiting_time, name = self.sensor_type, translation_byte_function = function_byte, translation_data_function = function_data))
+                self.channels.append(I2CChannel(self.i2c, addr, number_byte_receive, code_to_send, waiting_time, name = self.sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, id=id))
             elif channel['type'] == "Analog":
                 id = channel['id']
                 function_byte = sensors.__list_sensors[self.sensor_type]['byte'+id]['func']
@@ -106,10 +106,11 @@ class Sensor():
                 p2 = channel['p2']
                 p3 = channel['p3']
                 freq = channel['freq']
-                self.channels.append(AnalogChannel(pin, p1, p2, p3, name = self.sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq))
+                self.channels.append(AnalogChannel(pin, p1, p2, p3, name = self.sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id=id))
             elif channel['type'] == "Digital":
+                id = channel['id']
                 pin = channel['pin']
-                self.channels.append(DigitalChannel(pin, name = self.sensor_type))
+                self.channels.append(DigitalChannel(pin, name = self.sensor_type, id=id))
 
     def read(self):
         temp = []
@@ -152,7 +153,7 @@ class Sensor():
 
 # Channels
 class Channel():
-    def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x):
+    def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x, id=''):
 
         # the buffer for when we convert the data
         self.buffer = Buffer(30)
@@ -165,6 +166,8 @@ class Channel():
         self.translation_data_function = translation_data_function
         # the error code
         self.error = error
+        # id of the channel
+        self.id = id
 
         # the dic of information of the channel + their buffer
         self.dic = {}
@@ -269,7 +272,7 @@ class Channel():
 
 
 class DigitalChannel(Channel):
-    def __init__(self, pin, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : b'\x01' if x else b'\x00', translation_data_function = lambda x:x):
+    def __init__(self, pin, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : b'\x01' if x else b'\x00', translation_data_function = lambda x:x, id = ''):
         # a digital sensor will give us a boolean (true or false) when we read it
         # It is the fact that there is power or not
         # but the buffer use the byte array, so we will transform the boolean to byte
@@ -279,7 +282,7 @@ class DigitalChannel(Channel):
         # the pin for the sensor
         self.pin = Pin(pin, Pin.OUT)
 
-        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id)
 
     def create_buffer(self, name, size, step, times, error):
         return CircularBuffer(name, size, step, times, error = error, data_size = 1)
@@ -290,7 +293,7 @@ class DigitalChannel(Channel):
         self.pin.value(value)
 
 class AnalogChannel(Channel):
-    def __init__(self, pin, p1, p2, p3, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x, freq = 1000):
+    def __init__(self, pin, p1, p2, p3, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x, freq = 1000, id = ''):
         # here we don't have a specific transformation to do to the sensor data, so we will return the data
         # but, some sensors may have some transformations to do
 
@@ -304,7 +307,7 @@ class AnalogChannel(Channel):
         self.p2 = p2
         self.p3 = p3
 
-        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id)
     def read(self):
         Pin(0, mode=Pin.OUT).value(self.p1)
         Pin(2, mode=Pin.OUT).value(self.p2)
@@ -314,7 +317,7 @@ class AnalogChannel(Channel):
         self.pwm.duty(value)
 
 class I2CChannel(Channel):
-    def __init__(self, i2c, addr, byte_receive, code_send, wait, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x):
+    def __init__(self, i2c, addr, byte_receive, code_send, wait, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x, id = ''):
         # here we don't have a specific transformation to do to the sensor data, so we will return the data
         # but, some sensors may have some transformations to do
 
@@ -329,7 +332,7 @@ class I2CChannel(Channel):
         # the time to wait
         self.wait = wait
 
-        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id)
     def read(self):
         self.write(self.code_send)
         sleep_ms(self.wait)
