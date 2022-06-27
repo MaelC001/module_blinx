@@ -23,14 +23,26 @@ class Blinx():
         self.input_sensors = {}
         # list of all the output sensor
         self.output_sensors = {}
+        # list of all the output sensor
+        self.display_sensors = {}
         for sensor, config in configs.items():
             new_name = config['new_name']
             is_input = config['is_input']
-            channels = config['channels']
-            temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  is_input, i2c)}
+            is_display = config['is_display']
+
+            if is_display:
+                config = config['config']
+                temp = {'name' : sensor, 'sensor' : sensors.__list_sensors[sensor]['create'](config, i2c)}
+            else:
+                channels = config['config']
+                temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  is_input, i2c)}
+
             self.sensors[new_name] = temp
+
             if is_input :
                 self.input_sensors[new_name] = temp
+            elif is_display :
+                self.display_sensors[new_name] = temp
             else:
                 self.output_sensors[new_name] = temp
 
