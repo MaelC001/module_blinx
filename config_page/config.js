@@ -223,7 +223,7 @@ function saveConfig() {
     console.log(infoUserSensor);
 }
 
-function verify_i2c(port) {
+async function verify_i2c(port) {
     let cmd = "scan_i2c";
     write(cmd, idCmd = 0);
     return read().then(e => verify_json(e, verify));
@@ -249,53 +249,59 @@ function config_sensor() {
     var json_config = [];
     var json_sensor = {};
 
-    var port = [_('sensorsPort1').value, _('sensorsPort3').value];
-    var port2 = _('sensorsPort2').value;
+    var portAD = [_('sensorsPort1').value, _('sensorsPort3').value];
+    var portI2C = _('sensorsPort2').value;
 
-    port.forEach(DigiAnalogFunction);
+    portAD.forEach(DigiAnalogFunction);
     let i = 0;
     function DigiAnalogFunction(name) {
         if (name != "" && name != "costum") {
-            json_push(name, 'DigiAnalog');
+            json_config_push(name, 'DigiAnalog');
             let info = infoUserSensor[i];
             if (listAllSensors['DigiAnalog'][name]['is_display']){
             } else{
-                json_sensor[info['name']] = {
-                    'new_name': info['userName'],
-                    'is_input': listAllSensors['DigiAnalog'][name]['is_input'],
-                    'is_display': listAllSensors['DigiAnalog'][name]['is_display'],
-                    'channels': info['channels'],
-                }
+                json_sensor_push(info, name);
             }
             i = 2;
         }
     }
 
-    port2.forEach(I2CFunction);
+    portI2C.forEach(I2CFunction);
     function I2CFunction(name) {
-        json_push(name, 'I2C');
+        json_config_push(name, 'I2C');
         let infos = infoUserSensor[1];
         infos.forEach(setConfigJson);
         function setConfigJson(info){
             if (listAllSensors['I2C'][name]['is_display']){
             } else{
-                json_sensor[info['name']] = {
-                    'new_name': info['userName'],
-                    'is_input': listAllSensors['I2C'][name]['is_input'],
-                    'is_display': listAllSensors['I2C'][name]['is_display'],
-                    'channels': info['channels'],
-                }
+                json_sensor_push(info, name);
             }
         }
     }
 
     config_sensor_serial(json_config, json_sensor);
 
-    function json_push(name, type) {
+    function json_config_push(name, type) {
         json_config.push({
             'name': name,
             'file': listAllSensors[type][name]['file'],
         });
+    }
+    function json_sensor_push(info, name) {
+        json_sensor[info['name']] = {
+            'new_name': info['userName'],
+            'is_input': listAllSensors['DigiAnalog'][name]['is_input'],
+            'is_display': listAllSensors['DigiAnalog'][name]['is_display'],
+            'channels': info['channels'],
+        }
+    }
+    function json_sensor_display_push(info, name) {
+        json_sensor[info['name']] = {
+            'new_name': info['userName'],
+            'is_input': listAllSensors['DigiAnalog'][name]['is_input'],
+            'is_display': listAllSensors['DigiAnalog'][name]['is_display'],
+            'channels': info['channels'],
+        }
     }
 }
 
