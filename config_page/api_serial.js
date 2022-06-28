@@ -9,19 +9,30 @@ var id = 0;
 
 var url_mpy = "https://raw.githubusercontent.com/MaelC001/sensor_blinx/main/";
 
-async function connect(usbV = not_required, usbP = not_required){
-    if(port){
+async function connect(usbV = not_required, usbP = not_required) {
+    if (port) {
         port.close();
     }
-    port = await navigator.serial.requestPort({filters: [{usbVendorId: usbV, usbProductId: usbP}]});
-    await port.open({ baudRate: 115200 });
+    port = await navigator.serial.requestPort({
+        filters: [{
+            usbVendorId: usbV,
+            usbProductId: usbP
+        }]
+    });
+    await port.open({
+        baudRate: 115200
+    });
 }
 
-function write(cmd, arg = [], idCmd = id, repl = true){
-    if (repl){
-        cmd = "\x01"+cmd+"\x04";
-    } else{
-        cmd = JSON.stringify({'method' : cmd, 'arg' : arg, 'id' : idCmd});
+function write(cmd, arg = [], idCmd = id, repl = true) {
+    if (repl) {
+        cmd = "\x01" + cmd + "\x04";
+    } else {
+        cmd = JSON.stringify({
+            'method': cmd,
+            'arg': arg,
+            'id': idCmd
+        });
     }
     cmd = encoder.encode(cmd) + returnLignNumber;
     var writer = port.writable.getWriter();
@@ -32,91 +43,108 @@ function write(cmd, arg = [], idCmd = id, repl = true){
     writer.releaseLock();
 }
 
- function read(){
+async function read() {
     const reader = port.readable.getReader();
     var text = '';
     var nmb = 0;
     try {
-      while (true) {
-        const { value, done } = await reader.read();
-        text += decoder.decode(value);
-        for (var i = 0; i<value.length; i++){
-            if(value[i] == 10){
-                break;
+        while (true) {
+            const {
+                value,
+                done
+            } = await reader.read();
+            text += decoder.decode(value);
+            for (var i = 0; i < value.length; i++) {
+                if (value[i] == 10) {
+                    break;
+                }
             }
         }
-      }
     } finally {
-      reader.releaseLock();
-      text = text.split(cle)[0];
-      return JSON.parse(text);
+        reader.releaseLock();
+        text = text.split(cle)[0];
+        return JSON.parse(text);
     }
 }
 
-async function read_all_file(callback){
+async function cmd(cmd, arg = [], idCmd = id){
+    write(cmd, arg=arg, idCmd = idCmd);
+    return await read();
+}
+
+async function read_all_file(callback) {
     var cmd = 'liste_file';
-    write(cmd, idCmd = id);
-    read().then( e => back(e, id));
-    async function back(e, id){
+    cmd(cmd, idCmd = id).then(e => back(e, id));
+    async function back(e, id) {
         var json = JSON.parse(e);
-        if (!json['error']){
-            if (id == json['id']){
-                return verify_json(e, json => {return Promise.all(json['result'].map(read_file)).then(callback);});
-            } else{
+        if (!json['error']) {
+            if (id == json['id']) {
+                return verify_json(e, json => {
+                    return Promise.all(json['result'].map(read_file)).then(callback);
+                });
+            } else {
                 return 'no corresponding in id';
             }
-        } else{
+        } else {
             return json['error'];
         }
-        async function read_file(name){
+        async function read_file(name) {
             var cmd = "read";
             var arg = [name]
             write(cmd, arg = arg, idCmd = id);
             id += 1;
-            return read().then(e => parse(e, id-1));
+            return read().then(e => parse(e, id - 1));
         }
-        function parse(e, id){
-            return verify_json(e, json => {return json['result'];});
+
+        function parse(e, id) {
+            return verify_json(e, json => {
+                return json['result'];
+            });
         }
     }
 }
 
-function verify_json(e, func){
+function verify_json(e, func) {
     var json = JSON.parse(e);
-    if (!json['error']){
-        if (id == json['id']){
+    if (!json['error']) {
+        if (id == json['id']) {
             return func(json);
-        } else{
+        } else {
             console.log('no corresponding in id');
             return 'no corresponding in id';
         }
-    } else{
+    } else {
         console.log(json['error']);
         return json['error'];
     }
 }
 
-async function config_sensor_serial(json_config, json_sensor){
+async function config_sensor_serial(json_config, json_sensor) {
     var cmd = 'remove_config';
-    write(cmd, idCmd = id);
-    read().then( e => etape2(e));
-    async function etape2(e){
+    cmd(cmd, idCmd = id).then(e => etape2(e));
+    async function etape2(e) {
         verify_json(e, json => {});
         Promise.all(json_config.map(move_mpy)).then(e => etape3(e));
-        async function move_mpy(j){
+        async function move_mpy(j) {
             var name = j['name'];
             var url = url_mpy + j['file'] + '.mpy';
             var content = getText(url);
             var cmd = 'write';
-            var arg = {'name' : name, 'value' : content};
+            var arg = {
+                'name': name,
+                'value': content
+            };
             write(cmd, arg = arg, idCmd = id);
         }
-        async function etape3(e){
+        async function etape3(e) {
             var cmd = 'write';
-            var arg = {'name' : 'config_file.py', 'value' : ""};
+            var arg = {
+                'name': 'config_file.py',
+                'value': ""
+            };
             write(cmd, arg = arg, idCmd = id);
             read().then(e => etape4(e));
-            async function etape4(e){
+            async function etape4(e) {
                 var cmd = 'config_sensor';
                 var arg = json_sensor;
                 write(cmd, arg = arg, idCmd = id);
@@ -127,7 +155,7 @@ async function config_sensor_serial(json_config, json_sensor){
 }
 
 
-function getText(url){
+function getText(url) {
     // read text from URL location
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
@@ -138,5 +166,3 @@ function getText(url){
         }
     }
 }
-
-
