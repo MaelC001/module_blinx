@@ -67,8 +67,8 @@ async function read() {
     }
 }
 
-async function cmd(cmd, arg = [], idCmd = id){
-    write(cmd, arg=arg, idCmd = idCmd);
+async function cmd(cmd, arg = [], idCmd = id) {
+    write(cmd, arg = arg, idCmd = idCmd);
     return await read();
 }
 
