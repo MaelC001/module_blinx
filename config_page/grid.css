@@ -1,0 +1,103 @@
+.container {
+    display: grid;
+    grid-template-columns: 32% 32% 32%;
+    grid-template-rows: 32% 32% 32%;
+    gap: 2% 2%;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "boutton imageDiv ."
+        "analogDigi1 imageDiv analogDigi2"
+        ". I2C .";
+}
+
+.boutton {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 15% 15%;
+    gap: 0% 0%;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "save"
+        "wifi";
+    grid-area: boutton;
+}
+
+.save {
+    grid-area: save;
+}
+
+.wifi {
+    grid-area: wifi;
+}
+
+.imageDiv {
+    grid-area: imageDiv;
+}
+
+.analogDigi1 {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 66% 15% 15%;
+    grid-auto-columns: 1fr;
+    gap: 2% 0%;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "."
+        "select1"
+        "config1";
+    grid-area: analogDigi1;
+}
+
+.select1 {
+    grid-area: select1;
+}
+
+.config1 {
+    grid-area: config1;
+}
+
+.analogDigi2 {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 66% 15% 15%;
+    gap: 2% 0%;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "."
+        "select3"
+        "config3";
+    grid-area: analogDigi2;
+}
+
+.select3 {
+    grid-area: select3;
+}
+
+.config3 {
+    grid-area: config3;
+}
+
+.I2C {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 33% 33% 34%;
+    gap: 0% 0%;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "buttonI2C"
+        "select2"
+        "listI2C";
+    grid-area: I2C;
+}
+
+.buttonI2C {
+    grid-area: buttonI2C;
+}
+
+.select2 {
+    grid-area: select2;
+}
+
+.listI2C {
+    grid-area: listI2C;
+}

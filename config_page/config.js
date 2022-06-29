@@ -18,6 +18,7 @@ let listAllSensors = {
             "file": "",
             'is_input': false,
             'is_display': false,
+            'url': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
         },
         "humid-sht3x": {
             "text": "humidity (in micro controller)",
@@ -25,6 +26,7 @@ let listAllSensors = {
             "file": "",
             'is_input': false,
             'is_display': false,
+            'url': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
         },
     },
     "DigiAnalog": {
@@ -33,18 +35,21 @@ let listAllSensors = {
             "file": "",
             'is_input': false,
             'is_display': false,
+            'url': '',
         },
         "led pin2": {
             "text": "led (in micro controller) (pin 2)",
             "file": "",
             'is_input': false,
             'is_display': false,
+            'url': '',
         },
         "custom": {
             "text": "custom",
             "file": "",
             'is_input': false,
             'is_display': false,
+            'url': '',
         }
     },
 };
@@ -87,7 +92,7 @@ function loadSelectPort() {
     textHTML += " </p>";
     textHTML += "</div>";
     // the image
-    textHTML += "<div class='grid-item itemImage'><img src='./image.png'></div>";
+    textHTML += "<div class='grid-item itemImage'></div>";
     for (let i = 0; i < nmbPort; i++) {
         let y = i + 1;
         let nameResultID = "sensorsPort" + y;
@@ -95,17 +100,29 @@ function loadSelectPort() {
             // the sensor selector, for each port
             textHTML += "<div class='grid-item itemPortSensor" + y + "' id='div_" + nameResultID + "'>";
             textHTML += " <p>I2C Port</p>"
-            textHTML += " <select class='singleSensorI2C' id='" + nameResultID + "'";
-            textHTML += "     name='sensorsPort' onchange='changeSensorI2C(\"" + y + "\")'></select>";
-            textHTML += " <button type='button' class='btn' onclick='verify_i2c(" + y + ")'>Scan I2C</button>";
-            textHTML += " <button type='button' onclick='openForm(" + y + ")'> Config the sensor </button>";
+            textHTML += " <div class='singleSensorI2C ui fluid multiple search selection dropdown' id='" + nameResultID + "'\
+                                name='sensorsPort'>\
+                            <input type='hidden' name='country'>\
+                            <i class='dropdown icon'></i>\
+                            <div class='default text'>Select type sensor</div>\
+                            <div class='menu'>";
+            textHTML += setOptionSelect(listSensors['I2C']);
+            textHTML += " </div>";
+            textHTML += " <button type='button' class='ui labeled icon button' class='btn' onclick='verify_i2c(" + y + ")'><i class='icon fa-regular fa-magnifying-glass'></i>Scan I2C</button>";
+            textHTML += " <button type='button' class='ui labeled icon button' onclick='openForm(" + y + ")'><i class='icon settings'></i>Config the sensor </button>";
             textHTML += "</div>";
         } else {
             // the sensor selector, for each port
             textHTML += "<div class='grid-item itemPortSensor" + y + "' id='div_" + nameResultID + "'>";
-            textHTML += " <select class='singleSensor' id='" + nameResultID + "'";
-            textHTML += "     name='sensorsPort' onchange='changeSensor(\"" + y + "\")'></select>";
-            textHTML += " <button type='button' onclick='openForm(" + y + ")'> Config the sensor </button>";
+            textHTML += " <div class='singleSensor ui fluid search selection dropdown' id='" + nameResultID + "'";
+            textHTML += "     name='sensorsPort' onchange='changeSensor(\"" + y + "\")'>\
+            <input type='hidden' name='country'>\
+            <i class='dropdown icon'></i>\
+            <div class='default text'>Select Country</div>\
+            <div class='menu'>";
+            textHTML += setOptionSelect(listSensors['DigiAnalog']);
+            textHTML += "</div>";
+            textHTML += " <button type='button' class='ui labeled icon button' onclick='openForm(" + y + ")'><i class='icon settings'></i>Config the sensor </button>";
             textHTML += "</div>";
         }
     }
@@ -120,8 +137,10 @@ function loadSelectPort() {
     textHTML += '</div>';
 
     htmlItem.innerHTML = textHTML;
+    $(".singleSensor").dropdown({});
+    $(".singleSensorI2C").dropdown({});
     // change the selector to a select2, and put data on each select
-    $(".singleSensor").select2({
+    /*$(".singleSensor").select2({
         placeholder: "Select type sensor",
         data: listSensors['DigiAnalog'],
         width: '75%', // need to override the changed default
@@ -129,8 +148,8 @@ function loadSelectPort() {
         escapeMarkup: function (m) {
             return m;
         }
-    });
-    $(".singleSensorI2C").select2({
+    });*/
+    /*$(".singleSensorI2C").select2({
         placeholder: "Select type sensor",
         data: listSensors['I2C'],
         width: '75%', // need to override the changed default
@@ -139,7 +158,15 @@ function loadSelectPort() {
         escapeMarkup: function (m) {
             return m;
         }
+    });*/
+}
+
+function setOptionSelect(arrayItem) {
+    let tempText = '';
+    arrayItem.forEach(e => {
+        tempText += "<div class='item' data-text='" + e['name'] + "' data-value='" + e['value'] + "'><img class='ui image' src='" + e['url'] + "' style='width:20px;'>" + e['name'] + "</div>";
     });
+    return tempText;
 }
 
 function changeSensor(port) {
@@ -159,10 +186,11 @@ function changeSensorI2C(port) {
     let values = _('sensorsPort' + port).value;
     values.forEach(getInfoI2C);
     let tempoGlobal = {};
-    function getInfoI2C(name){
-        if (infoUserSensor[port - 1][name]){
+
+    function getInfoI2C(name) {
+        if (infoUserSensor[port - 1][name]) {
             tempoGlobal[name] = infoUserSensor[port - 1][name];
-        }else{
+        } else {
             let tempo = {
                 "name": value,
                 "userName": "",
@@ -254,12 +282,12 @@ function config_sensor() {
 
     portAD.forEach(DigiAnalogFunction);
     let i = 0;
+
     function DigiAnalogFunction(name) {
         if (name != "" && name != "costum") {
             json_config_push(name, 'DigiAnalog');
             let info = infoUserSensor[i];
-            if (listAllSensors['DigiAnalog'][name]['is_display']){
-            } else{
+            if (listAllSensors['DigiAnalog'][name]['is_display']) {} else {
                 json_sensor_push(info, name);
             }
             i = 2;
@@ -267,13 +295,14 @@ function config_sensor() {
     }
 
     portI2C.forEach(I2CFunction);
+
     function I2CFunction(name) {
         json_config_push(name, 'I2C');
         let infos = infoUserSensor[1];
         infos.forEach(setConfigJson);
-        function setConfigJson(info){
-            if (listAllSensors['I2C'][name]['is_display']){
-            } else{
+
+        function setConfigJson(info) {
+            if (listAllSensors['I2C'][name]['is_display']) {} else {
                 json_sensor_push(info, name);
             }
         }
@@ -287,6 +316,7 @@ function config_sensor() {
             'file': listAllSensors[type][name]['file'],
         });
     }
+
     function json_sensor_push(info, name) {
         json_sensor[info['name']] = {
             'new_name': info['userName'],
@@ -295,6 +325,7 @@ function config_sensor() {
             'channels': info['channels'],
         }
     }
+
     function json_sensor_display_push(info, name) {
         json_sensor[info['name']] = {
             'new_name': info['userName'],
@@ -305,16 +336,5 @@ function config_sensor() {
     }
 }
 
-function create_dic() {
-    for (var key1 in listAllSensors) {
-        listSensors[key1] = []
-        for (var key2 in listAllSensors[key1]) {
-            listSensors[key1].push({
-                'id': key2,
-                'text': listAllSensors[key1][key2]['text'],
-            })
-        }
-    }
-}
 
 loadSelectPort();
