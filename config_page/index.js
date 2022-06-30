@@ -256,6 +256,7 @@ function selectI2C(e) {
         onShow: createPopup,
         html: loader,
     });
+    $('#selectI2C').dropdown('clear');
 
     function removeItemI2C(value) {
         if (value['value'] != e) {
@@ -337,22 +338,21 @@ function removeToInfoUserI2C(idRemove) {
     infoUserSensor[idIndex] = filtered;
 }
 
-function scanI2C(e, boolPopup = True) {
+function scanI2C(e, boolPopup = true) {
     let popup = this;
+    let tempJson;
     let method = "scan_i2c";
-    let result = cmd(method, idCmd = 0).then(e => verify_json(e, verify));
-    if (boolPopup) {
-        let plus = recordI2C();
-        let html = arrayToHtml(result, plus);
-        popup.html(html);
-    } else {
-        return result
-    }
+    return cmd(method, idCmd = 0).then(e => verify_json(e, verify));
 
     function verify(json) {
-        let tempJson = json
+        tempJson = json;
         let values = _('sensorsPort' + port).value;
         values.filter(test);
+        if (boolPopup) {
+            let plus = recordI2C();
+            let html = arrayToHtml(values, plus);
+            popup.html(html);
+        }
         return values;
 
         function test(name) {
