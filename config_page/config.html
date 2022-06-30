@@ -1,3 +1,5 @@
+<!-- https://grid.layoutit.com/?id=3gI4huF -->
+
 <html>
 
 <head>
@@ -10,15 +12,259 @@
 </head>
 
 <body>
-    <div class="container" id="container"></div>
-    <div id="error"></div>
+    <div class="container">
+        <div class="divImage">
+            <div class="p2Arrow" id="p2Arrow"></div>
+            <div class="p1Arrow" id="p1Arrow"></div>
+            <div class="p3Arrow" id="p3Arrow"></div>
+            <div class="ledArrow" id="ledArrow"></div>
+            <div class="buttonArrow" id="buttonArrow"></div>
+            <div class="screenArrow" id="screenArrow"></div>
+            <div class="divDImage">
+                <img src='image_color.png' alt='image_of_micro_controller' class='ui centered image'>
+            </div>
+        </div>
+        <div class="general">
+            <div class="configButton">
+                <button type='button' class='ui labeled icon myBlue button' id='buttonSaveConfig'>
+                    <i class='icon settings'></i>
+                    Save Configuration
+                </button><br>
+            </div>
+            <div class="wifiButton">
+                <button type='button' class='ui labeled icon myBlue button' id='buttonConnectWifi'>
+                    <i class='icon wifi'></i>
+                    Configure WiFi
+                </button><br>
+            </div>
+            <div class="nameUser">
+            </div>
+            <div class="infoWifi">
+                <p>Info Wifi</p><br>
+            </div>
+            <div class="libre1"></div>
+            <div class="libre2"></div>
+        </div>
+        <div class="blueLed blocSensor" id="blueLed">
+            <div class="buttonActivateLed">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public">
+                    <label>Blue Led</label>
+                </div><br>
+            </div>
+            <div class="actionLed">
+                <div class="ui input">
+                    <input type="text" placeholder="Name for the sensor">
+                </div><br>
+            </div>
+            <div class="infoLed">
+                <p>Info</p><br>
+            </div>
+        </div>
+        <div class="button blocSensor" id="button">
+            <div class="buttonActivateButton">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public">
+                    <label>Button</label>
+                </div><br>
+            </div>
+            <div class="actionButton">
+                <div class="ui input">
+                    <input type="text" placeholder="Name for the sensor">
+                </div><br>
+            </div>
+            <div class="infoButton">
+                <p>Info</p><br>
+            </div>
+        </div>
+        <div class="screen blocSensor" id="screen">
+            <div class="buttonActivateScreen">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public">
+                    <label>Screen</label>
+                </div><br>
+            </div>
+
+            <div class="actionScreen">
+                <div class="ui input">
+                    <input type="text" placeholder="Name for the sensor">
+                </div><br>
+            </div>
+            <div class="infoScreen">
+                <p>Info</p><br>
+            </div>
+        </div>
+        <div class="port1 blocSensor" id="port1">
+            <div class="infoPort1 infoPort">
+                <div class="namePort1">
+                    <p>Port Analogic/Digital</p><br>
+                </div>
+                <div class="actionPort1">
+                    <div class="ui toggle checkbox">
+                        <input type="checkbox" name="public">
+                        <label>cable splitter</label>
+                    </div><br>
+                </div>
+            </div>
+            <div class="selectPort11">
+                <div class='ui fluid search selection dropdown selectAnalogDigi1' id='selectAnalogDigi11'
+                    name='selectAnalogDigi1'>
+                    <input type='hidden' name='sensorPort0'>
+                    <i class='dropdown icon'></i>
+                    <div class='default text'>Select type sensor Analogic/Digital</div>
+                    <div class='menu' id='listSelectAnalogDigi1'>
+                    </div>
+                </div>
+            </div>
+            <div class="selectPort12">
+                <div class='ui fluid search selection dropdown selectAnalogDigi1' id='selectAnalogDigi12'
+                    name='selectAnalogDigi1'>
+                    <input type='hidden' name='sensorPort0'>
+                    <i class='dropdown icon'></i>
+                    <div class='default text'>Select type sensor Analogic/Digital</div>
+                    <div class='menu' id='listSelectAnalogDigi1'>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="port2 blocSensor" id="port2">
+            <div class="infoPort2 infoPort">
+                <div class="namePort2">
+                    <p>Port I2C</p><br>
+                </div>
+                <div class="actionPort2">
+                    <button type='button' class='ui labeled icon myBlue button scan'>
+                        <i class='icon fa-regular fa-magnifying-glass'></i>
+                        Scan I2C
+                    </button><br>
+                </div>
+            </div>
+            <div class="selectPort2">
+                <div class='ui fluid search selection dropdown' id='selectI2C' name='selectI2C'>
+                    <input type='hidden' name='sensorPort1'>
+                    <i class='dropdown icon'></i>
+                    <div class='default text'>Select type sensor I2C</div>
+                    <div class='menu' id='listSelectI2c'>
+                    </div>
+                </div>
+            </div>
+            <div class="listSensorPort2"></div>
+        </div>
+        <div class="port3 blocSensor" id="port3">
+            <div class="infoPort3 infoPort">
+                <div class="namePort3">
+                    <p>Port Analogic/Digital</p><br>
+                </div>
+                <div class="actionPort3">
+                    <div class="ui toggle checkbox">
+                        <input type="checkbox" name="public">
+                        <label>cable splitter</label>
+                    </div><br>
+                </div>
+            </div>
+            <div class="selectPort31">
+                <div class='ui fluid search selection dropdown selectAnalogDigi2' id='selectAnalogDigi21'
+                    name='selectAnalogDigi2'>
+                    <input type='hidden' name='sensorPort2'>
+                    <i class='dropdown icon'></i>
+                    <div class='default text'>Select type sensor Analogic/Digital</div>
+                    <div class='menu' id='listSelectAnalogDigi1'>
+                    </div>
+                </div>
+            </div>
+            <div class="selectPort32">
+                <div class='ui fluid search selection dropdown selectAnalogDigi2' id='selectAnalogDigi22'
+                    name='selectAnalogDigi2'>
+                    <input type='hidden' name='sensorPort2'>
+                    <i class='dropdown icon'></i>
+                    <div class='default text'>Select type sensor Analogic/Digital</div>
+                    <div class='menu' id='listSelectAnalogDigi1'>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="temperature blocSensor">
+            <div class="buttonActivateTemp">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public">
+                    <label>Temperature</label>
+                </div><br>
+            </div>
+            <div class="actionTemp">
+                <div class="ui input">
+                    <input type="text" placeholder="Name for the sensor">
+                </div><br>
+            </div>
+            <div class="infoTemp">
+                <p>Info</p><br>
+            </div>
+        </div>
+        <div class="humidity blocSensor">
+            <div class="buttonActivateHumidity">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public">
+                    <label>Humidity</label>
+                </div><br>
+            </div>
+            <div class="actionHumidity">
+                <div class="ui input">
+                    <input type="text" placeholder="Name for the sensor">
+                </div><br>
+            </div>
+            <div class="infoHumidity">
+                <p>Info</p><br>
+            </div>
+        </div>
+        <div class="light blocSensor">
+            <div class="buttonActivateLight">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public">
+                    <label>Light</label>
+                </div><br>
+            </div>
+            <div class="actionLight blocSensor">
+                <div class="nameInput">
+                    <div class="ui input">
+                        <input type="text" placeholder="Name for the sensor">
+                    </div><br>
+                </div>
+                <div class="minInput">
+                    <div class="ui right labeled input mini">
+                        <input type="text" placeholder="Min">
+                        <a class="ui tag label">
+                            Min
+                        </a>
+                    </div><br>
+                </div>
+                <div class="maxInput">
+                    <div class="ui right labeled input mini">
+                        <input type="text" placeholder="Max">
+                        <a class="ui tag label">
+                            Max
+                        </a>
+                    </div><br>
+                </div>
+
+            </div>
+            <div class="infoLight">
+                <p>Info</p><br>
+            </div>
+        </div>
+        <div class="error"></div>
+    </div>
+
+    <!--<div class="line" id="line1"></div>
+    <div class="line" id="line2"></div>
+    <div class="line" id="line3"></div>
+    <div class="line" id="line4"></div>
+    <div class="line" id="line5"></div>
+    <div class="line" id="line6"></div>-->
     <!-- icon -->
     <script src="https://kit.fontawesome.com/3c218ccbae.js" crossorigin="anonymous"></script>
     <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="semantic/dist/semantic.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <!-- semantic js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="semantic/dist/semantic.min.js"></script>
     <!-- js -->
     <script src="./api_serial.js"></script>
     <script src="./index.js"></script>

@@ -10,20 +10,14 @@ body {
     color: #fff;
 }
 
-.selectAnalogDigi1 {
-    background-color: #c7f18f !important;
+#selectAnalogDigi1 {
+    background-color: #fff1a3;
 }
 
 #selectI2C {
     background-color: #eba6da;
 }
 
-.selectAnalogDigi2 {
-    background-color: #fff1a3 !important;
-}
-
-.line {
-    position: absolute;
-    width: 1px;
-    background-color: red;
+#selectAnalogDigi2 {
+    background-color: #c7f18f;
 }
