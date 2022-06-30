@@ -1,0 +1,23 @@
+body {
+    background-color: #e0f0f6;
+    margin: 0.5%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.ui.myBlue.button {
+    background-color: #7db6d5;
+    color: #fff;
+}
+
+#selectAnalogDigi1 {
+    background-color: #fff1a3;
+}
+
+#selectI2C {
+    background-color: #eba6da;
+}
+
+#selectAnalogDigi2 {
+    background-color: #c7f18f;
+}

@@ -9,36 +9,46 @@ var id = 0;
 
 var url_mpy = "https://raw.githubusercontent.com/MaelC001/sensor_blinx/main/";
 
-async function connect(usbV = not_required, usbP = not_required) {
+async function connect(usbV = null, usbP = null) {
     if (port) {
         port.close();
     }
-    port = await navigator.serial.requestPort({
-        filters: [{
-            usbVendorId: usbV,
-            usbProductId: usbP
-        }]
-    });
-    await port.open({
-        baudRate: 115200
-    });
+    try {
+        port = await navigator.serial.requestPort({
+            filters: [{
+                usbVendorId: usbV,
+                usbProductId: usbP
+            }]
+        });
+
+        await port.open({
+            baudRate: 115200
+        });
+    } catch (e) {
+        e = e+'';
+        if (e == 'TypeError: navigator.serial is undefined'){
+            alert('Our navigator is not compatible with the api of webserial, we need it for the connection with the microcontroller. You can use Chrome.')
+        }else{
+            throw e
+        }
+    }
 }
 
-function write(cmd, arg = [], idCmd = id, repl = true) {
+function write(method, arg, idCmd, repl = true) {
     if (repl) {
-        cmd = "\x01" + cmd + "\x04";
+        method = "\x01" + method + "\x04";
     } else {
-        cmd = JSON.stringify({
-            'method': cmd,
+        method = JSON.stringify({
+            'method': method,
             'arg': arg,
             'id': idCmd
         });
     }
-    cmd = encoder.encode(cmd) + returnLignNumber;
+    method = encoder.encode(method) + returnLignNumber;
     var writer = port.writable.getWriter();
-    writer.write(cmd);
-    /*for(var i=0; i<cmd.length; i+=32){
-        writer.write(encoder.encode(cmd.substring(i,i+32)));
+    writer.write(method);
+    /*for(var i=0; i<method.length; i+=32){
+        writer.write(encoder.encode(method.substring(i,i+32)));
     }*/
     writer.releaseLock();
 }
@@ -67,14 +77,14 @@ async function read() {
     }
 }
 
-async function cmd(cmd, arg = [], idCmd = id) {
-    write(cmd, arg = arg, idCmd = idCmd);
+async function cmd(method, arg = [], idCmd = id) {
+    write(method, arg, idCmd);
     return await read();
 }
 
 async function read_all_file(callback) {
-    var cmd = 'liste_file';
-    cmd(cmd, idCmd = id).then(e => back(e, id));
+    var method = 'liste_file';
+    cmd(method, idCmd = id).then(e => back(e, id));
     async function back(e, id) {
         var json = JSON.parse(e);
         if (!json['error']) {
@@ -89,11 +99,11 @@ async function read_all_file(callback) {
             return json['error'];
         }
         async function read_file(name) {
-            var cmd = "read";
+            var method = "read";
             var arg = [name]
-            write(cmd, arg = arg, idCmd = id);
+            var tempResult = cmd(method, arg = arg, idCmd = id).then(e => parse(e, id));
             id += 1;
-            return read().then(e => parse(e, id - 1));
+            return tempResult;
         }
 
         function parse(e, id) {
@@ -120,8 +130,8 @@ function verify_json(e, func) {
 }
 
 async function config_sensor_serial(json_config, json_sensor) {
-    var cmd = 'remove_config';
-    cmd(cmd, idCmd = id).then(e => etape2(e));
+    var method = 'remove_config';
+    cmd(method, idCmd = id).then(e => etape2(e));
     async function etape2(e) {
         verify_json(e, json => {});
         Promise.all(json_config.map(move_mpy)).then(e => etape3(e));
@@ -129,26 +139,24 @@ async function config_sensor_serial(json_config, json_sensor) {
             var name = j['name'];
             var url = url_mpy + j['file'] + '.mpy';
             var content = getText(url);
-            var cmd = 'write';
+            var method = 'write';
             var arg = {
                 'name': name,
                 'value': content
             };
-            write(cmd, arg = arg, idCmd = id);
+            return cmd(method, arg = arg, idCmd = id);
         }
         async function etape3(e) {
-            var cmd = 'write';
+            var method = 'write';
             var arg = {
                 'name': 'config_file.py',
                 'value': ""
             };
-            write(cmd, arg = arg, idCmd = id);
-            read().then(e => etape4(e));
+            cmd(method, arg = arg, idCmd = id).then(e => etape4(e));
             async function etape4(e) {
-                var cmd = 'config_sensor';
+                var method = 'config_sensor';
                 var arg = json_sensor;
-                write(cmd, arg = arg, idCmd = id);
-                read();
+                cmd(method, arg = arg, idCmd = id);
             }
         }
     }
@@ -166,3 +174,5 @@ function getText(url) {
         }
     }
 }
+
+connect();
