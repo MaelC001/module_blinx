@@ -27,7 +27,14 @@ async function connect(usbV = null, usbP = null) {
     } catch (e) {
         e = e+'';
         if (e == 'TypeError: navigator.serial is undefined'){
-            alert('Our navigator is not compatible with the api of webserial, we need it for the connection with the microcontroller. You can use Chrome.')
+            document.getElementById('error').innerHTML = '\
+            <div class="ui negative message">\
+                <div class="header">\
+                The navigator is not compatible with the api of webserial\
+                </div>\
+                <p>We need the webserial api for the connection with the microcontroller.</p>\
+                <p>Chrome is compatible withe the api.</p>\
+            </div>';
         }else{
             throw e
         }
