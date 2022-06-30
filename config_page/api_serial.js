@@ -33,7 +33,7 @@ async function connect(usbV = null, usbP = null) {
                 The navigator is not compatible with the api of webserial\
                 </div>\
                 <p>We need the webserial api for the connection with the microcontroller.</p>\
-                <p>Chrome is compatible withe the api.</p>\
+                <p>Chrome is compatible with the api.</p>\
             </div>';
         }else{
             throw e
