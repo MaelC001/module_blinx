@@ -12,17 +12,9 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" id="container">
         <div class="divImage">
-            <div class="p2Arrow" id="p2Arrow"></div>
-            <div class="p1Arrow" id="p1Arrow"></div>
-            <div class="p3Arrow" id="p3Arrow"></div>
-            <div class="ledArrow" id="ledArrow"></div>
-            <div class="buttonArrow" id="buttonArrow"></div>
-            <div class="screenArrow" id="screenArrow"></div>
-            <div class="divDImage">
-                <img src='image_color.png' alt='image_of_micro_controller' class='ui centered image'>
-            </div>
+            <img src='image_color.png' alt='image_of_micro_controller' class='ui centered image'>
         </div>
         <div class="general">
             <div class="configButton">
@@ -45,55 +37,6 @@
             <div class="libre1"></div>
             <div class="libre2"></div>
         </div>
-        <div class="blueLed blocSensor" id="blueLed">
-            <div class="buttonActivateLed">
-                <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
-                    <label>Blue Led</label>
-                </div><br>
-            </div>
-            <div class="actionLed">
-                <div class="ui input">
-                    <input type="text" placeholder="Name for the sensor">
-                </div><br>
-            </div>
-            <div class="infoLed">
-                <p>Info</p><br>
-            </div>
-        </div>
-        <div class="button blocSensor" id="button">
-            <div class="buttonActivateButton">
-                <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
-                    <label>Button</label>
-                </div><br>
-            </div>
-            <div class="actionButton">
-                <div class="ui input">
-                    <input type="text" placeholder="Name for the sensor">
-                </div><br>
-            </div>
-            <div class="infoButton">
-                <p>Info</p><br>
-            </div>
-        </div>
-        <div class="screen blocSensor" id="screen">
-            <div class="buttonActivateScreen">
-                <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
-                    <label>Screen</label>
-                </div><br>
-            </div>
-
-            <div class="actionScreen">
-                <div class="ui input">
-                    <input type="text" placeholder="Name for the sensor">
-                </div><br>
-            </div>
-            <div class="infoScreen">
-                <p>Info</p><br>
-            </div>
-        </div>
         <div class="port1 blocSensor" id="port1">
             <div class="infoPort1 infoPort">
                 <div class="namePort1">
@@ -101,7 +44,7 @@
                 </div>
                 <div class="actionPort1">
                     <div class="ui toggle checkbox">
-                        <input type="checkbox" name="public">
+                        <input type="checkbox" name="public" onclick="customPort(this, 1)">
                         <label>cable splitter</label>
                     </div><br>
                 </div>
@@ -157,7 +100,7 @@
                 </div>
                 <div class="actionPort3">
                     <div class="ui toggle checkbox">
-                        <input type="checkbox" name="public">
+                        <input type="checkbox" name="public" onclick="customPort(this, 2)">
                         <label>cable splitter</label>
                     </div><br>
                 </div>
@@ -183,82 +126,137 @@
                 </div>
             </div>
         </div>
+        <div class="button blocSensor" id="button">
+            <div class="buttonActivateButton">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public" onclick="sensorInMicroConfig(this, 'button')">
+                    <label>Button</label>
+                </div><br>
+            </div>
+            <div id="buttonConfig">
+                <div class="actionButton">
+                    <div class="ui input">
+                        <input type="text" placeholder="Name for the sensor">
+                    </div><br>
+                </div>
+                <div class="infoButton">
+                    <p>Info</p><br>
+                </div>
+            </div>
+        </div>
+        <div class="blueLed blocSensor" id="blueLed">
+            <div class="buttonActivateLed">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public" onclick="sensorInMicroConfig(this, 'led')">
+                    <label>Blue Led</label>
+                </div><br>
+            </div>
+            <div id="ledConfig">
+                <div class="actionLed">
+                    <div class="ui input">
+                        <input type="text" placeholder="Name for the sensor">
+                    </div><br>
+                </div>
+                <div class="infoLed">
+                    <p>Info</p><br>
+                </div>
+            </div>
+        </div>
+        <div class="screen blocSensor" id="screen">
+            <div class="buttonActivateScreen">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public" onclick="sensorInMicroConfig(this, 'screen')">
+                    <label>Screen</label>
+                </div><br>
+            </div>
+
+            <div id="screenConfig">
+                <div class="actionScreen">
+                    <div class="ui input">
+                        <input type="text" placeholder="Name for the sensor">
+                    </div><br>
+                </div>
+                <div class="infoScreen">
+                    <p>Info</p><br>
+                </div>
+            </div>
+        </div>
         <div class="temperature blocSensor">
             <div class="buttonActivateTemp">
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
+                    <input type="checkbox" name="public" onclick="sensorInMicroConfig(this, 'temp')">
                     <label>Temperature</label>
                 </div><br>
             </div>
-            <div class="actionTemp">
-                <div class="ui input">
-                    <input type="text" placeholder="Name for the sensor">
-                </div><br>
-            </div>
-            <div class="infoTemp">
-                <p>Info</p><br>
+            <div id="tempConfig">
+                <div class="actionTemp">
+                    <div class="ui input">
+                        <input type="text" placeholder="Name for the sensor">
+                    </div><br>
+                </div>
+                <div class="infoTemp">
+                    <p>Info</p><br>
+                </div>
             </div>
         </div>
         <div class="humidity blocSensor">
             <div class="buttonActivateHumidity">
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
+                    <input type="checkbox" name="public" onclick="sensorInMicroConfig(this, 'humidity')">
                     <label>Humidity</label>
                 </div><br>
             </div>
-            <div class="actionHumidity">
-                <div class="ui input">
-                    <input type="text" placeholder="Name for the sensor">
-                </div><br>
-            </div>
-            <div class="infoHumidity">
-                <p>Info</p><br>
+            <div id="humidityConfig">
+                <div class="actionHumidity">
+                    <div class="ui input">
+                        <input type="text" placeholder="Name for the sensor">
+                    </div><br>
+                </div>
+                <div class="infoHumidity">
+                    <p>Info</p><br>
+                </div>
             </div>
         </div>
         <div class="light blocSensor">
             <div class="buttonActivateLight">
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
+                    <input type="checkbox" name="public" onclick="sensorInMicroConfig(this, 'light')">
                     <label>Light</label>
                 </div><br>
             </div>
-            <div class="actionLight blocSensor">
-                <div class="nameInput">
-                    <div class="ui input">
-                        <input type="text" placeholder="Name for the sensor">
-                    </div><br>
-                </div>
-                <div class="minInput">
-                    <div class="ui right labeled input mini">
-                        <input type="text" placeholder="Min">
-                        <a class="ui tag label">
-                            Min
-                        </a>
-                    </div><br>
-                </div>
-                <div class="maxInput">
-                    <div class="ui right labeled input mini">
-                        <input type="text" placeholder="Max">
-                        <a class="ui tag label">
-                            Max
-                        </a>
-                    </div><br>
-                </div>
+            <div id="lightConfig">
+                <div class="actionLight blocSensor">
+                    <div class="nameInput">
+                        <div class="ui input">
+                            <input type="text" placeholder="Name for the sensor">
+                        </div><br>
+                    </div>
+                    <div class="minInput">
+                        <div class="ui right labeled input mini">
+                            <input type="text" placeholder="Min">
+                            <a class="ui tag label">
+                                Min
+                            </a>
+                        </div><br>
+                    </div>
+                    <div class="maxInput">
+                        <div class="ui right labeled input mini">
+                            <input type="text" placeholder="Max">
+                            <a class="ui tag label">
+                                Max
+                            </a>
+                        </div><br>
+                    </div>
 
-            </div>
-            <div class="infoLight">
-                <p>Info</p><br>
+                </div>
+                <div class="infoLight">
+                    <p>Info</p><br>
+                </div>
             </div>
         </div>
         <div class="error"></div>
     </div>
 
-    <!--<div class="line" id="line1"></div>
-    <div class="line" id="line2"></div>
-    <div class="line" id="line3"></div>
-    <div class="line" id="line4"></div>
-    <div class="line" id="line5"></div>
-    <div class="line" id="line6"></div>-->
     <!-- icon -->
     <script src="https://kit.fontawesome.com/3c218ccbae.js" crossorigin="anonymous"></script>
     <!-- jQuery -->
@@ -266,6 +264,7 @@
     <!-- semantic js -->
     <script src="semantic/dist/semantic.min.js"></script>
     <!-- js -->
+    <script src="./template.js"></script>
     <script src="./api_serial.js"></script>
     <script src="./index.js"></script>
 </body>
