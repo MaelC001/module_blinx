@@ -6,47 +6,14 @@
     grid-template-areas:
         "general general general port1 port3 port2"
         "divImage divImage divImage divImage divImage port2"
-        "button blueLed screen temperature humidity light"
+        "button led screen temperature humidity light"
         "error error error error error error";
 }
 
 .divImage {
-    display: grid;
-    grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
-    grid-template-rows: 20% 20% 20% 20% 20%;
-    gap: 0% 0%;
     justify-self: start;
     grid-area: divImage;
 }
-
-.buttonArrow {
-    grid-area: 5 / 2 / 6 / 3;
-}
-
-.ledArrow {
-    grid-area: 2 / 3 / 3 / 4;
-}
-
-.p1Arrow {
-    grid-area: 1 / 7 / 2 / 8;
-}
-
-.p2Arrow {
-    grid-area: 3 / 7 / 4 / 8;
-}
-
-.p3Arrow {
-    grid-area: 5 / 7 / 6 / 8;
-}
-
-.screenArrow {
-    grid-area: 3 / 4 / 4 / 5;
-}
-
-.divDImage {
-    grid-area: 1 / 1 / 6 / 8;
-}
-
 
 .general {
     display: grid;
@@ -85,12 +52,12 @@
     grid-area: libre2;
 }
 
-.blueLed {
+.led {
     grid-template-areas:
         "buttonActivateLed"
         "actionLed"
         "infoLed";
-    grid-area: blueLed;
+    grid-area: led;
 }
 
 .buttonActivateLed {
@@ -242,22 +209,22 @@
 
 .temperature {
     grid-template-areas:
-        "buttonActivateTemp"
-        "actionTemp"
-        "infoTemp";
+        "buttonActivateTemperature"
+        "actionTemperature"
+        "infoTemperature";
     grid-area: temperature;
 }
 
-.buttonActivateTemp {
-    grid-area: buttonActivateTemp;
+.buttonActivateTemperature {
+    grid-area: buttonActivateTemperature;
 }
 
-.infoTemp {
-    grid-area: infoTemp;
+.infoTemperature {
+    grid-area: infoTemperature;
 }
 
-.actionTemp {
-    grid-area: actionTemp;
+.actionTemperature {
+    grid-area: actionTemperature;
 }
 
 .humidity {

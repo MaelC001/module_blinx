@@ -1,120 +1,131 @@
-// https://cmsdk.com/css3/how-to-connect-html-divs-with-lines-duplicate.html
-
-function adjustLine(from, positionF, to, positionT, line) {
-    let fT = from.offsetTop;
-    let fH = from.offsetWidth;
-    let fL = from.offsetLeft;
-    let fW = from.offsetHeight;
-    let tL = to.offsetLeft;
-    let tW = to.offsetHeight;
-    let tT = to.offsetTop;
-    let tH = to.offsetWidth;
-
-    let listPositionFrom = [
-        [fT, fL],
-        [fT, fL + fW / 2],
-        [fT, fL + fW],
-        [fT + fH / 2, fL],
-        [fT + fH / 2, fL + fW / 2],
-        [fT + fH / 2, fL + fW],
-        [fT + fH, fL],
-        [fT + fH, fL + fW / 2],
-        [fT + fH, fL + fW],
-    ];
-    let listPositionTo = [
-        [tT, tL],
-        [tT, tL + tW / 2],
-        [tT, tL + tW],
-        [tT + tH / 2, tL],
-        [tT + tH / 2, tL + tW / 2],
-        [tT + tH / 2, tL + tW],
-        [tT + tH, tL],
-        [tT + tH, tL + tW / 2],
-        [tT + tH, tL + tW],
-    ];
-
-    fT = listPositionFrom[positionF][0];
-    fL = listPositionFrom[positionF][1];
-    if(positionT!=10){
-        tT = listPositionTo[positionT][0];
-        tL = listPositionTo[positionT][1];
-    } else{
-        tT = tT + tH / 4;
-        tL = tL;
-    }
-
-    var CA = Math.abs(tT - fT);
-    var CO = Math.abs(tL - fL);
-    var H = Math.sqrt(CA * CA + CO * CO);
-    var ANG = 180 / Math.PI * Math.acos(CA / H);
-    let top, left;
-
-    if (tT > fT) {
-        top = (tT - fT) / 2 + fT;
-    } else {
-        top = (fT - tT) / 2 + tT;
-    }
-    if (tL > fL) {
-        left = (tL - fL) / 2 + fL;
-    } else {
-        left = (fL - tL) / 2 + tL;
-    }
-
-    if ((fT < tT && fL < tL) || (tT < fT && tL < fL) || (fT > tT && fL > tL) || (tT > fT && tL > fL)) {
-        ANG *= -1;
-    }
-    top -= H / 2;
-
-    let textAng = 'rotate(' + ANG + 'deg)';
-
-    line.style["-webkit-transform"] = textAng;
-    line.style["-moz-transform"] = textAng;
-    line.style["-ms-transform"] = textAng;
-    line.style["-o-transform"] = textAng;
-    line.style["-transform"] = textAng;
-    line.style.top = top + 'px';
-    line.style.left = left + 'px';
-    line.style.height = H + 'px';
+function _(el) {
+    return document.getElementById(el);
 }
-adjustLine(
-    document.getElementById('p1Arrow'),
-    2,
-    document.getElementById('port1'),
-    10,
-    document.getElementById('line1')
-);
-adjustLine(
-    document.getElementById('p2Arrow'),
-    2,
-    document.getElementById('port2'),
-    10,
-    document.getElementById('line2')
-);
-adjustLine(
-    document.getElementById('p3Arrow'),
-    2,
-    document.getElementById('port3'),
-    10,
-    document.getElementById('line3')
-);
-adjustLine(
-    document.getElementById('ledArrow'),
-    4,
-    document.getElementById('blueLed'),
-    0,
-    document.getElementById('line4')
-);
-adjustLine(
-    document.getElementById('buttonArrow'),
-    5,
-    document.getElementById('button'),
-    1,
-    document.getElementById('line5')
-);
-adjustLine(
-    document.getElementById('screenArrow'),
-    4,
-    document.getElementById('screen'),
-    0,
-    document.getElementById('line6')
-);
+
+let numberOfPortAnalogDigi = [{
+        'numberPort': '1',
+        'numberPortAD': '1',
+    },
+    {
+        'numberPort': '3',
+        'numberPortAD': '2',
+    },
+];
+let sensorInMicro = ['led', 'button', 'screen', 'temperature', 'humidity', 'light'];
+let infoButtonGeneral = [{
+    'idButton': 'SaveConfig',
+    'idButtonCourt': 'config',
+    'textButton': 'Save Configuration',
+    'iconButton': 'settings',
+}, {
+    'idButton': 'ConnectWifi',
+    'idButtonCourt': 'wifi',
+    'textButton': 'Configure WiFi',
+    'iconButton': 'wifi',
+}, ];
+
+function loadPAge() {
+    let textHtml = templateGeneralPage;
+    textHtml = textHtml.replaceAll('$htmlButtonGeneral$', getHtmlForButton());
+    textHtml = textHtml.replaceAll('$htmlSensor$', getHtmlForSensor());
+    _('container').innerHTML = textHtml;
+
+
+    $("#selectAnalogDigi11").dropdown({
+        onChange: e => selectAnalogDigi(e, 0),
+    });
+    $("#selectAnalogDigi12").dropdown({
+        onChange: e => selectAnalogDigi(e, 0),
+    });
+    $("#selectAnalogDigi12").hide();
+    $('#selectI2C').dropdown({
+        onChange: selectI2C,
+    });
+    $("#selectAnalogDigi21").dropdown({
+        onChange: e => selectAnalogDigi(e, 2),
+    });
+    $("#selectAnalogDigi22").dropdown({
+        onChange: e => selectAnalogDigi(e, 2),
+    });
+    $("#selectAnalogDigi22").hide();
+    /*
+    $('.ui.button.config').popup({
+        on: 'click',
+        exclusive: true,
+        onShow: createPopup,
+        html: loader,
+    });
+    $('.ui.button.scan').popup({
+        on: 'click',
+        exclusive: true,
+        onShow: scanI2C,
+        html: loader,
+    });
+    $('#buttonConnectWifi').popup({
+        on: 'click',
+        exclusive: true,
+        html: templatePopupWifi,
+    });
+    $('#buttonSaveConfig').popup({
+        on: 'click',
+        exclusive: true,
+        //onShow: scanI2C,
+        html: loader,
+    });
+    */
+
+    sensorInMicro.forEach(id => $("#" + id + "Config").hide());
+
+    function getHtmlForButton() {
+        let textHtmlTemp = '';
+        infoButtonGeneral.forEach(info => {
+            textHtmlTemp += loopDic(info, templateButtonGeneral);
+        });
+        return textHtmlTemp;
+    }
+
+    function getHtmlForSensor() {
+        let textHtmlTemp = '';
+        numberOfPortAnalogDigi.forEach(info => {
+            textHtmlTemp += loopDic(info, templatePortAnlogDigi);
+        });
+        textHtmlTemp += templatePortI2C;
+        sensorInMicro.forEach(id => {
+            let temp = templatePortSensorInMicro.replaceAll('$idSensor$', id);
+            temp = temp.replaceAll('$idSensorMaj$', strUcFirst(id));
+            textHtmlTemp += temp;
+        });
+        return textHtmlTemp;
+    }
+
+    function loopDic(dic, template){
+        let temp = template;
+        for (let key in dic) {
+            temp = temp.replaceAll('$' + key + '$', dic[key]);
+        }
+        return temp;
+    }
+}
+
+
+function customPort(check, port) {
+    if (check.checked) {
+        $("#selectAnalogDigi" + port + "2").show();
+    } else {
+        $("#selectAnalogDigi" + port + "2").hide();
+    }
+}
+
+function sensorInMicroConfig(check, id) {
+    if (check.checked) {
+        $("#" + id + "Config").show();
+    } else {
+        $("#" + id + "Config").hide();
+    }
+}
+
+function strUcFirst(a) {
+    return (a + '').charAt(0).toUpperCase() + a.substr(1);
+}
+
+loadPAge();
