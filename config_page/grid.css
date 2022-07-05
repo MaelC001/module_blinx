@@ -22,9 +22,9 @@
     gap: 4% 2%;
     grid-template-areas:
         "configButton configButton infoWifi infoWifi"
-        "wifiButton wifiButton infoWifi infoWifi"
-        "nameUser nameUser libre2 libre2"
-        "libre1 libre1 libre2 libre2";
+        "configButton configButton infoWifi infoWifi"
+        "wifiButton wifiButton libre1 libre1"
+        "wifiButton wifiButton libre1 libre1";
     grid-area: general;
 }
 
@@ -146,6 +146,10 @@
 }
 
 .port2 {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 15% 15% 60%;
+    gap: 5% 0%;
     grid-template-areas:
         "infoPort2"
         "selectPort2"

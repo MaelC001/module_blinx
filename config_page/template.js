@@ -21,6 +21,10 @@ let templatePortAnlogDigi = "\
             $optionSelect1$\
             </div>\
         </div>\
+        <button type='button' class='ui labeled icon myBlue button config fluid'' id='buttonAnalogDigi$numberPortAD$1'>\
+            <i class='icon setting'></i>\
+            Config the Sensor\
+        </button><br>\
     </div>\
     <div class='selectPort$numberPort$2'>\
         <div class='ui fluid search selection dropdown selectAnalogDigi$numberPortAD$' id='selectAnalogDigi$numberPortAD$2'\
@@ -32,16 +36,20 @@ let templatePortAnlogDigi = "\
             $optionSelect2$\
             </div>\
         </div>\
+        <button type='button' class='ui labeled icon myBlue button config fluid' id='buttonAnalogDigi$numberPortAD$2'>\
+            <i class='icon setting'></i>\
+            Config the Sensor\
+        </button><br>\
     </div>\
 </div>";
 let templatePortI2C = "\
-<div class='port2 blocSensor' id='port2'>\
+<div class='port2' id='port2'>\
     <div class='infoPort2 infoPort'>\
         <div class='namePort2'>\
             <p>Port I2C</p><br>\
         </div>\
         <div class='actionPort2'>\
-            <button type='button' class='ui labeled icon myBlue button scan'>\
+            <button type='button' class='ui labeled icon myBlue button scan fluid'>\
                 <i class='icon fa-regular fa-magnifying-glass'></i>\
                 Scan I2C\
             </button><br>\
@@ -69,7 +77,7 @@ let templatePortSensorInMicro = "\
     </div>\
     <div id='$idSensor$Config'>\
         <div class='action$idSensorMaj$'>\
-            <div class='ui input'>\
+            <div class='ui mini input'>\
                 <input type='text' placeholder='Name for the sensor'>\
             </div><br>\
         </div>\
@@ -89,12 +97,12 @@ let templatePortSensorInMicroMinMax = "\
     <div id='$idSensor$Config'>\
         <div class='action$idSensorMaj$ blocSensor'>\
             <div class='nameInput$idSensorMaj$'>\
-                <div class='ui input'>\
+                <div class='ui mini input'>\
                     <input type='text' placeholder='Name for the sensor'>\
                 </div><br>\
             </div>\
             <div class='minInput$idSensorMaj$'>\
-                <div class='ui right labeled input mini'>\
+                <div class='ui right labeled mini input'>\
                     <input type='text' placeholder='Min'>\
                     <a class='ui tag label'>\
                         Min\
@@ -102,7 +110,7 @@ let templatePortSensorInMicroMinMax = "\
                 </div><br>\
             </div>\
             <div class='maxInput$idSensorMaj$'>\
-                <div class='ui right labeled input mini'>\
+                <div class='ui right labeled mini input'>\
                     <input type='text' placeholder='Max'>\
                     <a class='ui tag label'>\
                         Max\
@@ -117,7 +125,7 @@ let templatePortSensorInMicroMinMax = "\
 </div>";
 let templateButtonGeneral = "\
 <div class='$idButtonCourt$Button'>\
-    <button type='button' class='ui labeled icon myBlue button' id='button$idButton$'>\
+    <button type='button' class='ui labeled icon myBlue button fluid' id='button$idButton$'>\
         <i class='icon $iconButton$'></i>\
         $textButton$\
     </button><br>\
@@ -128,13 +136,10 @@ let templateGeneralPage = "\
     </div>\
     <div class='general'>\
         $htmlButtonGeneral$\
-        <div class='nameUser'>\
-        </div>\
         <div class='infoWifi'>\
             <p>Info Wifi</p><br>\
         </div>\
         <div class='libre1'></div>\
-        <div class='libre2'></div>\
     </div>\
     $htmlSensor$\
     <div class='error' id='error'></div>\

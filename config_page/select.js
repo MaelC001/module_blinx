@@ -82,9 +82,11 @@ function customPort(check, port) {
     if (check.checked) {
         pinListSensor[parseInt(port)-1] = [1];
         $("#selectAnalogDigi" + port + "2").show();
+        $("#buttonAnalogDigi" + port + "2").show();
     } else {
-        pinListSensor[parseInét(port)-1] = [1, 2];
+        pinListSensor[parseInt(port)-1] = [1, 2];
         $("#selectAnalogDigi" + port + "2").hide();
+        $("#buttonAnalogDigi" + port + "2").hide();
     }
     changeSelectAD();
 }

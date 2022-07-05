@@ -1,4 +1,3 @@
-
 function strUcFirst(a) {
     return (a + '').charAt(0).toUpperCase() + a.substr(1);
 }
@@ -70,9 +69,15 @@ let listAllSensors = {
 let listSensors = {};
 let listSensorsI2C = [];
 let listSensorsAD = [];
-let pinListSensor = [[1,2], [1,2]];
-let listSensorsSelectAD = [['',''],['','']];
+let pinListSensor = [
+    [1, 2, ],
+    [1, 2, ],
+];
+let listSensorsSelectAD = [
+    ['', '', ],
+    ['', '', ],
+];
 let sensorMicroController = [];
 let infoUserSensor = [{},
-    {}, {}
+    {}, {},
 ];

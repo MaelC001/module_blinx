@@ -18,6 +18,7 @@ function loadPAge() {
         onChange: changeSelectSensorAD,
     });
     $("#selectAnalogDigi12").hide();
+    $("#buttonAnalogDigi12").hide();
 
     $("#selectAnalogDigi21").dropdown({
         onChange: changeSelectSensorAD,
@@ -26,6 +27,7 @@ function loadPAge() {
         onChange: changeSelectSensorAD,
     });
     $("#selectAnalogDigi22").hide();
+    $("#buttonAnalogDigi22").hide();
 
     $('#selectI2C').dropdown({
         onChange: selectI2C,
