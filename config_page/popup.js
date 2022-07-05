@@ -1,0 +1,71 @@
+
+
+function createPopup(e) {
+    let popup = this;
+    let idPort = e.id;
+    let idItem;
+    let urlItem;
+    let type;
+    let valueItem;
+    let temp = '<p>error</p>';
+    if (idPort == 'AnalogDigi1' || idPort == 'AnalogDigi2') {
+        idItem = $('#select' + idPort).dropdown('get value');
+        type = 'DigiAnalog';
+    } else {
+        idItem = idPort.substring(idPort.length - 6, 0);
+        type = 'I2C';
+    }
+    valueItem = listAllSensors[type][idItem]['text'];
+    urlItem = listAllSensors[type][idItem]['url'];
+    if (valueItem != '') {
+        temp = templatePopup.replaceAll('$IdPortSensor$', idPort);
+        temp = temp.replaceAll('$ValuePopup$', valueItem);
+        temp = temp.replaceAll('$UrlSensor$', urlItem);
+    }
+    popup.html(temp);
+}
+
+
+function savePopupConfig(idPort, idPin = 0) {
+    let idIndex;
+    let nameSensor;
+    let idSensor;
+    let nameUser = _('nameSensor').value;
+    if (idPort == 'AnalogDigi1') {
+        idSensor = $('#select' + idPort).dropdown('get value');
+        nameSensor = listAllSensors['DigiAnalog'][idSensor]['text'];
+        idIndex = 0;
+        addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser, idPin = idPin);
+    } else if (idPort == 'AnalogDigi2') {
+        idSensor = $('#select' + idPort).dropdown('get value');
+        nameSensor = listAllSensors['DigiAnalog'][idSensor]['text'];
+        idIndex = 2;
+        addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser, idPin = idPin);
+    } else {
+        idSensor = idPort.substring(idPort.length - 6, 0);
+        valueItem = listAllSensors['I2C'][idItem]['text'];
+        idIndex = 1;
+        addToInfoUserI2C(idSensor, nameSensor, nameUser);
+    }
+}
+
+
+function connectWifi() {
+    let ssid = _('ssid').value;
+    let password = _('password').value;
+    $('#buttonConnectWifi').popup('change content', loader);
+
+    let method = 'wifi_connect';
+    let arg = {
+        'ssid': ssid,
+        'password': password
+    };
+    let result = cmd(method, arg = arg, idCmd = 0).then(e => verify_json(e, j => {
+        return j['result']
+    }));
+    if (result == true) {
+        $('#buttonConnectWifi').popup('change content', '<p>success</p>');
+    } else {
+        $('#buttonConnectWifi').popup('change content', '<p>error : ' + result + '</p>');
+    }
+}

@@ -18,7 +18,7 @@ let templatePortAnlogDigi = "\
             <i class='dropdown icon'></i>\
             <div class='default text'>Select type sensor Analogic/Digital</div>\
             <div class='menu' id='listSelectAnalogDigi$numberPortAD$1'>\
-            $optionSelect$\
+            $optionSelect1$\
             </div>\
         </div>\
     </div>\
@@ -29,7 +29,7 @@ let templatePortAnlogDigi = "\
             <i class='dropdown icon'></i>\
             <div class='default text'>Select type sensor Analogic/Digital</div>\
             <div class='menu' id='listSelectAnalogDigi$numberPortAD$2'>\
-            $optionSelect$\
+            $optionSelect2$\
             </div>\
         </div>\
     </div>\
