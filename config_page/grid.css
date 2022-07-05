@@ -1,13 +1,14 @@
 .container {
     display: grid;
-    grid-template-columns: 13% 13% 13% 17% 17% 17%;
+    grid-template-columns: 15% 15% 15% 15% 15% 15%;
     grid-template-rows: 35% 10% 30% 10%;
-    gap: 5% 2%;
+    row-gap: min(5%, 10px);
+    column-gap: 2%;
     grid-template-areas:
         "general general general port1 port3 port2"
         "divImage divImage divImage divImage divImage port2"
         "button led screen temperature humidity light"
-        "error error error error error error";
+        "errorMessages errorMessages errorMessages errorMessages errorMessages errorMessages";
 }
 
 .divImage {
@@ -17,14 +18,13 @@
 
 .general {
     display: grid;
-    grid-template-columns: 22% 22% 22% 22%;
-    grid-template-rows: 23.5% 23.5% 23.5% 23.5%;
-    gap: 4% 2%;
+    grid-template-columns: 48% 48%;
+    grid-template-rows: min(48%, 50px) min(48%, 50px);
+    row-gap: min(4%, 5px);
+    column-gap: 4%;
     grid-template-areas:
-        "configButton configButton infoWifi infoWifi"
-        "configButton configButton infoWifi infoWifi"
-        "wifiButton wifiButton libre1 libre1"
-        "wifiButton wifiButton libre1 libre1";
+        "configButton infoWifi"
+        "wifiButton libre1";
     grid-area: general;
 }
 
@@ -287,10 +287,10 @@
     grid-area: infoLight;
 }
 
-.error {
-    justify-self: start;
-    align-self: end;
-    grid-area: error;
+.errorMessages {
+    /*justify-self: start;
+    align-self: end;*/
+    grid-area: errorMessages;
 }
 
 

@@ -137,12 +137,20 @@ let templateGeneralPage = "\
     <div class='general'>\
         $htmlButtonGeneral$\
         <div class='infoWifi'>\
-            <p>Info Wifi</p><br>\
+            <h3>Info Wifi:</h3>\
+            <p>\
+                <span id='wifiConnected'>NOT </span>Connected\
+                <span id='wifiInfoConnected' style='display: none;'>\
+                    </br>SSID: <span id='wifiSSID'></span>\
+                    </br>IP: <span id='wifiIP'></span>\
+                    </br>MDNS: <span id='wifiMDNS'></span>\
+                </span>\
+            </p>\
         </div>\
         <div class='libre1'></div>\
     </div>\
     $htmlSensor$\
-    <div class='error' id='error'></div>\
+    <div class='errorMessages' id='error'></div>\
 ";
 
 

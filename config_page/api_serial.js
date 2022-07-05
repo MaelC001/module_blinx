@@ -28,7 +28,7 @@ async function connect(usbV = null, usbP = null) {
         e = e+'';
         if (e == 'TypeError: navigator.serial is undefined'){
             document.getElementById('error').innerHTML = '\
-            <div class="ui negative message">\
+            <div class="ui error floating message">\
                 <div class="header">\
                 The navigator is not compatible with the api of webserial\
                 </div>\
