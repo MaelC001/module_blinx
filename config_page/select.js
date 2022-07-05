@@ -1,4 +1,4 @@
-function changeSelectSensorAD(value, text, element, booleanSelectOnChange = True){
+function changeSelectSensorAD(value, text, element, booleanSelectOnChange = true){
     if(value != ''){
         let select;
         if (booleanSelectOnChange){
@@ -14,19 +14,19 @@ function changeSelectSensorAD(value, text, element, booleanSelectOnChange = True
         if (x == 1){
             id = 2;
         }
-        findValue(el, id, pin = y);
+        findValue(value, id, pin = y);
 
-        changeList();
-        changeSelectAD();
+        // changeList();
+        // changeSelectAD();
     }
 
 
     function changeList(){
         listSensorsAD = [];
         listSensors['DigiAnalog'].forEach(info => {
-            let value = info['info'];
+            let value = info['value'];
             if (!listSensorsSelectAD[0].includes(value) && !listSensorsSelectAD[1].includes(value)){
-                listSensorsAD.push(value);
+                listSensorsAD.push(info);
             }
         });
     }
@@ -48,23 +48,28 @@ function changeSelectSensorAD(value, text, element, booleanSelectOnChange = True
 function changeSelectAD(){
     let idSelect = 'SelectAnalogDigi';
     let a = [0,1];
-    for(let i = 1; i<=2; i++){
-        for(let y = 1; y<=2; y++){
+    for(let i = 0; i<2; i++){
+        for(let y = 0; y<2; y++){
             let value = listSensorsSelectAD[i][y];
-            let tempArray = listSensorsAD.concat([value]);
+            let tempArray = listSensorsAD;
+            if (value != ''){
+                tempArray = tempArray.concat([value]);
+            }
             let tempArrayWithout = []
             a.forEach(x2 => {
                 a.forEach(y2 => {
-                    if(x2 != i && y2 != y){
-                        tempArrayWithout.push(listSensorsSelectAD[x2][y2]);
+                    let val = listSensorsSelectAD[x2][y2];
+                    if(x2 != i && y2 != y && val != ''){
+                        tempArrayWithout.push(val);
                     }
                 });
             });
             let t = setOptionSelect(tempArray, pinNumber = pinListSensor[i], without = tempArrayWithout, x = i, y = y, item = value);
-            _('list'+idSelect+i+y).innerHTML = t[0];
-            $('#'+idSelect+i+y).dropdown('refresh');
+            let z = ''+(i+1)+(y+1)
+            _('list'+idSelect+z).innerHTML = t[0];
+            $('#'+idSelect+z).dropdown('refresh');
             if (t[1]){
-                $('#'+idSelect+i+y).dropdown('set selected', value);
+                $('#'+idSelect+z).dropdown('set selected', value);
             }
         }
     }
@@ -78,7 +83,7 @@ function customPort(check, port) {
         pinListSensor[parseInt(port)-1] = [1];
         $("#selectAnalogDigi" + port + "2").show();
     } else {
-        pinListSensor[parseInt(port)-1] = [1, 2];
+        pinListSensor[parseInét(port)-1] = [1, 2];
         $("#selectAnalogDigi" + port + "2").hide();
     }
     changeSelectAD();
@@ -93,9 +98,9 @@ function sensorInMicroConfig(check, id) {
 }
 
 
-function selectI2C(e, text, $selectedItem) {
+function selectI2C(e) {
+    let item = {};
     if (e != '') {
-        let item = {};
         listSensorsI2C = listSensorsI2C.filter(removeItemI2C);
 
         let temp = templateCardI2C;
@@ -167,6 +172,7 @@ function removeI2C(id) {
         'name': listAllSensors['I2C'][id]['text'],
         'urlImage': listAllSensors['I2C'][id]['urlImage'],
         'url': listAllSensors['I2C'][id]['url'],
+        'pinNumber': -1,
     });
 
     removeToInfoUserI2C(id);

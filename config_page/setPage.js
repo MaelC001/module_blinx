@@ -121,7 +121,7 @@ function create_dic() {
 
 function setOptionSelect(arrayItem, pinNumber = [], without = [], x = 2, y = 2, item = '') {
     let tempText = '';
-    let itemIn = False
+    let itemIn = false;
     arrayItem.forEach(e => {
         let val = e['value'];
         let pin = e['pinNumber'];
@@ -132,7 +132,7 @@ function setOptionSelect(arrayItem, pinNumber = [], without = [], x = 2, y = 2, 
             tempText += "<div class='item' data-text='" + e['name'] + "' data-value='" + val + "' data-selectSensor='"+ x +""+ y +"'><img class='ui image' src='" + e['urlImage'] + "' style='width:20px;'>" + e['name'] + "</div>";
         }
     });
-    return tempText, itemIn;
+    return [tempText, itemIn];
 }
 
 
