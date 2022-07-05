@@ -261,22 +261,22 @@
 
 .actionLight {
     grid-template-areas:
-        "nameInput"
-        "minInput"
-        "maxInput";
+        "nameInputLight"
+        "minInputLight"
+        "maxInputLight";
     grid-area: actionLight;
 }
 
-.nameInput {
-    grid-area: nameInput;
+.nameInputLight {
+    grid-area: nameInputLight;
 }
 
-.minInput {
-    grid-area: minInput;
+.minInputLight {
+    grid-area: minInputLight;
 }
 
-.maxInput {
-    grid-area: maxInput;
+.maxInputLight {
+    grid-area: maxInputLight;
 }
 
 .infoLight {

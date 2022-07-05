@@ -29,6 +29,7 @@ let templatePortAnlogDigi = "\
             <i class='dropdown icon'></i>\
             <div class='default text'>Select type sensor Analogic/Digital</div>\
             <div class='menu' id='listSelectAnalogDigi$numberPortAD$2'>\
+            $optionSelect$\
             </div>\
         </div>\
     </div>\
@@ -71,6 +72,43 @@ let templatePortSensorInMicro = "\
             <div class='ui input'>\
                 <input type='text' placeholder='Name for the sensor'>\
             </div><br>\
+        </div>\
+        <div class='info$idSensorMaj$'>\
+            <p>Info</p><br>\
+        </div>\
+    </div>\
+</div>";
+let templatePortSensorInMicroMinMax = "\
+<div class='$idSensor$ blocSensor' id='$idSensor$'>\
+    <div class='buttonActivate$idSensorMaj$'>\
+        <div class='ui toggle checkbox'>\
+            <input type='checkbox' name='public' onclick='sensorInMicroConfig(this, \"$idSensor$\")'>\
+            <label>$idSensorMaj$</label>\
+        </div><br>\
+    </div>\
+    <div id='$idSensor$Config'>\
+        <div class='action$idSensorMaj$ blocSensor'>\
+            <div class='nameInput$idSensorMaj$'>\
+                <div class='ui input'>\
+                    <input type='text' placeholder='Name for the sensor'>\
+                </div><br>\
+            </div>\
+            <div class='minInput$idSensorMaj$'>\
+                <div class='ui right labeled input mini'>\
+                    <input type='text' placeholder='Min'>\
+                    <a class='ui tag label'>\
+                        Min\
+                    </a>\
+                </div><br>\
+            </div>\
+            <div class='maxInput$idSensorMaj$'>\
+                <div class='ui right labeled input mini'>\
+                    <input type='text' placeholder='Max'>\
+                    <a class='ui tag label'>\
+                        Max\
+                    </a>\
+                </div><br>\
+            </div>\
         </div>\
         <div class='info$idSensorMaj$'>\
             <p>Info</p><br>\

@@ -11,7 +11,8 @@ let numberOfPortAnalogDigi = [{
         'numberPortAD': '2',
     },
 ];
-let sensorInMicro = ['led', 'button', 'screen', 'temperature', 'humidity', 'light'];
+let sensorInMicro = ['led', 'button', 'screen', 'temperature', 'humidity'];
+let sensorInMicroPlus = ['light'];
 let infoButtonGeneral = [{
     'idButton': 'SaveConfig',
     'idButtonCourt': 'config',
@@ -56,15 +57,8 @@ let listAllSensors = {
             'is_display': false,
             'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
             'url': '',
+            'numberPin': 1,
         },
-        "custom": {
-            "text": "custom",
-            "file": "",
-            'is_input': false,
-            'is_display': false,
-            'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
-            'url': '',
-        }
     },
 };
 let listSensors = {};
@@ -129,6 +123,7 @@ function loadPAge() {
     });
 
     sensorInMicro.forEach(id => $("#" + id + "Config").hide());
+    sensorInMicroPlus.forEach(id => $("#" + id + "Config").hide());
 
     function getHtmlForButton() {
         let textHtmlTemp = '';
@@ -142,12 +137,17 @@ function loadPAge() {
         let textHtmlTemp = '';
         numberOfPortAnalogDigi.forEach(info => {
             let temp = loopDic(info, templatePortAnlogDigi);
-            temp = temp.replaceAll('$optionSelect$', setOptionSelect(listSensors['DigiAnalog']))
+            temp = temp.replaceAll('$optionSelect$', setOptionSelect(listSensors['DigiAnalog'], pinNumber = [2, 1]))
             textHtmlTemp += temp;
         });
         textHtmlTemp += templatePortI2C.replaceAll('$optionSelect$', setOptionSelect(listSensorsI2C));
         sensorInMicro.forEach(id => {
             let temp = templatePortSensorInMicro.replaceAll('$idSensor$', id);
+            temp = temp.replaceAll('$idSensorMaj$', strUcFirst(id));
+            textHtmlTemp += temp;
+        });
+        sensorInMicroPlus.forEach(id => {
+            let temp = templatePortSensorInMicroMinMax.replaceAll('$idSensor$', id);
             temp = temp.replaceAll('$idSensorMaj$', strUcFirst(id));
             textHtmlTemp += temp;
         });
@@ -481,17 +481,19 @@ function createPopup(e) {
     valueItem = listAllSensors[type][idItem]['text'];
     urlItem = listAllSensors[type][idItem]['url'];
     if (valueItem != '') {
-        temp = templatePopup.replace('$IdPortSensor$', idPort);
-        temp = temp.replace('$ValuePopup$', valueItem);
-        temp = temp.replace('$UrlSensor$', urlItem);
+        temp = templatePopup.replaceAll('$IdPortSensor$', idPort);
+        temp = temp.replaceAll('$ValuePopup$', valueItem);
+        temp = temp.replaceAll('$UrlSensor$', urlItem);
     }
     popup.html(temp);
 }
 
-function setOptionSelect(arrayItem) {
+function setOptionSelect(arrayItem, pinNumber = [], without = []) {
     let tempText = '';
     arrayItem.forEach(e => {
-        tempText += "<div class='item' data-text='" + e['name'] + "' data-value='" + e['value'] + "'><img class='ui image' src='" + e['urlImage'] + "' style='width:20px;'>" + e['name'] + "</div>";
+        if ((e['piNumber'] == -1 || pinNumber.includes(e['piNumber'])) && !(without.includes(e['value']))){
+            tempText += "<div class='item' data-text='" + e['name'] + "' data-value='" + e['value'] + "'><img class='ui image' src='" + e['urlImage'] + "' style='width:20px;'>" + e['name'] + "</div>";
+        }
     });
     return tempText;
 }
@@ -501,11 +503,16 @@ function create_dic() {
     for (let key1 in listAllSensors) {
         listSensors[key1] = [];
         for (let key2 in listAllSensors[key1]) {
+            let temp = -1;
+            if ('numberPin' in listAllSensors[key1][key2]){
+                temp = listAllSensors[key1][key2]['numberPin'];
+            }
             listSensors[key1].push({
                 'value': key2,
                 'name': listAllSensors[key1][key2]['text'],
                 'urlImage': listAllSensors[key1][key2]['urlImage'],
                 'url': listAllSensors[key1][key2]['url'],
+                'piNumber': temp,
             });
         }
     }
