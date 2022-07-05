@@ -18,6 +18,7 @@ let templatePortAnlogDigi = "\
             <i class='dropdown icon'></i>\
             <div class='default text'>Select type sensor Analogic/Digital</div>\
             <div class='menu' id='listSelectAnalogDigi$numberPortAD$1'>\
+            $optionSelect$\
             </div>\
         </div>\
     </div>\
@@ -51,10 +52,11 @@ let templatePortI2C = "\
             <i class='dropdown icon'></i>\
             <div class='default text'>Select type sensor I2C</div>\
             <div class='menu' id='listSelectI2c'>\
+            $optionSelect$\
             </div>\
         </div>\
     </div>\
-    <div class='listSensorPort2'></div>\
+    <div class='listSensorPort2' id='listCardI2C'></div>\
 </div>";
 let templatePortSensorInMicro = "\
 <div class='$idSensor$ blocSensor' id='$idSensor$'>\
@@ -97,5 +99,54 @@ let templateGeneralPage = "\
         <div class='libre2'></div>\
     </div>\
     $htmlSensor$\
-    <div class='error'></div>\
+    <div class='error' id='error'></div>\
 ";
+
+
+let loader = '<i class="notched circle loading icon green"></i> wait...';
+
+
+let templatePopup = "\
+<div class='form-popup' id='formConfigPopup'>\
+    <form class='form-container'>\
+            <div onclick='window.open(\"$UrlSensor$\",\"infoSensor\",\"height=500,width=800\");'>\
+                <label for='typeSensor' class='urlPopupLabel'><b>Sensor Type</b></label>\
+                <input type='text' name='typeSensor' value='$ValuePopup$' id='typeSensor' class='urlPopup' disabled>\
+            </div>\
+            <label for='nameSensor'><b>Name</b></label>\
+            <input type='text' placeholder='Your name of the sensor' name='nameSensor' class='modify' id='nameSensor'>\
+            <div id='popupPlus'></div>\
+        <button type='button' class='btn' onclick='savePopupConfig(\"$IdPortSensor$\")'>Saving</button>\
+    </form>\
+</div>";
+
+let templatePopupWifi = "\
+<div class='form-popup' id='formWifiPopup'>\
+    <form class='form-container'>\
+        <label for='ssid'><b>SSID</b></label>\
+        <input type='text' placeholder='SSID wifi' name='ssid' class='modify' id='ssid'>\
+        <label for='password'><b>Password</b></label>\
+        <input type='password' placeholder='password wifi' name='password' class='modify' id='password'>\
+        <button type='button' class='btn' onclick='connectWifi()'>Connect</button>\
+    </form>\
+</div>";
+
+let templateCardI2C = "\
+<div class='card' id='$IdSensor$'>\
+    <div class='content'>\
+        <img class='right floated mini ui image' src='$ImageSensor$'>\
+        <div class='header'>\
+            $NameSensor$\
+        </div>\
+        <div class='meta'>\
+            <a href='$UrlSensor$' target='_blank'>info sensor</a>\
+        </div>\
+    </div>\
+    <div class='extra content'>\
+        <div class='ui two buttons'>\
+            <div class='ui labeled myBlue button icon config' data-position='right center' id='$IdSensor$Config'><i\
+            class='icon settings'></i>Config the sensor</div>\
+            <div class='ui labeled red button icon' onclick='removeI2C(\"$IdSensor$\")'><i class='trash icon'></i>Remove</div>\
+        </div>\
+    </div>\
+</div>";
