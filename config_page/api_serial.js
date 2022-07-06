@@ -14,28 +14,81 @@ async function connect(usbV = null, usbP = null) {
         port.close();
     }
     try {
-        port = await navigator.serial.requestPort({
+        await navigator.serial.requestPort({
             filters: [{
                 usbVendorId: usbV,
                 usbProductId: usbP
             }]
+        }).then((p) => {
+            port = p;
+            port.open({
+                baudRate: 115200
+            });
+        }).catch((e) => {
+            e = e + '';
+            if (e == 'DOMException: No port selected by the user.' || e == "NotFoundError: No port selected by the user.") {
+                document.getElementById('error').innerHTML = "\
+                    <div class='ui error floating message'>\
+                        <div class='header'>\
+                        Chose port\
+                        </div>\
+                        <p>You have to chose the port of the micro controller, so we can tlak with it.</p>\
+                        <button type='button' class='ui labeled button' onclick='connect()'>\
+                            Re-try\
+                        </button>\
+                    </div>";
+            } else if (e == "SecurityError: Failed to execute 'requestPort' on 'Serial': Must be handling a user gesture to show a permission request.") {
+                document.getElementById('error').innerHTML = "\
+                    <div class='ui error floating message'>\
+                        <div class='header'>\
+                        Security Error\
+                        </div>\
+                        <p>Your browser block the request of the port for the micro-controller.</p>\
+                        <button type='button' class='ui labeled button' onclick='connect()'>\
+                            Re-try\
+                        </button>\
+                    </div>";
+            } else {
+                console.log(e);
+                throw e;
+            }
         });
 
-        await port.open({
-            baudRate: 115200
-        });
     } catch (e) {
-        e = e+'';
-        if (e == 'TypeError: navigator.serial is undefined'){
-            document.getElementById('error').innerHTML = '\
-            <div class="ui error floating message">\
-                <div class="header">\
-                The navigator is not compatible with the api of webserial\
-                </div>\
-                <p>We need the webserial api for the connection with the microcontroller.</p>\
-                <p>Chrome is compatible with the api.</p>\
-            </div>';
-        }else{
+        e = e + '';
+        if (e == 'TypeError: navigator.serial is undefined') {
+            document.getElementById('error').innerHTML = "\
+                <div class='ui error floating message'>\
+                    <div class='header'>\
+                    The navigator is not compatible with the api of webserial\
+                    </div>\
+                    <p>We need the webserial api for the connection with the microcontroller.</p>\
+                    <p>Chrome is compatible with the api.</p>\
+                </div>";
+        } else if (e == 'DOMException: No port selected by the user.' || e == "NotFoundError: No port selected by the user.") {
+            document.getElementById('error').innerHTML = "\
+                <div class='ui error floating message'>\
+                    <div class='header'>\
+                    Chose port\
+                    </div>\
+                    <p>You have to chose the port of the micro controller, so we can tlak with it.</p>\
+                    <button type='button' class='ui labeled button' onclick='connect()'>\
+                        Re-try\
+                    </button>\
+                </div>";
+        } else if (e == "SecurityError: Failed to execute 'requestPort' on 'Serial': Must be handling a user gesture to show a permission request.") {
+            document.getElementById('error').innerHTML = "\
+                <div class='ui error floating message'>\
+                    <div class='header'>\
+                    Security Error\
+                    </div>\
+                    <p>Your browser block the request of the port for the micro-controller.</p>\
+                    <button type='button' class='ui labeled button' onclick='connect()'>\
+                        Re-try\
+                    </button>\
+                </div>";
+        } else {
+            console.log(e);
             throw e
         }
     }
