@@ -78,6 +78,6 @@ let listSensorsSelectAD = [
     ['', '', ],
 ];
 let sensorMicroController = [];
-let infoUserSensor = [{},
-    {}, {},
+let infoUserSensor = [[{}, {},],
+    {}, [{}, {},],
 ];

@@ -156,11 +156,12 @@ let templateGeneralPage = "\
 
 let loader = '<i class="notched circle loading icon green"></i> wait...';
 
+let templatePopupPage = "onclick='window.open(\"$UrlSensor$\",\"infoSensor\",\"height=500,width=800\");'";
 
 let templatePopup = "\
 <div class='form-popup' id='formConfigPopup'>\
     <form class='form-container'>\
-            <div onclick='window.open(\"$UrlSensor$\",\"infoSensor\",\"height=500,width=800\");'>\
+            <div $PLUSURL$>\
                 <label for='typeSensor' class='urlPopupLabel'><b>Sensor Type</b></label>\
                 <input type='text' name='typeSensor' value='$ValuePopup$' id='typeSensor' class='urlPopup' disabled>\
             </div>\

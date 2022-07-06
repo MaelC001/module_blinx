@@ -8,45 +8,56 @@ function createPopup(e) {
     let type;
     let valueItem;
     let temp = '<p>error</p>';
-    if (idPort == 'AnalogDigi1' || idPort == 'AnalogDigi2') {
+    let l = idPort.length;
+    if (idPort.substring(l-2,0) == 'buttonAnalogDigi') {
+        idPort = idPort.substring(6, l);
         idItem = $('#select' + idPort).dropdown('get value');
         type = 'DigiAnalog';
     } else {
         idItem = idPort.substring(idPort.length - 6, 0);
         type = 'I2C';
     }
-    valueItem = listAllSensors[type][idItem]['text'];
-    urlItem = listAllSensors[type][idItem]['url'];
-    if (valueItem != '') {
-        temp = templatePopup.replaceAll('$IdPortSensor$', idPort);
-        temp = temp.replaceAll('$ValuePopup$', valueItem);
-        temp = temp.replaceAll('$UrlSensor$', urlItem);
+    if(idItem != ''){
+        valueItem = listAllSensors[type][idItem]['text'];
+        urlItem = listAllSensors[type][idItem]['url'];
+        let plusUrl = '';
+        if(urlItem != ''){
+            plusUrl = templatePopupPage.replaceAll('$UrlSensor$', urlItem);
+        }
+        console.log(idPort,valueItem,urlItem, listAllSensors[type][idItem])
+        if (valueItem != '') {
+            temp = templatePopup.replaceAll('$IdPortSensor$', idPort);
+            temp = temp.replaceAll('$ValuePopup$', valueItem);
+            temp = temp.replaceAll('$PLUSURL$', plusUrl);
+        }
+        popup.html(temp);
     }
-    popup.html(temp);
 }
 
 
-function savePopupConfig(idPort, idPin = 0) {
+function savePopupConfig(idPort) {
     let idIndex;
     let nameSensor;
     let idSensor;
     let nameUser = _('nameSensor').value;
-    if (idPort == 'AnalogDigi1') {
+    let l = idPort.length;
+    let idPin = parseInt(idPort[l-1])-1;
+    if (idPort.substring(l-2,0) == 'AnalogDigi') {
         idSensor = $('#select' + idPort).dropdown('get value');
         nameSensor = listAllSensors['DigiAnalog'][idSensor]['text'];
-        idIndex = 0;
-        addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser, idPin = idPin);
-    } else if (idPort == 'AnalogDigi2') {
-        idSensor = $('#select' + idPort).dropdown('get value');
-        nameSensor = listAllSensors['DigiAnalog'][idSensor]['text'];
-        idIndex = 2;
+        if (idPort[l-2] == '1'){
+            idIndex = 0;
+        } else{
+            idIndex = 2;
+        }
         addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser, idPin = idPin);
     } else {
-        idSensor = idPort.substring(idPort.length - 6, 0);
-        valueItem = listAllSensors['I2C'][idItem]['text'];
+        idSensor = idPort.substring(l - 6, 0);
+        valueItem = listAllSensors['I2C'][idSensor]['text'];
         idIndex = 1;
         addToInfoUserI2C(idSensor, nameSensor, nameUser);
     }
+    $('.ui.button.config').popup('hide');
 }
 
 
