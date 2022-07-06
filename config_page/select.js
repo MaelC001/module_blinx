@@ -111,9 +111,23 @@ function customPort(check, port) {
 }
 
 function sensorInMicroConfig(check, id) {
+    let arrayAD = ['button', 'led', 'screen'];
     if (check.checked) {
+        infoUserSensor[3][id] = {
+            "name": id,
+            "idSensor": id,
+            "userName": '',
+            "channels": [],
+            "borne inferieure": -1,
+            "borne supeieure": -1,
+            "type": "I2C",
+        };
+        if(arrayAD.includes(id)){
+            infoUserSensor[3][id]['type'] = 'DigiAnalog'
+        }
         $("#" + id + "Config").show();
     } else {
+        delete infoUserSensor[3][id];
         $("#" + id + "Config").hide();
     }
 }
@@ -136,12 +150,18 @@ function selectI2C(e) {
 
         changeSelectI2C();
 
-        $('#' + e + 'Config').popup({
+        $('.ui.button.config').popup({
             on: 'click',
             exclusive: true,
             onShow: createPopup,
             html: loader,
         });
+        /*$('#' + e + 'Config').popup({
+            on: 'click',
+            exclusive: true,
+            onShow: createPopup,
+            html: loader,
+        });*/
 
         $('#selectI2C').dropdown('clear');
     }

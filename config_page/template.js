@@ -6,7 +6,7 @@ let templatePortAnlogDigi = "\
         </div>\
         <div class='actionPort$numberPort$'>\
             <div class='ui toggle checkbox'>\
-                <input type='checkbox' name='public' onclick='customPort(this, $numberPortAD$)'>\
+                <input type='checkbox' name='public' onclick='customPort(this, $numberPortAD$)' id='sensorSplitter$numberPortAD$'>\
                 <label>cable splitter</label>\
             </div><br>\
         </div>\

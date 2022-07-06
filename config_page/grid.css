@@ -15,6 +15,11 @@
     justify-self: start;
     grid-area: divImage;
 }
+.image{
+    object-fit:cover;
+    height:100%;
+    width:100%;
+}
 
 .general {
     display: grid;
