@@ -78,7 +78,12 @@ function loadPAge() {
             textHtmlTemp += temp;
             indexAD += 1;
         });
+        textHtmlTemp += '</div>';
+        textHtmlTemp += templateImage;
+        textHtmlTemp += '</div>';
         textHtmlTemp += templatePortI2C.replaceAll('$optionSelect$', setOptionSelect(listSensorsI2C)[0]);
+        textHtmlTemp += '</div>';
+        textHtmlTemp += '<div class="rowFlex">';
         sensorInMicro.forEach(id => {
             let temp = templatePortSensorInMicro.replaceAll('$idSensor$', id);
             temp = temp.replaceAll('$idSensorMaj$', strUcFirst(id));
@@ -89,6 +94,7 @@ function loadPAge() {
             temp = temp.replaceAll('$idSensorMaj$', strUcFirst(id));
             textHtmlTemp += temp;
         });
+        textHtmlTemp += '</div>';
         return textHtmlTemp;
     }
 

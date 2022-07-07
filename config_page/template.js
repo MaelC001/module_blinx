@@ -1,6 +1,6 @@
 let templatePortAnlogDigi = "\
-<div class='port$numberPort$ blocSensor' id='port$numberPort$'>\
-    <div class='infoPort$numberPort$ infoPort'>\
+<div class='port$numberPort$ columnFlex' id='port$numberPort$'>\
+    <div class='infoPort$numberPort$ infoPort columnFlex'>\
         <div class='namePort$numberPort$'>\
             <p>Port Analogic/Digital</p><br>\
         </div>\
@@ -11,7 +11,7 @@ let templatePortAnlogDigi = "\
             </div><br>\
         </div>\
     </div>\
-    <div class='selectPort$numberPort$1'>\
+    <div class='selectPort$numberPort$1 columnFlex'>\
         <div class='ui fluid search selection dropdown selectAnalogDigi$numberPortAD$' id='selectAnalogDigi$numberPortAD$1'\
             name='selectAnalogDigi$numberPortAD$'>\
             <input type='hidden' name='sensorPort$numberPortAD$1'>\
@@ -26,7 +26,7 @@ let templatePortAnlogDigi = "\
             Config the Sensor\
         </button><br>\
     </div>\
-    <div class='selectPort$numberPort$2'>\
+    <div class='selectPort$numberPort$2 columnFlex'>\
         <div class='ui fluid search selection dropdown selectAnalogDigi$numberPortAD$' id='selectAnalogDigi$numberPortAD$2'\
             name='selectAnalogDigi$numberPortAD$'>\
             <input type='hidden' name='sensorPort$numberPortAD$2'>\
@@ -43,8 +43,8 @@ let templatePortAnlogDigi = "\
     </div>\
 </div>";
 let templatePortI2C = "\
-<div class='port2' id='port2'>\
-    <div class='infoPort2 infoPort'>\
+<div class='port2 columnFlex' id='port2'>\
+    <div class='infoPort2 infoPort columnFlex'>\
         <div class='namePort2'>\
             <p>Port I2C</p><br>\
         </div>\
@@ -68,14 +68,14 @@ let templatePortI2C = "\
     <div class='listSensorPort2' id='listCardI2C'></div>\
 </div>";
 let templatePortSensorInMicro = "\
-<div class='$idSensor$ blocSensor' id='$idSensor$'>\
+<div class='$idSensor$ columnFlex' id='$idSensor$'>\
     <div class='buttonActivate$idSensorMaj$'>\
         <div class='ui toggle checkbox'>\
             <input type='checkbox' name='public' onclick='sensorInMicroConfig(this, \"$idSensor$\")'>\
             <label>$idSensorMaj$</label>\
         </div><br>\
     </div>\
-    <div id='$idSensor$Config'>\
+    <div id='$idSensor$Config' class='columnFlex'>\
         <div class='action$idSensorMaj$'>\
             <div class='ui mini input'>\
                 <input type='text' placeholder='Name for the sensor'>\
@@ -87,14 +87,14 @@ let templatePortSensorInMicro = "\
     </div>\
 </div>";
 let templatePortSensorInMicroMinMax = "\
-<div class='$idSensor$ blocSensor' id='$idSensor$'>\
+<div class='$idSensor$ columnFlex' id='$idSensor$'>\
     <div class='buttonActivate$idSensorMaj$'>\
         <div class='ui toggle checkbox'>\
             <input type='checkbox' name='public' onclick='sensorInMicroConfig(this, \"$idSensor$\")'>\
             <label>$idSensorMaj$</label>\
         </div><br>\
     </div>\
-    <div id='$idSensor$Config'>\
+    <div id='$idSensor$Config' class='columnFlex'>\
         <div class='action$idSensorMaj$ blocSensor'>\
             <div class='nameInput$idSensorMaj$'>\
                 <div class='ui mini input'>\
@@ -130,26 +130,33 @@ let templateButtonGeneral = "\
         $textButton$\
     </button><br>\
 </div>";
+
+let templateImage = "\
+<div class='divImage'>\
+    <img src='image_color.png' alt='image_of_micro_controller' class='ui centered image'>\
+</div>";
+
 let templateGeneralPage = "\
-    <div class='divImage'>\
-        <img src='image_color.png' alt='image_of_micro_controller' class='ui centered image'>\
+    <div class='rowFlex maximize'>\
+        <div class='columnFlex'>\
+            <div class='rowFlex'>\
+                <div class='general square'>\
+                    $htmlButtonGeneral$\
+                    <div class='libre1'></div>\
+                    <div class='infoWifi'>\
+                        <h3>Info Wifi:</h3>\
+                        <p>\
+                            <span id='wifiConnected'>NOT </span>Connected\
+                            <span id='wifiInfoConnected' style='display: none;'>\
+                                </br>SSID: <span id='wifiSSID'></span>\
+                                </br>IP: <span id='wifiIP'></span>\
+                                </br>MDNS: <span id='wifiMDNS'></span>\
+                            </span>\
+                        </p>\
+                    </div>\
+                </div>\
+        $htmlSensor$\
     </div>\
-    <div class='general'>\
-        $htmlButtonGeneral$\
-        <div class='infoWifi'>\
-            <h3>Info Wifi:</h3>\
-            <p>\
-                <span id='wifiConnected'>NOT </span>Connected\
-                <span id='wifiInfoConnected' style='display: none;'>\
-                    </br>SSID: <span id='wifiSSID'></span>\
-                    </br>IP: <span id='wifiIP'></span>\
-                    </br>MDNS: <span id='wifiMDNS'></span>\
-                </span>\
-            </p>\
-        </div>\
-        <div class='libre1'></div>\
-    </div>\
-    $htmlSensor$\
     <div class='errorMessages' id='error'></div>\
 ";
 
