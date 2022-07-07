@@ -24,7 +24,6 @@ function createPopup(e) {
         if(urlItem != ''){
             plusUrl = templatePopupPage.replaceAll('$UrlSensor$', urlItem);
         }
-        console.log(idPort,valueItem,urlItem, listAllSensors[type][idItem])
         if (valueItem != '') {
             temp = templatePopup.replaceAll('$IdPortSensor$', idPort);
             temp = temp.replaceAll('$ValuePopup$', valueItem);
