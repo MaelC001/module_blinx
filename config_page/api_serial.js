@@ -187,7 +187,7 @@ async function config_sensor_serial(json_config, json_sensor) {
             var method = 'write';
             var arg = {
                 'name': 'config_file.py',
-                'value': ""
+                'value': "array = " + JSON.stringify(json_config),
             };
             cmd(method, arg = arg, idCmd = id).then(e => etape4(e));
             async function etape4(e) {
