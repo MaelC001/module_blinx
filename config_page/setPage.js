@@ -60,6 +60,9 @@ function loadPAge() {
     sensorInMicro.forEach(id => $("#" + id + "Config").hide());
     sensorInMicroPlus.forEach(id => $("#" + id + "Config").hide());
 
+
+    connect(usbV = null, usbP = null, idError = 'error', callback = infoWifi);
+
     function getHtmlForButton() {
         let textHtmlTemp = '';
         infoButtonGeneral.forEach(info => {

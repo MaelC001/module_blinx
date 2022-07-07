@@ -9,7 +9,8 @@ var id = 0;
 
 var url_mpy = "https://raw.githubusercontent.com/MaelC001/sensor_blinx/main/";
 
-async function connect(usbV = null, usbP = null) {
+async function connect(usbV = null, usbP = null, idError = null, callback = null) {
+    let textError;
     if (port) {
         port.close();
     }
@@ -24,17 +25,21 @@ async function connect(usbV = null, usbP = null) {
             port.open({
                 baudRate: 115200
             });
-        }).catch((e) => {
-            error(e);
         });
+        callback();
     } catch (e) {
         error(e);
+    }
+    if(idError == null){
+        console.log(textError);
+    } else{
+        document.getElementById(idError).innerHTML = textError;
     }
 
     function error(e){
         e = e + '';
         if (e == 'TypeError: navigator.serial is undefined') {
-            document.getElementById('error').innerHTML = "\
+            textError = "\
                 <div class='ui error floating message'>\
                     <div class='header'>\
                     The navigator is not compatible with the api of webserial\
@@ -43,7 +48,7 @@ async function connect(usbV = null, usbP = null) {
                     <p>Chrome is compatible with the api.</p>\
                 </div>";
         } else if (e == 'DOMException: No port selected by the user.' || e == "NotFoundError: No port selected by the user.") {
-            document.getElementById('error').innerHTML = "\
+            textError = "\
                 <div class='ui error floating message'>\
                     <div class='header'>\
                     Chose port\
@@ -54,7 +59,7 @@ async function connect(usbV = null, usbP = null) {
                     </button>\
                 </div>";
         } else if (e == "SecurityError: Failed to execute 'requestPort' on 'Serial': Must be handling a user gesture to show a permission request.") {
-            document.getElementById('error').innerHTML = "\
+            textError = "\
                 <div class='ui error floating message'>\
                     <div class='header'>\
                     Security Error\
@@ -66,7 +71,7 @@ async function connect(usbV = null, usbP = null) {
                 </div>";
         } else {
             console.log(e);
-            throw e
+            throw e;
         }
     }
 }
@@ -212,4 +217,23 @@ function getText(url) {
     }
 }
 
-connect();
+function infoWifi(){
+    var method = 'wifi';
+    cmd(method, idCmd = id).then(e => getInfo(e));
+    function getInfo(e) {
+        verify_json(e, json => {
+            let t = json['result']['wlan_sta'];
+            let connected = t['isconnected'];
+            let ip = t['ifcongif'];
+            let ssid = t['config']['ssid'];
+            let hostname = t['config']['dhcp_hostname'];
+            if (connected){
+                _('wifiConnected').innerHTML = '';
+                _('wifiInfoConnected').style.display = 'block';
+                _('wifiSSID').innerHTML = ssid;
+                _('wifiIP').innerHTML = ip;
+                _('wifiMDNS').innerHTML = hostname;
+            }
+        });
+    }
+}
