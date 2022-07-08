@@ -41,6 +41,9 @@ def accept_conn(listen_sock):
     print("\nWebREPL connection from:", remote_addr)
     client_s = cl
     websocket_helper.server_handshake(cl)
+    webrepl_handler(cl)
+
+def webrepl_handler(cl):
     ws = uwebsocket.websocket(cl, True)
     ws = _webrepl._webrepl(ws)
     cl.setblocking(False)
@@ -48,6 +51,12 @@ def accept_conn(listen_sock):
     if hasattr(uos, "dupterm_notify"):
         cl.setsockopt(socket.SOL_SOCKET, 20, uos.dupterm_notify)
     uos.dupterm(ws)
+
+def wifi_manager_handler():
+    pass
+def codeboot_handler():
+    pass
+
 
 
 def stop():

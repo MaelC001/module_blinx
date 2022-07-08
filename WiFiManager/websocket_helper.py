@@ -15,15 +15,20 @@ except:
 DEBUG = 0
 
 
-def server_handshake(sock):
+def read_socket(sock):
     clr = sock.makefile("rwb", 0)
+    print(clr)
     l = clr.readline()
+    print(l)
+    print(repr(l))
+    DEBUG = True
     # sys.stdout.write(repr(l))
 
     webkey = None
 
     while 1:
         l = clr.readline()
+        print(l)
         if not l:
             raise OSError("EOF in headers")
         if l == b"\r\n":
@@ -34,6 +39,12 @@ def server_handshake(sock):
             print((h, v))
         if h == b"Sec-WebSocket-Key":
             webkey = v
+
+    return webkey
+
+
+def server_handshake(sock):
+    webkey = read_socket(sock)
 
     if not webkey:
         raise OSError("Not a websocket request")
