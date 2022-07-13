@@ -518,7 +518,7 @@ def nextTime(arrayTime):
 
     return arrayNextTime
 
-def diffTicks(self, before, after, diffMax = 2000):
+def diffTicks(before, after):
     """calcul the difference between to ticks"""
     diff = time.ticks_diff(after, before)
     if after >= before:

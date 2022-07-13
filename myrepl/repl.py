@@ -30,6 +30,7 @@ i2c=I2C(sda=Pin(4),scl=Pin(5))
 
 # serial port
 uart = UART(0, 115200)
+uart.init(baudrate = 115200, rxbuf = 200)
 
 
 loop = None
@@ -102,6 +103,7 @@ async def receiver():
     # try to parse the json
     try:
       line = data.decode('utf-8').rstrip()
+      #print(line)
       #sender(line)
       j=json.loads(line)
     except Exception as e:
@@ -156,6 +158,7 @@ async def receiver():
       j={}
       j['error'] = {"code": -32600, "message": "Invalid Request"}#error}
       j['id'] = error_id
+      print(j)
       sender(j)
 
 @register('write', "")
@@ -391,9 +394,12 @@ def save_sensor_while_request(time_before):
   when we get the data form the sensors for the user,
   we have to continue to capture the data
   """
-  if time_before < time.time()+1:
-    time_before = time.time()+1
-    Blinx.save()
+  present= time.ticks_ms()
+  diffTime = 1000 - blinxSensor.diffTicks(time_before, present)
+
+  if diffTime <= 0:
+    time_before = present
+    Blinx.save(present)
   return time_before
 
 def verification_list_sensor(list_sensors):
@@ -432,7 +438,7 @@ async def save_all_sensor():
     # we will wait a minimum of 1 secondes before we recommence
     time_before = time.ticks_ms()
 
-    Blinx.save()
+    Blinx.save(time.ticks_ms())
 
     present= time.ticks_ms()
     diffTime = 1000 - blinxSensor.diffTicks(time_before, present)
