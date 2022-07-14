@@ -271,22 +271,6 @@ def list_file():
   """
   return os.listdir()
 
-@register('exec', "")
-def execute(cmd):
-  """
-  execute a command python of the user
-  arg :
-    - cmd : str
-  """
-  verification(cmd, str)
-
-  # capture the stdout
-  dupTempo = DUP()
-  os.dupterm(dupTempo)
-  exec(cmd)#, {"print":write})
-  os.dupterm(None)
-  return dupTempo.readAll()
-
 @register('wifi', "")
 def wifi():
   return {
