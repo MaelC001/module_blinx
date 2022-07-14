@@ -8,31 +8,31 @@ import time
 def repl():
     import repl
 
-    repl.debug({'params': {'name': 'a.txt'}, 'method': 'remove', "id" : 1})
+    repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'remove', 'id' : 1}\n")
 
-    assert repl.debug({"method":"liste", "params":{}, "id" : 1}) == {'result': ['bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
+    assert repl.read_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n") == {'result': ['bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
 
-    assert repl.debug({'params': {'name': 'a.txt'}, 'method': 'create', "id" : None}) == {'result': '', 'id': None}
-    assert repl.debug({'params': {'name': 'a.txt'}, 'method': 'create', "id" : 0}) == {'id': 0, 'error': {'code': -32000, 'message': "a.txt don't have a correct value"}}
-    assert repl.debug({"method":"liste", "params":{}, "id" : 0}) == {'result': ['a.txt', 'bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 0}
-    assert repl.debug({'params': {'name': 'a.txt'}, 'method': 'read', "id" : 1}) == {'result': '', 'id': 1}
+    assert repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'create', 'id' : None}\n") == {'result': '', 'id': None}
+    assert repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'create', 'id' : 0}\n") == {'id': 0, 'error': {'code': -32000, 'message': 'a.txt don\'t have a correct value'}}
+    assert repl.read_input(b"{'method':'liste', 'params':{}, 'id' : 0}\n") == {'result': ['a.txt', 'bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 0}
+    assert repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}\n") == {'result': '', 'id': 1}
 
-    assert repl.debug({'params': {'name': 'a.txt', 'text': 'bonjour'}, 'method': 'write', "id" : 1}) == {'result': '', 'id': 1}
-    assert repl.debug({"method":"liste", "params":{}, "id" : 1}) == {'result': ['a.txt', 'bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
-    assert repl.debug({'params': {'name': 'a.txt'}, 'method': 'read', "id" : 1}) == {'result': 'bonjour', 'id': 1}
+    assert repl.read_input(b"{'params': {'name': 'a.txt', 'text': 'bonjour'}, 'method': 'write', 'id' : 1}\n") == {'result': '', 'id': 1}
+    assert repl.read_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n") == {'result': ['a.txt', 'bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
+    assert repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}\n") == {'result': 'bonjour', 'id': 1}
 
-    assert repl.debug({'params': {'name': 'a.txt', 'text': ' m', 'format': 'a'}, 'method': 'write', "id" : 1}) == {'result': '', 'id': 1}
-    assert repl.debug({"method":"liste", "params":{}, "id" : 1}) == {'result': ['a.txt', 'bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
-    assert repl.debug({'params': {'name': 'a.txt'}, 'method': 'read', "id" : 1}) == {'result': 'bonjour m', 'id': 1}
+    assert repl.read_input(b"{'params': {'name': 'a.txt', 'text': ' m', 'format': 'a'}, 'method': 'write', 'id' : 1}\n") == {'result': '', 'id': 1}
+    assert repl.read_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n") == {'result': ['a.txt', 'bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
+    assert repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}\n") == {'result': 'bonjour m', 'id': 1}
 
-    assert repl.debug({'params': {'name': 'a.txt'}, 'method': 'remove', "id" : 1}) == {'result': '', 'id': 1}
-    assert repl.debug({'params': {'name': 'a.txt'}, 'method': 'remove', "id" : 1}) == {'id': 1, 'error': {'code': -32000, 'message': "a.txt don't have a correct value"}}
-    assert repl.debug({'params': {'name': 10}, 'method': 'read', "id" : 1}) == {'id': 1, 'error': {'code': -32000, 'message': "the type of 10 isn't <class 'str'>"}}
-    assert repl.debug({"method":"liste", "params":{}, "id" : 1}) == {'result': ['bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
+    assert repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'remove', 'id' : 1}\n") == {'result': '', 'id': 1}
+    assert repl.read_input(b"{'params': {'name': 'a.txt'}, 'method': 'remove', 'id' : 1}\n") == {'id': 1, 'error': {'code': -32000, 'message': 'a.txt don\'t have a correct value'}}
+    assert repl.read_input(b"{'params': {'name': 10}, 'method': 'read', 'id' : 1}\n") == {'id': 1, 'error': {'code': -32000, 'message': 'the type of 10 isn\'t <class \'str\'>'}}
+    assert repl.read_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n") == {'result': ['bufferCircular.mpy', 'repl.mpy', 'saveSensor.py', 'sensors.py', 'test.py'], 'id': 1}
 
-    assert repl.debug({'params': {'value': 0}, 'method': 'led', "id" : 1}) == {'result': '', 'id': 1}
-    assert repl.debug({'params': {'value': 1}, 'method': 'led', "id" : 1}) == {'result': '', 'id': 1}
-    assert repl.debug({'params': {'value': 2}, 'method': 'led', "id" : 1}) == {'id': 1, 'error': {'code': -32000, 'message': "2 don't have a correct value"}}
+    assert repl.read_input(b"{'params': {'value': 0}, 'method': 'led', 'id' : 1}\n") == {'result': '', 'id': 1}
+    assert repl.read_input(b"{'params': {'value': 1}, 'method': 'led', 'id' : 1}\n") == {'result': '', 'id': 1}
+    assert repl.read_input(b"{'params': {'value': 2}, 'method': 'led', 'id' : 1}\n") == {'id': 1, 'error': {'code': -32000, 'message': '2 don\'t have a correct value'}}
 
 
 def circularBuffer():
