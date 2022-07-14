@@ -273,54 +273,79 @@ def list_file():
 
 @register('wifi', "")
 def wifi():
+  """
+    we return all the wifi information
+  """
   return {
     'wlan_sta' : {
-      'active' : wlan_sta.active(), 
-      'isconnected' : wlan_sta.isconnected(), 
-      'scan' : wlan_sta.scan() if wlan_sta.active() else [], 
+      'active' : wlan_sta.active(),
+      'isconnected' : wlan_sta.isconnected(),
+      'scan' : wlan_sta.scan() if wlan_sta.active() else [], # all the wifi the microcontroller scan
       'config' : {
-        "ifcongif" : wlan_sta.ifconfig(), 
-        "mac" : wlan_sta.config('mac'), 
-        "ssid" : wlan_sta.config('essid'), 
-        "dhcp_hostname" : wlan_sta.config('dhcp_hostname'), 
-      }, 
-    }, 
+        "ifcongif" : wlan_sta.ifconfig(), # the ip, netmask ...
+        "mac" : wlan_sta.config('mac'), # the mac address
+        "ssid" : wlan_sta.config('essid'), # the ssid of the wifi connected
+        "dhcp_hostname" : wlan_sta.config('dhcp_hostname'), # the hostname of the microcontroller (for the mdns)
+      },
+    },
     'wlan_ap' : {
-      'active' : wlan_ap.active(), 
-      'isconnected' : wlan_ap.isconnected(), 
+      'active' : wlan_ap.active(),
+      'isconnected' : wlan_ap.isconnected(),
       'config' : {
-        "ifcongif" : wlan_ap.ifconfig(), 
-        "mac" : wlan_ap.config('mac'), 
-        "ssid" : wlan_ap.config('essid'), 
-        "channel" : wlan_ap.config('channel'), 
-        "hidden" : wlan_ap.config('hidden'), 
-        "authmode" : wlan_ap.config('authmode'), 
-      }, 
-    }, 
+        "ifcongif" : wlan_ap.ifconfig(),
+        "mac" : wlan_ap.config('mac'),
+        "ssid" : wlan_ap.config('essid'),
+        "channel" : wlan_ap.config('channel'),
+        "hidden" : wlan_ap.config('hidden'),
+        "authmode" : wlan_ap.config('authmode'),
+      },
+    },
   }
 
-@register('wifi_connect', "")
-def wifi_connect(ssid = '', password = '', active = True):
+@register('wifi_active', "")
+def wifi_active(active = True):
+  """active the wifi
+
+  Args:
+      active (bool, optional): actived the wifi or desactived. Defaults to True.
+  """
   wlan_sta.active(active)
-  if active:
-    if not wlan_sta.isconnected():
-      wlan_sta.connect(ssid, password)
-
-      status = wlan_sta.status()
-      if status == network.STAT_NO_AP_FOUND:
-        return "no AP found"
-      elif status == network.STAT_WRONG_PASSWORD:
-        return "wrong password"
-      elif status == network.STAT_CONNECT_FAIL:
-        return "connection fail"
-
-      time.sleep(0.1)
-      return wlan_sta.isconnected()
-  else :
+  if not active:
     wlan_sta.disconnect()
+
+@register('wifi_connect', "")
+def wifi_connect(ssid = '', password = ''):
+  """connect the microcontroller to wifi
+
+  Args:
+      ssid (str, optional): the ssid to connect. Defaults to ''.
+      password (str, optional): the password of the ssid. Defaults to ''.
+  """
+  # try to connect to wifi
+  wlan_sta.connect(ssid, password)
+
+  # get the status, to know if a error appear
+  status = wlan_sta.status()
+  if status == network.STAT_NO_AP_FOUND:
+    return "no AP found"
+  elif status == network.STAT_WRONG_PASSWORD:
+    return "wrong password"
+  elif status == network.STAT_CONNECT_FAIL:
+    return "connection fail"
+
+  time.sleep(0.1)
+  return wlan_sta.isconnected()
 
 @register('wifi_server', "")
 def wifi_server(ssid = '', password = '', auth = 3, active = True):
+  """create a wifi server
+
+  Args:
+      ssid (str, optional): the name of the wifi server. Defaults to ''.
+      password (str, optional): the password of the wifi server. Defaults to ''.
+      auth (int, optional): the mode of authentication of the wifi server. Defaults to 3.
+      active (bool, optional): actived the wifi server?. Defaults to True.
+  """
   wlan_ap.active(False)
   if active:
     wlan_ap.config(essid = ssid, password = password, authmode = auth)
@@ -350,23 +375,44 @@ def config_sensor(dictConfig):
 
 @register('remove_config', "remove_file")
 def remove_all_function_sensor():
+  """
+    remove the last config for the sensor (remove the python file of the function)
+  """
   sensors.__listSensor.clear()
   try:
     import listSensorUser
   except:
     return
   for i in listSensorUser.array:
-    remove_file(i+'.py')
+    try:
+      remove_file(i+'.py')
+      del sys.modules[i]
+    except:
+      continue
   remove_file("listSensorUser.py")
   del sys.modules['listSensorUser']
 
 @register('sensors_output', "")
 def output_sensors(sensor_name, array_value):
+  """
+    give a command to the ouput sensor
+
+  Args:
+      sensor_name (str): the name of the output sensor we want to change
+      array_value (list): the data to write for each channel
+  """
   verification(sensor_name, str, Blinx.output_sensors)
   Blinx.sensors_output[sensor_name]['sensor'].write(array_value)
 
 @register('diplay', "")
 def output_sensors(sensor_name, func_name, *array_value):
+  """
+    give a command to a display sensor
+
+  Args:
+      sensor_name (str): the name of the display sensor
+      func_name (str): the function we want to use for the command
+  """
   verification(sensor_name, str, Blinx.display_sensors)
   Blinx.display_sensors[sensor_name]['sensor'].function(func_name, *array_value)
 
@@ -393,12 +439,15 @@ def get_sensors(list_sensors, times = '1s'):
     data_all_sensor = ''
     index_data = 0
     size_buffer = 300
+
     while index_data < size_buffer:
+
       text_time_stamp = ''
       for i in range(len(function_sensors)):
         func = function_sensors[i]
         sensor = name_sensors[i]
         time_before = save_sensor_while_request(time_before)
+
         for y in func.getIndex(times, index_data, True):
           data_sensor, time_data_sensor = y
           text_time_stamp += ';' + data_sensor
@@ -412,13 +461,21 @@ def get_sensors(list_sensors, times = '1s'):
   return text
 @register('scan_i2c', "")
 def scan_i2c(addr = None):
+  """scan the i2c bus and look if a address is in the
+
+  Args:
+      addr (hex, optional): the hexadecimal address of the i2c sensor we are looking at. Defaults to None.
+
+  Returns:
+      list or bool: all the i2c address connected (list) or is the address given in the i2c bus (bool)
+  """
   if addr == None:
     return i2c.scan()
   return addr in i2c.scan()
 
 def save_sensor_while_request(time_before):
   """
-  when we get the data form the sensors for the user, 
+  when we get the data form the sensors for the user,
   we have to continue to capture the data
   """
   present = time.ticks_ms()
@@ -495,7 +552,10 @@ for the debugging, we will simulate the serial port
 # https://github.com/rdehuyss/micropython-ota-updater
 @register('updateFirmware', "")
 def ota_update():
-    from .ota_updater import OTAUpdater
-    otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'app', secrets_file = "secrets.py")
-    otaUpdater.install_update_if_available()
-    del(otaUpdater)
+  """
+    update the firmware of the microcontroller
+  """
+  from .ota_updater import OTAUpdater
+  otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'app', secrets_file = "secrets.py")
+  otaUpdater.install_update_if_available()
+  del (otaUpdater)
