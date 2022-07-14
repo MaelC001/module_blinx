@@ -19,28 +19,27 @@ import sys, json, io
 from machine import Pin, I2C, ADC, PWM, UART
 import blinxSensor, sensors, network
 
-#import sh1107, mpu9250
-#import dps310_simple as dps310
-
 # the class with all the sensor
 Blinx = blinxSensor.Blinx()
 
 # connection to i2c
-i2c=I2C(sda=Pin(4),scl=Pin(5))
+i2c = I2C(sda = Pin(4), scl = Pin(5))
 
 # serial port
-uart = UART(0, 115200)
-uart.init(baudrate = 115200, rxbuf = 200)
+baud_rate = 115200
+uart = UART(0, baud_rate)
+uart.init(baudrate = baud_rate, rxbuf = 200)
 
-
+# the loop async
 loop = None
 
 # function register
 __register = {}
 
-wlan_sta=network.WLAN(network.STA_IF)
+# the connection wifi
+wlan_sta = network.WLAN(network.STA_IF)
 wlan_sta.active(True)
-wlan_ap=network.WLAN(network.AP_IF)
+wlan_ap = network.WLAN(network.AP_IF)
 wlan_ap.active(False)
 
 # class for capture the stdout when `exec`
@@ -52,11 +51,11 @@ class DUP(io.IOBase):
     return len(data)
   def readinto(self, data):
     return 0
-  def readAll(self):
+  def read_all(self):
     return str(self.s)
 
 # the register for the user function
-def register(name, sub_function=""):
+def register(name, sub_function = ""):
   def wrapper(fn):
     def inner_wrapper(*args, id, **kwargs):
       error = ""
@@ -64,10 +63,13 @@ def register(name, sub_function=""):
       message = ""
       # execute the function and capture the error
       try:
+        # the output of the function
         output = fn(*args, **kwargs)
       except Exception as e:
+        # the error of the function
         error = str(e)
       finally:
+        # we create the json to return
         message = "result"
         if error :
           message = "error"
@@ -86,9 +88,11 @@ def register(name, sub_function=""):
     return inner_wrapper
   return wrapper
 
-def sender(j):
+def sender(text):
   """send message to serial port in json"""
-  uart.write(json.dumps(j))
+  if isinstance(text, dict):
+    text = json.dumps(text)
+  uart.write(text)
 
 
 async def receiver():
@@ -98,71 +102,115 @@ async def receiver():
   """
   sreader = asyncio.StreamReader(uart)
   while True:
-    data=await sreader.readline()
+    # wait for the input
+    data = await sreader.readline()
+    # read the input
+    read_input(data, send = True, debug = True)
 
+def read_input(input, send = True, debug = False):
+  """we will read the input and try to decode it, then we will try to execute it.
+
+  Args:
+      input (bytes): the input of the user
+      send (bool, optional): do we send the info on the serial port?. Defaults to True.
+      debug (bool, optional): do we send info by print?. Defaults to False.
+  """
+  try:
+    # try to transform bytes to str
+    line = input.decode('utf-8').rstrip()
+    if debug:
+      print(line)
+      if send:
+        sender(line)
     # try to parse the json
-    try:
-      line = data.decode('utf-8').rstrip()
-      #print(line)
-      #sender(line)
-      j=json.loads(line)
-    except Exception as e:
-      #error = str(e)
-      error_id = None
-      j={}
-      j['error'] = {"code": -32700, "message": "Parse error"}#error}
-      j['id'] = error_id
-      sender(j)
-      continue
-
-    # try to read the parameter of the json
-    # then the parameter of the method
-    # to execute the method with the parameter
-    try:
-      id = j['id']
-      cmd = j['method']
-      args = j['params']
-
-      # is the id correct ?
-      if not(isinstance(id, str) or isinstance(id, int) or id is None) or not(isinstance(cmd, str)):
-        j={}
-        j['error'] = {"code": -32600, "message": "Invalid Request"}
-        j['id'] = None
-        sender(j)
-
-      # method exist ?
-      if cmd in __register:
-        # type of the parameter
-        if isinstance(args, list):
-          reply = __register[cmd](*args, id = id)
-          sender(reply)
-        elif isinstance(args, dict):
-          reply = __register[cmd](id = id, **args)
-          sender(reply)
-        else :
-          j={}
-          j['error'] = {"code": -32602, "message": "Invalid params"}
-          j['id'] = id
-          sender(j)
-      else :
-        j={}
-        j['error'] = {"code": -32601, "message": "Method not found"}
-        j['id'] = id
-        sender(j)
-    except Exception as e:
-      #error = str(e)
-      if id:
-        error_id = id
-      else:
-        error_id = None
-      j={}
-      j['error'] = {"code": -32600, "message": "Invalid Request"}#error}
-      j['id'] = error_id
+    j = json.loads(line)
+    if debug:
       print(j)
+      if send:
+        sender(j)
+  except Exception as e:
+    # if an error appear, we send the error message and we stop the function
+    #error = str(e)
+    error_id = None
+    j = {}
+    j['error'] = {"code": -32700, "message": "Parse error"}
+    j['id'] = error_id
+    if debug:
+      print(j, str(e), line)
+    if send:
       sender(j)
+    return
+
+  # try to read the parameter of the json
+  # then the parameter of the method
+  # to execute the method with the parameter
+  try:
+    id = j['id']
+    cmd = j['method']
+    args = j['params']
+
+    # is the id correct ? and the command ?
+    if not(isinstance(id, str) or isinstance(id, int) or id is None) or not(isinstance(cmd, str)):
+      j = {}
+      j['error'] = {"code": -32600, "message": "Invalid Request"}
+      j['id'] = None
+      if debug:
+        print(j)
+      if send:
+        sender(j)
+      return
+
+    # method exist ?
+    if cmd in __register:
+      # type of the parameter
+      if isinstance(args, list):
+        reply = __register[cmd](*args, id = id)
+        if debug:
+          print(reply)
+        if send:
+          sender(reply)
+      elif isinstance(args, dict):
+        reply = __register[cmd](id = id, **args)
+        if debug:
+          print(reply)
+        if send:
+          sender(reply)
+      else :
+        # if the args is not a list or a dict we have a error
+        j = {}
+        j['error'] = {"code": -32602, "message": "Invalid params"}
+        j['id'] = id
+        if debug:
+          print(j)
+        if send:
+          sender(j)
+    else :
+      # if the command don't exist we have a error :
+      j = {}
+      j['error'] = {"code": -32601, "message": "Method not found"}
+      j['id'] = id
+      if debug:
+        print(j)
+      if send:
+        sender(j)
+  except Exception as e:
+    # if an error appear, we send the error message
+    #error = str(e)
+    if id:
+      error_id = id
+    else:
+      error_id = None
+    j = {}
+    j['error'] = {"code": -32600, "message": "Invalid Request"}
+    j['id'] = error_id
+    if debug:
+      print(j, str(e))
+    if send:
+      sender(j)
+
 
 @register('write', "")
-def write_file(name, text, format = 'w', do_verification=True):
+def write_file(name, text, format = 'w', do_verification = True):
   """
   write in a file
   arg :
@@ -173,7 +221,7 @@ def write_file(name, text, format = 'w', do_verification=True):
   if do_verification:
     verification(name, str)
     verification(text, str)
-    verification(format, str, ['w','w+','a','a+'])
+    verification(format, str, ['w', 'w+', 'a', 'a+'])
   f = open(name, format)
   f.write(text)
   f.close()
@@ -232,11 +280,6 @@ def execute(cmd):
   """
   verification(cmd, str)
 
-  #result_exec = ""
-  #def write(*args, sep=' ', end='\n'):
-  #  global result
-  #  result += sep.join(str(a) for a in args) + end
-
   # capture the stdout
   dupTempo = DUP()
   os.dupterm(dupTempo)
@@ -248,28 +291,28 @@ def execute(cmd):
 def wifi():
   return {
     'wlan_sta' : {
-      'active' : wlan_sta.active(),
-      'isconnected' : wlan_sta.isconnected(),
-      'scan' : wlan_sta.scan() if wlan_sta.active() else [],
+      'active' : wlan_sta.active(), 
+      'isconnected' : wlan_sta.isconnected(), 
+      'scan' : wlan_sta.scan() if wlan_sta.active() else [], 
       'config' : {
-        "ifcongif" : wlan_sta.ifconfig(),
-        "mac" : wlan_sta.config('mac'),
-        "ssid" : wlan_sta.config('essid'),
-        "dhcp_hostname" : wlan_sta.config('dhcp_hostname'),
-      },
-    },
+        "ifcongif" : wlan_sta.ifconfig(), 
+        "mac" : wlan_sta.config('mac'), 
+        "ssid" : wlan_sta.config('essid'), 
+        "dhcp_hostname" : wlan_sta.config('dhcp_hostname'), 
+      }, 
+    }, 
     'wlan_ap' : {
-      'active' : wlan_ap.active(),
-      'isconnected' : wlan_ap.isconnected(),
+      'active' : wlan_ap.active(), 
+      'isconnected' : wlan_ap.isconnected(), 
       'config' : {
-        "ifcongif" : wlan_ap.ifconfig(),
-        "mac" : wlan_ap.config('mac'),
-        "ssid" : wlan_ap.config('essid'),
-        "channel" : wlan_ap.config('channel'),
-        "hidden" : wlan_ap.config('hidden'),
-        "authmode" : wlan_ap.config('authmode'),
-      },
-    },
+        "ifcongif" : wlan_ap.ifconfig(), 
+        "mac" : wlan_ap.config('mac'), 
+        "ssid" : wlan_ap.config('essid'), 
+        "channel" : wlan_ap.config('channel'), 
+        "hidden" : wlan_ap.config('hidden'), 
+        "authmode" : wlan_ap.config('authmode'), 
+      }, 
+    }, 
   }
 
 @register('wifi_connect', "")
@@ -296,7 +339,7 @@ def wifi_connect(ssid = '', password = '', active = True):
 def wifi_server(ssid = '', password = '', auth = 3, active = True):
   wlan_ap.active(False)
   if active:
-    wlan_ap.config(essid=ssid, password=password, authmode=auth)
+    wlan_ap.config(essid = ssid, password = password, authmode = auth)
     wlan_ap.active(True)
 
 @register('sensors_stop', "")
@@ -391,10 +434,10 @@ def scan_i2c(addr = None):
 
 def save_sensor_while_request(time_before):
   """
-  when we get the data form the sensors for the user,
+  when we get the data form the sensors for the user, 
   we have to continue to capture the data
   """
-  present= time.ticks_ms()
+  present = time.ticks_ms()
   diffTime = 1000 - blinxSensor.diffTicks(time_before, present)
 
   if diffTime <= 0:
@@ -440,7 +483,7 @@ async def save_all_sensor():
 
     Blinx.save(time.ticks_ms())
 
-    present= time.ticks_ms()
+    present = time.ticks_ms()
     diffTime = 1000 - blinxSensor.diffTicks(time_before, present)
     if diffTime > 0:
       await asyncio.sleep_ms(diffTime)
@@ -453,14 +496,11 @@ def launch():
   loop.create_task(save_all_sensor())
   loop.run_forever()
 
-def debug(json):
-  """
-  for the debugging, we will simulate the serial port
-  """
-  cmd = json['method']
-  args = json['params']
-  id = json['id']
-  return __register[cmd](**args, id = id)
+"""
+for the debugging, we will simulate the serial port
+"""
+# data = ''
+# read_input(data, send = False, debug = True)
 
 
 
@@ -470,8 +510,8 @@ def debug(json):
 
 # https://github.com/rdehuyss/micropython-ota-updater
 @register('updateFirmware', "")
-def otaUpdate():
+def ota_update():
     from .ota_updater import OTAUpdater
-    otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir='src', main_dir='app', secrets_file="secrets.py")
+    otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'app', secrets_file = "secrets.py")
     otaUpdater.install_update_if_available()
     del(otaUpdater)
