@@ -18,14 +18,22 @@ class Blinx():
         self.sensors_input = {}
         # list of all the output sensor
         self.sensors_output = {}
+        # list of all the display sensor
+        self.display_sensors = {}
         for sensor, config in configs.items():
+            # get the info of each sensor
             newName = config['new']
             input = config['input']
+            display = config['display']
             channels = config['channels']
+            # create the sensor
             temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  input, i2c)}
+            # store the sensor
             self.sensors[newName] = temp
             if input :
                 self.sensors_input[newName] = temp
+            elif display :
+                self.display_sensors[newName] = temp
             else:
                 self.sensors_output[newName] = temp
 
@@ -75,8 +83,9 @@ class Sensor():
         self._createChannel(sensorType, channels, input)
 
     def _createChannel(self, sensor, channels = [], input= True):
-        """create all the channel"""
+        """create all the channel of the sensor"""
         for channel in channels:
+            # what type of channel is it ?
             if channel['type'] == "I2C":
                 id = channel['id']
                 function = sensors.__listSensor[sensor]['byte'+id]['func']
@@ -152,6 +161,7 @@ class Channel():
         # the dic of information of the channel + their buffer
         self.dic = {}
         for key, config in sensorsCreateDict().items():
+            # create each buffer for each time
             size = config['size']
             times = config['times']
             step = config['value']
@@ -169,6 +179,7 @@ class Channel():
 
             self.dic[key] = tempo
     def createBuffer(self, name, size, step, times, error):
+        # create a normal circular buffer
         return BufferCircular(name, size, step, times, error = error)
 
     def read(self):
