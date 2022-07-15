@@ -92,6 +92,7 @@ def sender(text):
   """send message to serial port in json"""
   if isinstance(text, dict):
     text = json.dumps(text)
+  text += '\n'
   uart.write(text)
 
 
@@ -107,7 +108,7 @@ async def receiver():
     # read the input
     read_input(data, send = True, debug = True)
 
-def read_input(input, send = True, debug = False):
+def read_input(input, send = True, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -119,15 +120,11 @@ def read_input(input, send = True, debug = False):
     # try to transform bytes to str
     line = input.decode('utf-8').rstrip()
     if debug:
-      print(line)
-      if send:
-        sender(line)
+      print(0, line)
     # try to parse the json
     j = json.loads(line)
     if debug:
-      print(j)
-      if send:
-        sender(j)
+      print(1, j)
   except Exception as e:
     # if an error appear, we send the error message and we stop the function
     #error = str(e)
@@ -136,7 +133,9 @@ def read_input(input, send = True, debug = False):
     j['error'] = {"code": -32700, "message": "Parse error"}
     j['id'] = error_id
     if debug:
-      print(j, str(e), line)
+      print(2, j, str(e), line)
+    elif printMessage:
+      print(j)
     if send:
       sender(j)
     return
@@ -150,11 +149,17 @@ def read_input(input, send = True, debug = False):
     args = j['params']
 
     # is the id correct ? and the command ?
-    if not(isinstance(id, str) or isinstance(id, int) or id is None) or not(isinstance(cmd, str)):
+    test_id_1 = isinstance(id, str)
+    test_id_2 = isinstance(id, int)
+    test_id_3 = id is None
+    test_cmd = isinstance(cmd, str)
+    if not(test_id_1 or test_id_2 or test_id_3) or not(test_cmd):
       j = {}
       j['error'] = {"code": -32600, "message": "Invalid Request"}
       j['id'] = None
       if debug:
+        print(3, j, test_id_1, test_id_2, test_id_3, test_cmd)
+      elif printMessage:
         print(j)
       if send:
         sender(j)
@@ -166,12 +171,16 @@ def read_input(input, send = True, debug = False):
       if isinstance(args, list):
         reply = __register[cmd](*args, id = id)
         if debug:
+          print(4, reply)
+        elif printMessage:
           print(reply)
         if send:
           sender(reply)
       elif isinstance(args, dict):
         reply = __register[cmd](id = id, **args)
         if debug:
+          print(5, reply)
+        elif printMessage:
           print(reply)
         if send:
           sender(reply)
@@ -181,6 +190,8 @@ def read_input(input, send = True, debug = False):
         j['error'] = {"code": -32602, "message": "Invalid params"}
         j['id'] = id
         if debug:
+          print(6, j, type(args))
+        elif printMessage:
           print(j)
         if send:
           sender(j)
@@ -190,6 +201,8 @@ def read_input(input, send = True, debug = False):
       j['error'] = {"code": -32601, "message": "Method not found"}
       j['id'] = id
       if debug:
+        print(7, j, cmd, __register.keys)
+      elif printMessage:
         print(j)
       if send:
         sender(j)
@@ -204,7 +217,9 @@ def read_input(input, send = True, debug = False):
     j['error'] = {"code": -32600, "message": "Invalid Request"}
     j['id'] = error_id
     if debug:
-      print(j, str(e))
+      print(8, j, str(e))
+    elif printMessage:
+      print(j)
     if send:
       sender(j)
 
