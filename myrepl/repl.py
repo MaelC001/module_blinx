@@ -312,6 +312,7 @@ def wifi_active(active = True):
   wlan_sta.active(active)
   if not active:
     wlan_sta.disconnect()
+  return ''
 
 @register('wifi_connect', "")
 def wifi_connect(ssid = '', password = ''):
@@ -350,6 +351,7 @@ def wifi_server(ssid = '', password = '', auth = 3, active = True):
   if active:
     wlan_ap.config(essid = ssid, password = password, authmode = auth)
     wlan_ap.active(True)
+  return ''
 
 @register('sensors_stop', "")
 def sensor_stop():
@@ -360,6 +362,7 @@ def sensor_stop():
   global Blinx
   Blinx = blinxSensor.Blinx()
   #sensors.__listSensor.clear()
+  return 'sensor stopped'
 
 @register('configSensor', "")
 def config_sensor(dictConfig):
@@ -372,6 +375,7 @@ def config_sensor(dictConfig):
   verification(dictConfig, dict)
   Blinx = blinxSensor.Blinx(dictConfig, i2c)
   sensors.get_all_function_sensor()
+  return 'change config success'
 
 @register('remove_config', "remove_file")
 def remove_all_function_sensor():
@@ -382,7 +386,7 @@ def remove_all_function_sensor():
   try:
     import listSensorUser
   except:
-    return
+    return 'no config'
   for i in listSensorUser.array:
     try:
       remove_file(i+'.py')
@@ -391,6 +395,7 @@ def remove_all_function_sensor():
       continue
   remove_file("listSensorUser.py")
   del sys.modules['listSensorUser']
+  return 'success'
 
 @register('sensors_output', "")
 def output_sensors(sensor_name, array_value):
@@ -403,6 +408,7 @@ def output_sensors(sensor_name, array_value):
   """
   verification(sensor_name, str, Blinx.output_sensors)
   Blinx.sensors_output[sensor_name]['sensor'].write(array_value)
+  return 'Done'
 
 @register('diplay', "")
 def output_sensors(sensor_name, func_name, *array_value):
@@ -415,6 +421,7 @@ def output_sensors(sensor_name, func_name, *array_value):
   """
   verification(sensor_name, str, Blinx.display_sensors)
   Blinx.display_sensors[sensor_name]['sensor'].function(func_name, *array_value)
+  return 'Done'
 
 @register('get_sensors', "")
 def get_sensors(list_sensors, times = '1s'):
@@ -459,6 +466,7 @@ def get_sensors(list_sensors, times = '1s'):
 
   blinxSensor.tampon = False
   return text
+
 @register('scan_i2c', "")
 def scan_i2c(addr = None):
   """scan the i2c bus and look if a address is in the
@@ -540,7 +548,7 @@ def launch():
 """
 for the debugging, we will simulate the serial port
 """
-# data = ''
+# data = b'{"method":"liste","params":[],"id":0}'
 # read_input(data, send = False, debug = True)
 
 
