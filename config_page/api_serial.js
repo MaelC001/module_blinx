@@ -2,7 +2,7 @@ var port;
 var encoder = new TextEncoder();
 var decoder = new TextDecoder();
 
-var returnLignString = '';
+var returnLignString = '\n';
 var returnLignNumber = 10;
 
 var id = 0;
@@ -76,22 +76,23 @@ async function connect(usbV = null, usbP = null, idError = null, callback = null
     }
 }
 
-function write(method, arg, idCmd, repl = true) {
+function write(method, arg, idCmd, repl = false) {
     if (repl) {
         method = "\x01" + method + "\x04";
     } else {
         method = JSON.stringify({
             'method': method,
-            'arg': arg,
+            'params': arg,
             'id': idCmd
-        });
+        }) + returnLignString;
     }
-    method = encoder.encode(method) + returnLignNumber;
+    method = encoder.encode(method);
     var writer = port.writable.getWriter();
-    writer.write(method);
-    /*for(var i=0; i<method.length; i+=32){
-        writer.write(encoder.encode(method.substring(i,i+32)));
-    }*/
+    //writer.write(method);
+    let step = 95;
+    for(var i=0; i<method.length; i+=step){
+        writer.write(encoder.encode(method.substring(i,i+step)));
+    }
     writer.releaseLock();
 }
 
@@ -107,7 +108,7 @@ async function read() {
             } = await reader.read();
             text += decoder.decode(value);
             for (var i = 0; i < value.length; i++) {
-                if (value[i] == 10) {
+                if (value[i] == returnLignNumber) {
                     break;
                 }
             }
