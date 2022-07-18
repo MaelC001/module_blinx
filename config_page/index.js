@@ -52,7 +52,7 @@ let listAllSensors = {
         "ht16k33": {
             "text": "I2C 8x8 LED Matrix",
             "addr": "",
-            "file": "",
+            "file": "display",
             "is_input": false,
             "is_display": true,
             "urlImage": "https://wiki.keyestudio.com/images/4/40/Ks0064-%E5%9B%BE%E7%89%871.png",
@@ -127,7 +127,7 @@ let listAllSensors = {
         "ssd1306_oled": {
             "text": "OLED Display OLED",
             "addr": "",
-            "file": "",
+            "file": "display",
             "is_input": false,
             "is_display": true,
             "urlImage": "https://wiki.keyestudio.com/images/8/86/Ks0271-1.png",
@@ -352,7 +352,7 @@ let listAllSensors = {
         "diymall_96": {
             "text": "diymall 9.6 oled",
             "addr": "",
-            "file": "",
+            "file": "display",
             "is_input": false,
             "is_display": true,
             "urlImage": "",
@@ -446,7 +446,7 @@ let listAllSensors = {
         },
         "servo_9g": {
             "text": "9G Servo Motor Blue 90\\u00b0",
-            "file": "pwm",
+            "file": "analog",
             "is_input": false,
             "is_display": false,
             "urlImage": "https://wiki.keyestudio.com/images/a/a4/Ks0209.png",
@@ -1038,7 +1038,7 @@ let listAllSensors = {
         },
         "vibration_motor": {
             "text": "Vibration Motor Module",
-            "file": "pwm",
+            "file": "analog",
             "is_input": false,
             "is_display": false,
             "urlImage": "https://wiki.keyestudio.com/images/6/61/Ks0450-1.png",
@@ -1054,7 +1054,7 @@ let listAllSensors = {
         },
         "l9110": {
             "text": "fan control",
-            "file": "pwm",
+            "file": "analog",
             "is_input": false,
             "is_display": false,
             "urlImage": "https://wiki.keyestudio.com/images/0/03/Ks0168.png",
@@ -1070,7 +1070,7 @@ let listAllSensors = {
         },
         "sg90s": {
             "text": "Micro Servo",
-            "file": "pwm",
+            "file": "analog",
             "is_input": false,
             "is_display": false,
             "urlImage": "https://wiki.keyestudio.com/images/b/be/Ks0194-_servo.png",
@@ -1118,7 +1118,7 @@ let listAllSensors = {
         },
         "ssd13006": {
             "text": "Screen",
-            "file": "ssd13006",
+            "file": "display",
             "is_input": false,
             "is_display": true,
             "url": "",
