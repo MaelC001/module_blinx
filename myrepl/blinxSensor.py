@@ -75,7 +75,7 @@ class Blinx():
 
 # Sensors
 class Sensor():
-    def __init__(self, sensor_type, channels, input= True, error = b'\xff\xfe', i2c = None):
+    def __init__(self, sensor_type, channels, input = True, error = b'\xff\xfe', i2c = None):
         # the type of sensor
         self.sensor_type = sensor_type
         # the error code
@@ -102,7 +102,7 @@ class Sensor():
                 waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+channel['id']]['waiting']
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
-            t = Channel._configure(channel, self.sensor_type, self.i2c)
+            t = Channel._configure(channel, self.sensor_type, self.i2c, self.input)
             self.channels.append(t[0])
             self.pin_sensor.append(t[1])
 
@@ -147,7 +147,7 @@ class Sensor():
 
 # Channels
 class Channel():
-    def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x, id=''):
+    def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, id = '', input = True):
 
         # the buffer for when we convert the data
         self.buffer = Buffer(30)
@@ -163,28 +163,32 @@ class Channel():
         # id of the channel
         self.id = id
 
-        # the dic of information of the channel + their buffer
+        # is it a channel of a input sensor
+        self.input = input
+
+        # the dic of information of the channel + their buffer (if a input sensor)
         self.dic = {}
-        for key, config in sensors_create_dict().items():
-            size = config['size']
-            times = config['times']
-            step = config['value']
+        if self.input:
+            for key, config in sensors_create_dict().items():
+                size = config['size']
+                times = config['times']
+                step = config['value']
 
-            temp = {}
-            temp['buffer'] = self.create_buffer(name, size, step, times, error)
-            temp['before'] = config['before']
-            temp['offset'] = config['offset']
-            temp['times'] = times
-            temp['next'] = step
+                temp = {}
+                temp['buffer'] = self.create_buffer(name, size, step, times, error)
+                temp['before'] = config['before']
+                temp['offset'] = config['offset']
+                temp['times'] = times
+                temp['next'] = step
 
-            if key == '1s':
-                self.size = size
+                if key == '1s':
+                    self.size = size
 
-            self.dic[key] = temp
+                self.dic[key] = temp
     def create_buffer(self, name, size, step, times, error):
         return CircularBuffer(name, size, step, times, error = error)
 
-    def _configure(channel, sensor_type, i2c):
+    def _configure(channel, sensor_type, i2c, input):
         if channel['type'] == "I2C":
             id = channel['id']
             function_byte = sensors.__list_sensors[sensor_type]['byte'+id]['func']
@@ -197,7 +201,7 @@ class Channel():
             number_byte_receive = sensors.__list_sensors[sensor_type]['args']['byteReceive']
             # the code to send to the sensor to tell him we want the data
             code_to_send = sensors.__list_sensors[sensor_type]['args']['codeSend']
-            return I2CChannel(i2c, addr, number_byte_receive, code_to_send, waiting_time, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, id=id), {}
+            return I2CChannel(i2c, addr, number_byte_receive, code_to_send, waiting_time, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, id = id, input = input), {}
         elif channel['type'] == "Analog":
             id = channel['id']
             function_byte = sensors.__list_sensors[sensor_type]['byte'+id]['func']
@@ -209,16 +213,16 @@ class Channel():
             p3 = channel['p3']
             freq = sensors.__list_sensors[sensor_type]['args']['freq']
             temp = {
-                'pin' : pin,
-                'p1' : p1,
-                'p2' : p2,
-                'p3' : p3,
+                'pin' : pin, 
+                'p1' : p1, 
+                'p2' : p2, 
+                'p3' : p3, 
             }
-            return AnalogChannel(pin, p1, p2, p3, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id=id), temp
+            return AnalogChannel(pin, p1, p2, p3, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id = id, input = input), temp
         elif channel['type'] == "Digital":
             id = channel['id']
             pin = channel['pin']
-            return DigitalChannel(pin, name = sensor_type, id=id), {'pin' : pin}
+            return DigitalChannel(pin, name = sensor_type, id = id, input = input), {'pin' : pin}
 
     def read(self):
         raise NotImplementedError
@@ -243,7 +247,7 @@ class Channel():
 
     def buffer_to_log(self):
         """
-            when we finish with tge buffer,
+            when we finish with tge buffer, 
             we have to transfert all data from the buffer
             to the log and do the mean for the different time
         """
@@ -302,7 +306,7 @@ class Channel():
 
 
 class DigitalChannel(Channel):
-    def __init__(self, pin, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : b'\x01' if x else b'\x00', translation_data_function = lambda x:x, id = ''):
+    def __init__(self, pin, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : b'\x01' if x else b'\x00', translation_data_function = lambda x:x, id = '', input = True):
         # a digital sensor will give us a boolean (true or false) when we read it
         # It is the fact that there is power or not
         # but the buffer use the byte array, so we will transform the boolean to byte
@@ -312,7 +316,7 @@ class DigitalChannel(Channel):
         # the pin for the sensor
         self.pin = Pin(pin, Pin.OUT)
 
-        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input)
 
     def create_buffer(self, name, size, step, times, error):
         return CircularBuffer(name, size, step, times, error = error, data_size = 1)
@@ -323,7 +327,7 @@ class DigitalChannel(Channel):
         self.pin.value(value)
 
 class AnalogChannel(Channel):
-    def __init__(self, pin, p1, p2, p3, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x, freq = 1000, id = ''):
+    def __init__(self, pin, p1, p2, p3, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, freq = 1000, id = '', input = True):
         # here we don't have a specific transformation to do to the sensor data, so we will return the data
         # but, some sensors may have some transformations to do
 
@@ -337,17 +341,17 @@ class AnalogChannel(Channel):
         self.p2 = p2
         self.p3 = p3
 
-        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input)
     def read(self):
-        Pin(0, mode=Pin.OUT).value(self.p1)
-        Pin(2, mode=Pin.OUT).value(self.p2)
-        Pin(15, mode=Pin.OUT).value(self.p3)
+        Pin(0, mode = Pin.OUT).value(self.p1)
+        Pin(2, mode = Pin.OUT).value(self.p2)
+        Pin(15, mode = Pin.OUT).value(self.p3)
         return self.translation_byte_function(ADC(0).read(), self.error, self.old_data)
     def write(self, value):
         self.pwm.duty(value)
 
 class I2CChannel(Channel):
-    def __init__(self, i2c, addr, byte_receive, code_send, wait, name, error = b'\xff\xfe', translation_byte_function = lambda x,y,z : x, translation_data_function = lambda x:x, id = ''):
+    def __init__(self, i2c, addr, byte_receive, code_send, wait, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, id = '', input = True):
         # here we don't have a specific transformation to do to the sensor data, so we will return the data
         # but, some sensors may have some transformations to do
 
@@ -362,7 +366,7 @@ class I2CChannel(Channel):
         # the time to wait
         self.wait = wait
 
-        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input)
     def read(self):
         self.write(self.code_send)
         sleep_ms(self.wait)
@@ -377,12 +381,12 @@ class Buffer():
     def __init__(self, size, step = 1, time = 0, null = b'\xff\xff', data_size = 2):
         # the real index in the byte array
         self.real_index = 0
-        # the index for the each data, it is not equal to the realIndex,
+        # the index for the each data, it is not equal to the realIndex, 
         # if the data is stock in multiple byte
         self.data_index = 0
         # value index is the value of one index
-        # if the index is 2, and step=1, then we are at 2s
-        # if the index is 2, and step=10, then we are at 20s ...
+        # if the index is 2, and step = 1, then we are at 2s
+        # if the index is 2, and step = 10, then we are at 20s ...
         self.step = step
         # it is the number of byte to stock the data
         self.data_size = data_size
@@ -547,11 +551,11 @@ def sensors_create_dict():
     for i in range(len(array_time_value)):
         name_time = array_time_name[i]
         temp_dict[name_time] = {
-            'size' : array_time_size[i],
-            'times' : array_next_time[i],
-            'value' : array_time_value[i],
-            'offset' : array_time_offset[i],
-            'before' : before,
+            'size' : array_time_size[i], 
+            'times' : array_next_time[i], 
+            'value' : array_time_value[i], 
+            'offset' : array_time_offset[i], 
+            'before' : before, 
         }
         before = name_time
     return temp_dict
