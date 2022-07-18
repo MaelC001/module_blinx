@@ -45,10 +45,10 @@ def get_all_function_sensor():
     info = a.info
     name = info['name']
     infoSensor = info['info']
-    functions = info['functions']
+    functions = info['channels']
     for id, infoFunction in functions.items():
       waiting = infoFunction['waiting']
-      dictFunctions = infoFunction['dictFunctions']
+      dictFunctions = infoFunction['functions']
       for type, function in dictFunctions.items():
         register(function, name, type+id, waiting=waiting)
 
