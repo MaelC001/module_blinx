@@ -10,7 +10,7 @@ time_ns = time.time_ns() - time.ticks_ms()
 ticks_max = 2**30
 
 # import blinxC
-# a = blinxC.Blinx(configs = {'A' : {'new_name' : 'B', 'is_input' : False, 'channels' : [{'type':'Digital', 'pin':2}]}}, i2c = None)
+# a = blinxC.Blinx(configs = {'A' : {'new_name' : 'B', 'is_input' : False, 'is_display' : False, 'channels' : [{'type':'Digital', 'pin':2}]}}, i2c = None)
 # b = a.sensors['B']['sensor']
 # c = b.channels[0]
 # d = c.dic['1s']['buffer']
