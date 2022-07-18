@@ -444,22 +444,6 @@ let listAllSensors = {
                 }
             ]
         },
-        "servo_9g": {
-            "text": "9G Servo Motor Blue 90\\u00b0",
-            "file": "analog",
-            "is_input": false,
-            "is_display": false,
-            "urlImage": "https://wiki.keyestudio.com/images/a/a4/Ks0209.png",
-            "url": "https://wiki.keyestudio.com/Ks0209_keyestudio_9G_Servo_Motor_Blue_90%C2%B0",
-            "numberPin": 1,
-            "channels": [
-                {
-                    "type": "Analog",
-                    "id": 0,
-                    "pin": 0
-                }
-            ]
-        },
         "3w_led": {
             "text": "3W LED",
             "file": "digital",
@@ -583,6 +567,166 @@ let listAllSensors = {
             "channels": [
                 {
                     "type": "Digital",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_2": {
+            "text": "gas sensors - mq-2",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_3": {
+            "text": "gas sensors - mq-3",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/2/23/KS0041_%283%29.png",
+            "url": "https://wiki.keyestudio.com/Ks0041_keyestudio_Analog_Alcohol_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_4": {
+            "text": "gas sensors - mq-4",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_5": {
+            "text": "gas sensors - mq-5",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_6": {
+            "text": "gas sensors - mq-6",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_7": {
+            "text": "gas sensors - mq-7",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_8": {
+            "text": "gas sensors - mq-8",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_9": {
+            "text": "gas sensors - mq-9",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "mq_135": {
+            "text": "gas sensors - mq-135",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0047_keyestudio_MQ135_Air_Quality_Sensor",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "servo_9g": {
+            "text": "9G Servo Motor Blue 90\\u00b0",
+            "file": "analog",
+            "is_input": false,
+            "is_display": false,
+            "urlImage": "https://wiki.keyestudio.com/images/a/a4/Ks0209.png",
+            "url": "https://wiki.keyestudio.com/Ks0209_keyestudio_9G_Servo_Motor_Blue_90%C2%B0",
+            "numberPin": 1,
+            "channels": [
+                {
+                    "type": "Analog",
                     "id": 0,
                     "pin": 0
                 }
