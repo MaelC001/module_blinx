@@ -614,7 +614,7 @@ let listAllSensors = {
             "numberPin": 1,
             "channels": [
                 {
-                    "type": "analog",
+                    "type": "Analog",
                     "id": 0,
                     "pin": 0
                 }
