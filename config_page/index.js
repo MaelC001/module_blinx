@@ -34,9 +34,9 @@ let infoButtonGeneral = [{
 // list of sensor for each different port
 let listAllSensors = {
     "I2C": {
-        "ADXL345": {
+        "adxl345": {
             "text": "Three Axis Acceleration",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -49,9 +49,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "HT16K33": {
+        "ht16k33": {
             "text": "I2C 8x8 LED Matrix",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": false,
             "is_display": true,
@@ -66,7 +66,7 @@ let listAllSensors = {
         },
         "motor_16_12": {
             "text": "16-channel 12-bit PWM/Servo Driver",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": false,
             "is_display": false,
@@ -79,9 +79,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "MPU6050": {
+        "mpu6050": {
             "text": "Gyroscope and Accelerometer module",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -94,9 +94,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "APDS9930": {
+        "apds9930": {
             "text": "Attitude Sensor",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -109,9 +109,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "APDS9960": {
+        "apds9960": {
             "text": "motion detection",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -124,9 +124,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "SSD1306_oled": {
+        "ssd1306_oled": {
             "text": "OLED Display OLED",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": false,
             "is_display": true,
@@ -139,9 +139,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "BH1750FVI": {
+        "bh1750fvi": {
             "text": "Digital Light Intensity",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -154,9 +154,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "BMP280": {
+        "bmp280": {
             "text": "temperature and air pressure sensor",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -169,9 +169,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "CCS811": {
+        "ccs811": {
             "text": "Carbon Dioxide Air Quality",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -184,9 +184,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "BMP180": {
+        "bmp180": {
             "text": "Digital Barometric Pressure Sensor",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -199,9 +199,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "TTP229L": {
+        "ttp229l": {
             "text": "16-key Touch Sensor",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -214,9 +214,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "MLX90614": {
+        "mlx90614": {
             "text": "Non-contact Infrared Temperature Sensor",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -229,9 +229,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "TCS34725": {
+        "tcs34725": {
             "text": "Color Sensor",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -244,9 +244,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "MAX30102": {
+        "max30102": {
             "text": "Heart Rate Sensor",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -259,9 +259,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "L76_L": {
+        "l76_l": {
             "text": "gps L76-L",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -274,9 +274,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "MEGA8A": {
+        "mega8a": {
             "text": "joystick",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -289,9 +289,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "MPU9150": {
+        "mpu9150": {
             "text": "acceleration, turn rate and the magnetic field in three axes - MPU9150",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -304,9 +304,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "AK8963": {
+        "ak8963": {
             "text": "acceleration, turn rate and the magnetic field in three axes - AK8963",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -319,9 +319,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "MPU9250": {
+        "mpu9250": {
             "text": "acceleration, turn rate and the magnetic field in three axes - MPU9250",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -334,9 +334,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "MPU6500": {
+        "mpu6500": {
             "text": "acceleration, turn rate and the magnetic field in three axes - MPU6500",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -349,9 +349,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "DIYMall_96": {
+        "diymall_96": {
             "text": "diymall 9.6 oled",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": false,
             "is_display": true,
@@ -364,9 +364,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "GY521": {
+        "gy521": {
             "text": "Accelerometer",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -379,9 +379,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "PCF8523": {
+        "pcf8523": {
             "text": "Real Time Clock",
-            "addr": "0x70",
+            "addr": "",
             "file": "",
             "is_input": true,
             "is_display": false,
@@ -445,7 +445,7 @@ let listAllSensors = {
             ]
         },
         "servo_9g": {
-            "text": "9G Servo Motor Blue 90°",
+            "text": "9G Servo Motor Blue 90\\u00b0",
             "file": "pwm",
             "is_input": false,
             "is_display": false,
@@ -556,7 +556,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "SFE_Reed_Switch": {
+        "sfe_reed_switch": {
             "text": "Hall Magnetic Sensor",
             "file": "digital",
             "is_input": false,
@@ -572,7 +572,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "Reed_Switch": {
+        "reed_switch": {
             "text": "Reed Switch",
             "file": "digital",
             "is_input": true,
@@ -588,7 +588,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "AD_KEY_Button": {
+        "ad_key_button": {
             "text": "AD KEY Button Module",
             "file": "analog",
             "is_input": true,
@@ -668,7 +668,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "801S": {
+        "801s": {
             "text": "Vibration Sensor",
             "file": "digital",
             "is_input": true,
@@ -732,7 +732,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "XKC-Y25-T12V": {
+        "xkc_y25_t12v": {
             "text": "Non-contact Liquid Level Sensor",
             "file": "digital",
             "is_input": true,
@@ -748,7 +748,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "DHT11": {
+        "dht11": {
             "text": "Temperature and Humidity Sensor",
             "file": "digital",
             "is_input": true,
@@ -828,7 +828,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "LM35": {
+        "lm35": {
             "text": "Linear Temperature",
             "file": "analog",
             "is_input": true,
@@ -924,7 +924,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "TEMT6000": {
+        "temt6000": {
             "text": "Ambient Light Sensor",
             "file": "analog",
             "is_input": true,
@@ -956,7 +956,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "GUVA-S12SD_3528": {
+        "guva_s12sd_3528": {
             "text": "Ultraviolet Sensor",
             "file": "analog",
             "is_input": true,
@@ -1004,7 +1004,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "XD-58C": {
+        "xd_58c": {
             "text": "Pulse Sensor",
             "file": "analog",
             "is_input": true,
@@ -1020,7 +1020,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "GY-ML8511": {
+        "gy_ml8511": {
             "text": "Ultraviolet Sensor",
             "file": "analog",
             "is_input": true,
@@ -1038,7 +1038,7 @@ let listAllSensors = {
         },
         "vibration_motor": {
             "text": "Vibration Motor Module",
-            "file": "analog",
+            "file": "pwm",
             "is_input": false,
             "is_display": false,
             "urlImage": "https://wiki.keyestudio.com/images/6/61/Ks0450-1.png",
@@ -1052,9 +1052,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "L9110": {
+        "l9110": {
             "text": "fan control",
-            "file": "analog",
+            "file": "pwm",
             "is_input": false,
             "is_display": false,
             "urlImage": "https://wiki.keyestudio.com/images/0/03/Ks0168.png",
@@ -1068,9 +1068,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "SG90S": {
+        "sg90s": {
             "text": "Micro Servo",
-            "file": "analog",
+            "file": "pwm",
             "is_input": false,
             "is_display": false,
             "urlImage": "https://wiki.keyestudio.com/images/b/be/Ks0194-_servo.png",
