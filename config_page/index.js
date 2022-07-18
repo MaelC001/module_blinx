@@ -64,7 +64,7 @@ let listAllSensors = {
     "DigiAnalog": {
         "led": {
             "text": "led (in micro controller) (pin 2)",
-            "file": "",
+            "file": "digital_ou",
             'is_input': false,
             'is_display': false,
             'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
@@ -80,7 +80,7 @@ let listAllSensors = {
     "In": {
         "led": {
             "text": "led (in micro controller) (pin 2)",
-            "file": "",
+            "file": "digital_ou",
             'is_input': false,
             'is_display': false,
             'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
