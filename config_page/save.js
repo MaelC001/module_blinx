@@ -69,10 +69,10 @@ function config_sensor(e) {
         }
 
         function json_config_push(type, name) {
-            json_config.push({
-                'name': name,
-                'file': listAllSensors[type][name]['file'],
-            });
+            let file = listAllSensors[type][name]['file']
+            if(!json_config.includes(file)){
+                json_config.push(file);
+            }
         }
 
         function json_sensor_push(type, info) {

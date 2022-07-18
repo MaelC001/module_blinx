@@ -178,9 +178,8 @@ async function config_sensor_serial(json_config, json_sensor) {
     async function etape2(e) {
         verify_json(e, json => {});
         Promise.all(json_config.map(move_mpy)).then(e => etape3(e));
-        async function move_mpy(j) {
-            var name = j['name'];
-            var url = url_mpy + j['file'] + '.mpy';
+        async function move_mpy(name) {
+            var url = url_mpy + name + '.mpy';
             var content = getText(url);
             var method = 'write';
             var arg = {
@@ -193,7 +192,7 @@ async function config_sensor_serial(json_config, json_sensor) {
             var method = 'write';
             var arg = {
                 'name': 'config_file.py',
-                'value': "array = " + JSON.stringify(json_config),
+                'value': "array = [\"" + json_config.toString().replaceAll(',','","')+"\"]",
             };
             cmd(method, arg = arg, idCmd = id).then(e => etape4(e));
             async function etape4(e) {
