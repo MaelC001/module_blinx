@@ -30,5 +30,6 @@ body {
 
 .listSensorPort2 {
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
+    max-height: 25vh;
 }
