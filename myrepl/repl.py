@@ -425,7 +425,7 @@ def output_sensors(sensor_name, array_value):
   Blinx.sensors_output[sensor_name]['sensor'].write(array_value)
   return 'Done'
 
-@register('diplay', "")
+@register('display', "")
 def display_sensors(sensor_name, func_name, *array_value):
   """
     give a command to a display sensor

@@ -55,6 +55,6 @@ def get_all_function_sensor():
           for type, function in dictFunctions.items():
             register(function, name, type+id, waiting=waiting)
 
-          dictFunctions = infoChannel['functions']
-          for type, function in dictFunctions.items():
-            register(function, name, type, waiting=waiting, args=infoSensor)
+        dictFunctions = info['functions']
+        for type, function in dictFunctions.items():
+          register(function, name, type, waiting=waiting, args=infoSensor)
