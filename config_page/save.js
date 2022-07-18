@@ -45,8 +45,10 @@ function config_sensor(e) {
             if (Object.keys(info).length > 0) {
                 let val = info['idSensor'];
                 json_config_push(type, val);
-                if (listAllSensors[type][val]['is_display']) {} else {
-                    json_sensor_push(type, info);
+                if (listAllSensors[type][val]['is_display']) {
+                    json_sensor_push(type, info, true);
+                } else {
+                    json_sensor_push(type, info, false);
                 }
             }
         }
@@ -64,8 +66,10 @@ function config_sensor(e) {
                     info['borne supeieure'] = t.children[2].children[0].children[0].value;
                 }
                 json_config_push('In', val);
-                if (val == 'screen') {} else {
-                    json_sensor_push('In', info);
+                if (val == 'screen') {
+                    json_sensor_push('In', info, true);
+                } else {
+                    json_sensor_push('In', info, false);
                 }
             }
         }
@@ -77,23 +81,17 @@ function config_sensor(e) {
             }
         }
 
-        function json_sensor_push(type, info) {
+        function json_sensor_push(type, info, display = false) {
+            let config = 'channels';
+            if(display){
+                config = 'config';
+            }
             let value = info['idSensor'];
             json_sensor[info['name']] = {
                 'new_name': info['userName'],
                 'is_input': listAllSensors[type][value]['is_input'],
                 'is_display': listAllSensors[type][value]['is_display'],
-                'config': listAllSensors[type][value]['channels'],
-            }
-        }
-
-        function json_sensor_display_push(type, info) {
-            let value = info['value'];
-            json_sensor[info['name']] = {
-                'new_name': info['userName'],
-                'is_input': listAllSensors[type][value]['is_input'],
-                'is_display': listAllSensors[types][value]['is_display'],
-                'config': listAllSensors[type][value]['channels'],
+                'config': listAllSensors[type][value][config],
             }
         }
     }
