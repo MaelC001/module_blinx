@@ -451,9 +451,9 @@ def get_sensors(list_sensors, times = '1s'):
   # immedate data of the sensor
   if times == '0s':
     text += '\n' + str(time.time())
-    for sensor in name_sensors:
+    for i in range(len(name_sensors)):
       time_before = save_sensor_while_request(time_before)
-      sensor_info = sensors.__listSensor[sensor]['immediate']
+      sensor_info = sensors.__listSensor[name_sensors[i]]['immediate'](function_sensors[name_sensors[i]].info)
       text += ';' + str(sensor_info['func'](i2c, **sensor_info['args']))
     return text
   else :
@@ -467,7 +467,7 @@ def get_sensors(list_sensors, times = '1s'):
       text_time_stamp = ''
       for i in range(len(function_sensors)):
         func = function_sensors[i]
-        sensor = name_sensors[i]
+        name_sensors[i] = name_sensors[i]
         time_before = save_sensor_while_request(time_before)
 
         for y in func.getIndex(times, index_data, True):
