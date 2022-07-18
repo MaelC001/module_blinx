@@ -30,6 +30,9 @@ class Blinx():
             is_input = config['is_input']
             is_display = config['is_display']
 
+            if new_name == '':
+                new_name = sensor
+
             if is_display:
                 config = config['config']
                 temp = {'name' : sensor, 'sensor' : sensors.__list_sensors[sensor]['create'](i2c, *config)}
