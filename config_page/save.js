@@ -34,6 +34,8 @@ function config_sensor(e) {
             }
         }
 
+        aaaaa = json_config;
+        aaaab = json_sensor;
         console.log(json_config);
         console.log(json_sensor);
 

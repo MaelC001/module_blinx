@@ -179,11 +179,12 @@ async function config_sensor_serial(json_config, json_sensor) {
         verify_json(e, json => {});
         Promise.all(json_config.map(move_mpy)).then(e => etape3(e));
         async function move_mpy(name) {
-            var url = url_mpy + name + '.mpy';
-            var content = getText(url);
+            var file = name + '.mpy';
+            var url = url_mpy + file;
+            var content = await getText(url);
             var method = 'write';
             var arg = {
-                'name': name,
+                'name': file,
                 'value': content
             };
             return cmd(method, arg = arg, idCmd = id);
@@ -205,16 +206,9 @@ async function config_sensor_serial(json_config, json_sensor) {
 }
 
 
-function getText(url) {
+async function getText(url) {
     // read text from URL location
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.send(null);
-    request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status === 200) {
-            return request.responseText;
-        }
-    }
+    return fetch(url).then(res => {return res.text()}).then(e => {return e});
 }
 
 function infoWifi(){
