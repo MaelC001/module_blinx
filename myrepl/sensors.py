@@ -46,14 +46,12 @@ def get_all_function_sensor():
     name = info['name']
     infoSensor = info['info']
     functions = info['channels']
-    for id, infoFunction in functions.items():
-      waiting = infoFunction['waiting']
-      dictFunctions = infoFunction['functions']
+    for id, infoChannel in functions.items():
+      waiting = infoChannel['waiting']
+      dictFunctions = infoChannel['functionsId']
       for type, function in dictFunctions.items():
         register(function, name, type+id, waiting=waiting)
 
-    # type of function : byte, data, immediate
-
-    functionImmediate = info['immediate']
-    waiting = info['waiting']
-    register(functionImmediate, name, 'immediate', waiting=waiting, args=infoSensor)
+      dictFunctions = infoChannel['functions']
+      for type, function in dictFunctions.items():
+        register(function, name, type, waiting=waiting, args=infoSensor)
