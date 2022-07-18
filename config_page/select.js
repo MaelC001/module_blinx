@@ -117,7 +117,6 @@ function sensorInMicroConfig(check, id) {
             "name": id,
             "idSensor": id,
             "userName": '',
-            "channels": [],
             "borne inferieure": -1,
             "borne supeieure": -1,
             "type": "I2C",
@@ -187,7 +186,6 @@ function addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser = '', idPin = 0
         "name": nameSensor,
         "idSensor": idSensor,
         "userName": nameUser,
-        "channels": [],
         "borne inferieure": -1,
         "borne supeieure": -1,
     };
@@ -199,7 +197,6 @@ function addToInfoUserI2C(idSensor, nameSensor, nameUser = '') {
         "name": nameSensor,
         "idSensor": idSensor,
         "userName": nameUser,
-        "channels": [],
         "borne inferieure": -1,
         "borne supeieure": -1,
     };

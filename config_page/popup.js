@@ -71,11 +71,10 @@ function connectWifi() {
         'password': password
     };
     let result = cmd(method, arg = arg, idCmd = 0).then(e => verify_json(e, j => {
-        return j['result']
+        if(j['result'] == true){
+            $('#buttonConnectWifi').popup('change content', '<p>success</p>');
+        } else {
+            $('#buttonConnectWifi').popup('change content', '<p>error : ' + j['result'] + '</p>');
+        }
     }));
-    if (result == true) {
-        $('#buttonConnectWifi').popup('change content', '<p>success</p>');
-    } else {
-        $('#buttonConnectWifi').popup('change content', '<p>error : ' + result + '</p>');
-    }
 }

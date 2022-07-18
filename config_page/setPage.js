@@ -53,7 +53,7 @@ function loadPAge() {
     $('#buttonSaveConfig').popup({
         on: 'click',
         exclusive: true,
-        //onShow: scanI2C,
+        onShow: config_sensor,
         html: loader,
     });
 

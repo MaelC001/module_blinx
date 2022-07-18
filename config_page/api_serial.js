@@ -9,24 +9,21 @@ var id = 0;
 
 var url_mpy = "https://raw.githubusercontent.com/MaelC001/sensor_blinx/main/";
 
-async function connect(usbV = null, usbP = null, idError = null, callback = null) {
+async function connect(idError = null, callback = null) {
     let textError;
     if (port) {
         port.close();
     }
     try {
-        await navigator.serial.requestPort({
-            filters: [{
-                usbVendorId: usbV,
-                usbProductId: usbP
-            }]
-        }).then((p) => {
+        await navigator.serial.requestPort().then((p) => {
             port = p;
             port.open({
                 baudRate: 115200
             });
         });
-        callback();
+        if(callback != null){
+            callback();
+        }
     } catch (e) {
         error(e);
     }
@@ -76,7 +73,7 @@ async function connect(usbV = null, usbP = null, idError = null, callback = null
     }
 }
 
-function write(method, arg, idCmd, repl = false) {
+function write(method, arg, idCmd, repl = true) {
     if (repl) {
         method = "\x01" + method + "\x04";
     } else {
@@ -87,9 +84,10 @@ function write(method, arg, idCmd, repl = false) {
         }) + returnLignString;
     }
     method = encoder.encode(method);
+    console.log(method);
     var writer = port.writable.getWriter();
     //writer.write(method);
-    let step = 95;
+    var step = 95;
     for(var i=0; i<method.length; i+=step){
         writer.write(encoder.encode(method.substring(i,i+step)));
     }
@@ -99,9 +97,9 @@ function write(method, arg, idCmd, repl = false) {
 async function read() {
     const reader = port.readable.getReader();
     var text = '';
-    var nmb = 0;
+    var finBoucle = true;
     try {
-        while (true) {
+        while (finBoucle) {
             const {
                 value,
                 done
@@ -109,19 +107,21 @@ async function read() {
             text += decoder.decode(value);
             for (var i = 0; i < value.length; i++) {
                 if (value[i] == returnLignNumber) {
+                    finBoucle = false;
                     break;
                 }
             }
         }
     } finally {
         reader.releaseLock();
-        text = text.split(cle)[0];
-        return JSON.parse(text);
+        //text = text.split(cle)[0];
+        //console.log(text);
+        return text;
     }
 }
 
 async function cmd(method, arg = [], idCmd = id) {
-    write(method, arg, idCmd);
+    write(method, arg, idCmd, repl=false);
     return await read();
 }
 
@@ -220,12 +220,12 @@ function getText(url) {
 
 function infoWifi(){
     var method = 'wifi';
-    cmd(method, idCmd = id).then(e => getInfo(e));
+    cmd(method,arg = [], idCmd = id).then(e => getInfo(e));
     function getInfo(e) {
         verify_json(e, json => {
             let t = json['result']['wlan_sta'];
             let connected = t['isconnected'];
-            let ip = t['ifcongif'];
+            let ip = t['config']['ifcongif'][0];
             let ssid = t['config']['ssid'];
             let hostname = t['config']['dhcp_hostname'];
             if (connected){

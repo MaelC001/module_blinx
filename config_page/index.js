@@ -42,6 +42,10 @@ let listAllSensors = {
             'is_display': false,
             'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
             'url': 'https://wiki.seeedstudio.com/Grove-I2C_High_Accuracy_Temp&Humi_Sensor-SHT35/',
+            'channels': [{
+                'type': 'I2C',
+                'id': 0,
+            }],
         },
         "humid-sht3x": {
             "text": "humidity (in micro controller)",
@@ -51,10 +55,14 @@ let listAllSensors = {
             'is_display': false,
             'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
             'url': 'https://wiki.seeedstudio.com/Grove-I2C_High_Accuracy_Temp&Humi_Sensor-SHT35/',
+            'channels': [{
+                'type': 'I2C',
+                'id': 0,
+            }],
         },
     },
     "DigiAnalog": {
-        "led pin2": {
+        "led": {
             "text": "led (in micro controller) (pin 2)",
             "file": "",
             'is_input': false,
@@ -62,6 +70,27 @@ let listAllSensors = {
             'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
             'url': '',
             'numberPin': 1,
+            'channels': [{
+                'type': 'Digital',
+                'id': 0,
+                'pin': 2,
+            }],
+        },
+    },
+    "In": {
+        "led": {
+            "text": "led (in micro controller) (pin 2)",
+            "file": "",
+            'is_input': false,
+            'is_display': false,
+            'urlImage': 'http://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Male-icon.png',
+            'url': '',
+            'numberPin': 1,
+            'channels': [{
+                'type': 'Digital',
+                'id': 0,
+                'pin': 2,
+            }],
         },
     },
 };
