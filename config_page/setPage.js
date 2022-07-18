@@ -13,24 +13,29 @@ function loadPAge() {
 
     $("#selectAnalogDigi11").dropdown({
         onChange: changeSelectSensorAD,
+        forceSelection: false,
     });
     $("#selectAnalogDigi12").dropdown({
         onChange: changeSelectSensorAD,
+        forceSelection: false,
     });
     $("#selectAnalogDigi12").hide();
     $("#buttonAnalogDigi12").hide();
 
     $("#selectAnalogDigi21").dropdown({
         onChange: changeSelectSensorAD,
+        forceSelection: false,
     });
     $("#selectAnalogDigi22").dropdown({
         onChange: changeSelectSensorAD,
+        forceSelection: false,
     });
     $("#selectAnalogDigi22").hide();
     $("#buttonAnalogDigi22").hide();
 
     $('#selectI2C').dropdown({
         onChange: selectI2C,
+        forceSelection: false,
     });
 
     $('.ui.button.config').popup({
