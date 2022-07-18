@@ -40,18 +40,21 @@ def get_all_function_sensor():
     import listSensorUser
   except:
     return
+  list_sensors = listSensorUser.list_sensors
   for i in listSensorUser.array:
     a = __import__(i)
     info = a.info
-    name = info['name']
-    infoSensor = info['info']
-    functions = info['channels']
-    for id, infoChannel in functions.items():
-      waiting = infoChannel['waiting']
-      dictFunctions = infoChannel['functionsId']
-      for type, function in dictFunctions.items():
-        register(function, name, type+id, waiting=waiting)
+    names = info['name']
+    for name in names:
+      if name in list_sensors:
+        infoSensor = info['info']
+        functions = info['channels']
+        for id, infoChannel in functions.items():
+          waiting = infoChannel['waiting']
+          dictFunctions = infoChannel['functionsId']
+          for type, function in dictFunctions.items():
+            register(function, name, type+id, waiting=waiting)
 
-      dictFunctions = infoChannel['functions']
-      for type, function in dictFunctions.items():
-        register(function, name, type, waiting=waiting, args=infoSensor)
+          dictFunctions = infoChannel['functions']
+          for type, function in dictFunctions.items():
+            register(function, name, type, waiting=waiting, args=infoSensor)
