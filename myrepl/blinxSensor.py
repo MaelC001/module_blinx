@@ -181,14 +181,15 @@ class Channel():
         if channel['type'] == "I2C":
             id = channel['id']
             function_byte = sensors.__list_sensors[sensor_type]['byte'+id]['func']
+            waiting_time = sensors.__list_sensors[sensor_type]['byte'+id]['waiting']
             function_data = sensors.__list_sensors[sensor_type]['data'+id]['func']
 
             # the address of the sensor I2C
-            addr = sensors.info_sensor_I2C[sensor_type]['addr']
+            addr = sensors.__list_sensors[sensor_type]['args']['addr']
             # the number of byte to receive form the sensor
-            number_byte_receive = sensors.info_sensor_I2C[sensor_type]['byteReceive']
+            number_byte_receive = sensors.__list_sensors[sensor_type]['args']['byteReceive']
             # the code to send to the sensor to tell him we want the data
-            code_to_send = sensors.info_sensor_I2C[sensor_type]['codeSend']
+            code_to_send = sensors.__list_sensors[sensor_type]['args']['codeSend']
             return I2CChannel(i2c, addr, number_byte_receive, code_to_send, waiting_time, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, id=id)
         elif channel['type'] == "Analog":
             id = channel['id']
@@ -199,7 +200,7 @@ class Channel():
             p1 = channel['p1']
             p2 = channel['p2']
             p3 = channel['p3']
-            freq = channel['freq']
+            freq = sensors.__list_sensors[sensor_type]['args']['freq']
             return AnalogChannel(pin, p1, p2, p3, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id=id)
         elif channel['type'] == "Digital":
             id = channel['id']
