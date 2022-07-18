@@ -61,7 +61,7 @@ function loadPAge() {
     sensorInMicroPlus.forEach(id => $("#" + id + "Config").hide());
 
 
-    connect(usbV = null, usbP = null, idError = 'error', callback = infoWifi);
+    connect(idError = 'error', callback = infoWifi);
 
     function getHtmlForButton() {
         let textHtmlTemp = '';

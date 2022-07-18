@@ -51,7 +51,7 @@ async function connect(idError = null, callback = null) {
                     Chose port\
                     </div>\
                     <p>You have to chose the port of the micro controller, so we can tlak with it.</p>\
-                    <button type='button' class='ui labeled button' onclick='connect()'>\
+                    <button type='button' class='ui labeled button' onclick='connect(idError = 'error')'>\
                         Re-try\
                     </button>\
                 </div>";
@@ -62,7 +62,7 @@ async function connect(idError = null, callback = null) {
                     Security Error\
                     </div>\
                     <p>Your browser block the request of the port for the micro-controller.</p>\
-                    <button type='button' class='ui labeled button' onclick='connect()'>\
+                    <button type='button' class='ui labeled button' onclick='connect(idError = 'error')'>\
                         Re-try\
                     </button>\
                 </div>";
