@@ -573,7 +573,7 @@ let listAllSensors = {
             ]
         },
         "mq_2": {
-            "text": "gas sensors - mq-2",
+            "text": "LPG, I-butane, propane, methane, alcohol, Hydrogen and smoke sensors - mq-2",
             "file": "analog",
             "is_input": true,
             "is_display": false,
@@ -589,7 +589,7 @@ let listAllSensors = {
             ]
         },
         "mq_3": {
-            "text": "gas sensors - mq-3",
+            "text": "alcohol sensors - mq-3",
             "file": "analog",
             "is_input": true,
             "is_display": false,
@@ -605,12 +605,12 @@ let listAllSensors = {
             ]
         },
         "mq_4": {
-            "text": "gas sensors - mq-4",
+            "text": "natural gas and methane sensors - mq-4",
             "file": "analog",
             "is_input": true,
             "is_display": false,
-            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
-            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "urlImage": "https://wiki.keyestudio.com/images/4/45/Ks0042.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0042_keyestudio_MQ-4_Gas_Sensor",
             "numberPin": 1,
             "channels": [
                 {
@@ -621,12 +621,12 @@ let listAllSensors = {
             ]
         },
         "mq_5": {
-            "text": "gas sensors - mq-5",
+            "text": "SnO2 gas sensors - mq-5",
             "file": "analog",
             "is_input": true,
             "is_display": false,
-            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
-            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "urlImage": "https://wiki.keyestudio.com/images/1/19/Ks0043.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0043_keyestudio_MQ-5_Gas_Sensor",
             "numberPin": 1,
             "channels": [
                 {
@@ -637,12 +637,12 @@ let listAllSensors = {
             ]
         },
         "mq_6": {
-            "text": "gas sensors - mq-6",
+            "text": "Sn02 gas sensors - mq-6",
             "file": "analog",
             "is_input": true,
             "is_display": false,
-            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
-            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "urlImage": "https://wiki.keyestudio.com/images/0/0e/Ks0044.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0044_keyestudio_MQ-6_Gas_Sensor",
             "numberPin": 1,
             "channels": [
                 {
@@ -653,12 +653,12 @@ let listAllSensors = {
             ]
         },
         "mq_7": {
-            "text": "gas sensors - mq-7",
+            "text": "carbon monoxide gas sensors - mq-7",
             "file": "analog",
             "is_input": true,
             "is_display": false,
-            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
-            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "urlImage": "https://wiki.keyestudio.com/images/3/35/Ks0045.png",
+            "url": "https://wiki.keyestudio.com/Ks0045_keyestudio_MQ-7_Carbon_Monoxide_Gas_Sensor",
             "numberPin": 1,
             "channels": [
                 {
@@ -669,12 +669,12 @@ let listAllSensors = {
             ]
         },
         "mq_8": {
-            "text": "gas sensors - mq-8",
+            "text": "hydrogen gas sensors - mq-8",
             "file": "analog",
             "is_input": true,
             "is_display": false,
-            "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
-            "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
+            "urlImage": "https://wiki.keyestudio.com/images/3/31/Ks0046.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0046_keyestudio_MQ-8_Hydrogen_Gas_Sensor",
             "numberPin": 1,
             "channels": [
                 {
@@ -701,7 +701,7 @@ let listAllSensors = {
             ]
         },
         "mq_135": {
-            "text": "gas sensors - mq-135",
+            "text": "Air Quality Sensor - mq-135",
             "file": "analog",
             "is_input": true,
             "is_display": false,
