@@ -174,7 +174,9 @@ let templatePopup = "\
             </div>\
             <label for='nameSensor'><b>Name</b></label>\
             <input type='text' placeholder='Your name of the sensor' name='nameSensor' class='modify' id='nameSensor'>\
-            <div id='popupPlus'></div>\
+            <div id='popupPlus'>\
+                $PopupPlusInput$\
+            </div>\
         <button type='button' class='btn' onclick='savePopupConfig(\"$IdPortSensor$\")'>Saving</button>\
     </form>\
 </div>";
@@ -208,4 +210,19 @@ let templateCardI2C = "\
             <div class='ui labeled red button icon' onclick='removeI2C(\"$IdSensor$\")'><i class='trash icon'></i>Remove</div>\
         </div>\
     </div>\
+</div>";
+
+
+var templateMinMaxPopup = "\
+<div class='ui right labeled mini input'>\
+    <input type='text' placeholder='Min' id='minInputPopup'>\
+    <a class='ui tag label'>\
+        Min\
+    </a>\
+</div>\
+<div class='ui right labeled mini input'>\
+    <input type='text' placeholder='Max' id='maxInputPopup'>\
+    <a class='ui tag label'>\
+        Max\
+    </a>\
 </div>";

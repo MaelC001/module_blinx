@@ -62,8 +62,8 @@ function config_sensor(e) {
                     info['userName'] = t.children[0].children[0].value;
                 } else {
                     info['userName'] = t.children[0].children[0].children[0].value;
-                    info['borne inferieure'] = t.children[1].children[0].children[0].value;
-                    info['borne supeieure'] = t.children[2].children[0].children[0].value;
+                    info['borne_min'] = t.children[1].children[0].children[0].value;
+                    info['borne_max'] = t.children[2].children[0].children[0].value;
                 }
                 json_config_push('In', val);
                 if (val == 'screen') {
@@ -91,6 +91,8 @@ function config_sensor(e) {
                 'new_name': info['userName'],
                 'is_input': listAllSensors[type][value]['is_input'],
                 'is_display': listAllSensors[type][value]['is_display'],
+                'min': info['borne_min'],
+                'max': info['borne_max'],
                 'config': listAllSensors[type][value][config],
             }
         }

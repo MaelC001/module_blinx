@@ -180,25 +180,25 @@ function changeSelectI2C() {
     $('#selectI2C').dropdown('refresh');
 }
 
-function addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser = '', idPin = 0) {
+function addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser = '', idPin = 0, min = -1, max = -1) {
     infoUserSensor[idIndex][idPin] = {};
     infoUserSensor[idIndex][idPin][idSensor] = {
         "name": nameSensor,
         "idSensor": idSensor,
         "userName": nameUser,
-        "borne inferieure": -1,
-        "borne supeieure": -1,
+        "borne_max": min,
+        "borne_min": max,
     };
 }
 
-function addToInfoUserI2C(idSensor, nameSensor, nameUser = '') {
+function addToInfoUserI2C(idSensor, nameSensor, nameUser = '', min = -1, max = -1) {
     idIndex = 1
     infoUserSensor[idIndex][idSensor] = {
         "name": nameSensor,
         "idSensor": idSensor,
         "userName": nameUser,
-        "borne inferieure": -1,
-        "borne supeieure": -1,
+        "borne_min": min,
+        "borne_max": max,
     };
 }
 

@@ -20,14 +20,19 @@ function createPopup(e) {
     if(idItem != ''){
         valueItem = listAllSensors[type][idItem]['text'];
         urlItem = listAllSensors[type][idItem]['url'];
+        let popupPlus = '';
         let plusUrl = '';
         if(urlItem != ''){
             plusUrl = templatePopupPage.replaceAll('$UrlSensor$', urlItem);
+        }
+        if (listAllSensors[type][idItem]['min_max']){
+            popupPlus = templateMinMaxPopup;
         }
         if (valueItem != '') {
             temp = templatePopup.replaceAll('$IdPortSensor$', idPort);
             temp = temp.replaceAll('$ValuePopup$', valueItem);
             temp = temp.replaceAll('$PLUSURL$', plusUrl);
+            temp = temp.replaceAll('$PopupPlusInput$', popupPlus);
         }
         popup.html(temp);
     }
@@ -49,12 +54,28 @@ function savePopupConfig(idPort) {
         } else{
             idIndex = 2;
         }
-        addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser, idPin = idPin);
+
+        let bornMin = -1;
+        let bornMax = -1;
+        if(listAllSensors['DigiAnalog'][idSensor]['min_max']){
+            bornMin = _('minInputPopup').value;
+            bornMax = _('maxInputPopup').value;
+        }
+
+        addToInfoUserAD(idIndex, idSensor, nameSensor, nameUser, idPin = idPin, min = bornMin, max = bornMax);
     } else {
         idSensor = idPort.substring(l - 6, 0);
         valueItem = listAllSensors['I2C'][idSensor]['text'];
         idIndex = 1;
-        addToInfoUserI2C(idSensor, nameSensor, nameUser);
+
+        let bornMin = -1;
+        let bornMax = -1;
+        if(listAllSensors['I2C'][idSensor]['min_max']){
+            bornMin = _('minInputPopup').value;
+            bornMax = _('maxInputPopup').value;
+        }
+
+        addToInfoUserI2C(idSensor, nameSensor, nameUser, min = bornMin, max = bornMax);
     }
     $('.ui.button.config').popup('hide');
 }
