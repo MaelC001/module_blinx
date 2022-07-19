@@ -29,6 +29,8 @@ class Blinx():
             new_name = config['new_name']
             is_input = config['is_input']
             is_display = config['is_display']
+            min = config['min']
+            max = config['max']
 
             if new_name == '':
                 new_name = sensor
@@ -38,7 +40,7 @@ class Blinx():
                 temp = {'name' : sensor, 'sensor' : sensors.__list_sensors[sensor]['create'](i2c, *config)}
             else:
                 channels = config['channels']
-                temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  is_input, i2c)}
+                temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  is_input, i2c, min, max)}
 
             self.sensors[new_name] = temp
 
@@ -75,7 +77,7 @@ class Blinx():
 
 # Sensors
 class Sensor():
-    def __init__(self, sensor_type, channels, input = True, error = b'\xff\xfe', i2c = None):
+    def __init__(self, sensor_type, channels, input = True, error = b'\xff\xfe', i2c = None, min=-1, max=-1):
         # the type of sensor
         self.sensor_type = sensor_type
         # the error code
@@ -92,6 +94,9 @@ class Sensor():
         self.waiting = 0
         # all the pin of the sensor
         self.pin_sensor = []
+        # the min max value to calcul the %
+        self.min = min
+        self.max = max
         # create all the channel
         self._create_channels(channels)
 
@@ -131,7 +136,20 @@ class Sensor():
         # get the data from a index of all channel
         result = []
         for i in self.channels:
-            result.append(i.get_index(time, index, translate = translate))
+            data = i.get_index(time, index, translate = translate)
+            if translate and (min > 0 and max > min):
+                t = data[0]
+                t = int.from_bytes(t, 'big')
+                if t <= min:
+                    result = 0
+                elif t >= max:
+                    result = 100
+                else :
+                    temp = t - min
+                    diff = max - min
+                    result = int(temp/diff * 100)
+                data[0] = result.to_bytes(i.data_size, 'big')
+            result.append(data)
         return result
 
     def get_time_buffer(self, time):
@@ -147,7 +165,7 @@ class Sensor():
 
 # Channels
 class Channel():
-    def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, id = '', input = True):
+    def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, id = '', input = True, data_size = 2):
 
         # the buffer for when we convert the data
         self.buffer = Buffer(30)
@@ -162,6 +180,8 @@ class Channel():
         self.error = error
         # id of the channel
         self.id = id
+        # data size
+        self.data_size = data_size
 
         # is it a channel of a input sensor
         self.input = input
@@ -175,7 +195,7 @@ class Channel():
                 step = config['value']
 
                 temp = {}
-                temp['buffer'] = self.create_buffer(name, size, step, times, error)
+                temp['buffer'] = CircularBuffer(name, size, step, times, error = error, data_size=self.data_size)
                 temp['before'] = config['before']
                 temp['offset'] = config['offset']
                 temp['times'] = times
@@ -185,8 +205,6 @@ class Channel():
                     self.size = size
 
                 self.dic[key] = temp
-    def create_buffer(self, name, size, step, times, error):
-        return CircularBuffer(name, size, step, times, error = error)
 
     def _configure(channel, sensor_type, i2c, input):
         if channel['type'] == "I2C":
@@ -272,9 +290,9 @@ class Channel():
                     buffer_before = self.dic[before]['buffer']
                     last_time = temp['times'] - next
                     array = buffer_before.get_partial(last_time)
-                    s = sum(array[0], buffer_before.data_size)
+                    s = self.sum_bytes(array[0], buffer_before.data_size)
                     value = int(s/array[1])
-                    value = value.to_bytes(2, 'big')
+                    value = value.to_bytes(buffer_before.data_size, 'big')
                 temp['buffer'].append(value, time)
                 temp['times'] = time + next
 
@@ -316,10 +334,7 @@ class DigitalChannel(Channel):
         # the pin for the sensor
         self.pin = Pin(pin, Pin.OUT)
 
-        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input)
-
-    def create_buffer(self, name, size, step, times, error):
-        return CircularBuffer(name, size, step, times, error = error, data_size = 1)
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input, data_size = 1)
 
     def read(self):
         return self.translation_byte_function(self.pin(), self.error, self.old_data)
