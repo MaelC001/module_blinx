@@ -1388,7 +1388,7 @@ let listAllSensors = {
             "file": "light",
             "is_input": true,
             "is_display": false,
-            "min_max": false,
+            "min_max": true,
             "url": "",
             "numberPin": 1,
             "channels": [
