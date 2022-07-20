@@ -53,25 +53,25 @@ class Blinx():
 
     def save(self, time, input_sensor = True):
         # save the reply of all the sensor
-        dic = self.input_sensor if input_sensor else self.sensors
+        dic = self.input_sensors
         for i in dic.values():
             i['sensor'].save(time)
 
     def get_index(self, time, index, translate = True):
         # get the data from a index for all the sensor
         result = []
-        for i in self.sensors.values():
+        for i in self.input_sensors.values():
             result.append(i['sensor'].get_index(time, index, translate = translate))
         return result
 
     def get_time_buffer(self, time):
         # current time of the buffer
-        temp = next(iter(self.sensors.keys()))
-        return self.sensors[temp]['sensor'].get_time_buffer(time)
+        temp = next(iter(self.input_sensors.keys()))
+        return self.input_sensors[temp]['sensor'].get_time_buffer(time)
 
     def buffer_to_log(self):
         # move the buffer to the log
-        for i in self.sensors.values():
+        for i in self.input_sensors.values():
             i['sensor'].buffer_to_log(time)
 
 
@@ -167,9 +167,6 @@ class Sensor():
 class Channel():
     def __init__(self, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, id = '', input = True, data_size = 2):
 
-        # the buffer for when we convert the data
-        self.buffer = Buffer(30)
-
         # the data for the last reply
         self.old_data = 0
         # the function to translate the byte
@@ -186,9 +183,11 @@ class Channel():
         # is it a channel of a input sensor
         self.input = input
 
-        # the dic of information of the channel + their buffer (if a input sensor)
-        self.dic = {}
         if self.input:
+            # the dic of information of the channel + their buffer (if a input sensor)
+            self.dic = {}
+            # the buffer for when we convert the data
+            self.buffer = Buffer(30)
             for key, config in sensors_create_dict().items():
                 size = config['size']
                 times = config['times']
