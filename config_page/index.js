@@ -43,6 +43,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/4/42/Ks0012-.png",
             "url": "https://wiki.keyestudio.com/Ks0012_keyestudio_ADXL345_Three_Axis_Acceleration_Module",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -59,6 +60,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/4/40/Ks0064-%E5%9B%BE%E7%89%871.png",
             "url": "https://wiki.keyestudio.com/Ks0064_keyestudio_I2C_8x8_LED_Matrix_HT16K33",
+            "tester": true,
             "config": [
                 {
                     "type": "I2C",
@@ -75,6 +77,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/f/fa/Ks0065-1.png",
             "url": "https://wiki.keyestudio.com/Ks0065_keyestudio_16-channel_12-bit_PWM/Servo_Driver_-_I2C_Interface",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -91,6 +94,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/8/80/Ks0170.png",
             "url": "https://wiki.keyestudio.com/Ks0170_keyestudio_MPU6050_Gyroscope_and_Accelerometer_module",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -98,7 +102,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "apds9930": {
+        /*"apds9930": {
             "text": "Attitude Sensor",
             "addr": "",
             "file": "",
@@ -107,13 +111,14 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/5/57/KS0267--.png",
             "url": "https://wiki.keyestudio.com/Ks0267_keyestudio_APDS-9930_Attitude_Sensor_Module",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
                     "id": 0
                 }
             ]
-        },
+        },*/
         "apds9960": {
             "text": "motion detection",
             "addr": "",
@@ -123,6 +128,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -139,6 +145,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/8/86/Ks0271-1.png",
             "url": "https://wiki.keyestudio.com/Ks0271_keyestudio_OLED_Display_OLED_Module",
+            "tester": true,
             "config": [
                 {
                     "type": "I2C",
@@ -155,6 +162,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/4/4c/KS0278.png",
             "url": "https://wiki.keyestudio.com/Ks0278_keyestudio_BH1750FVI_Digital_Light_Intensity_Module",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -162,7 +170,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "bmp280": {
+        /*"bmp280": {
             "text": "temperature and air pressure sensor",
             "addr": "",
             "file": "",
@@ -171,13 +179,14 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/6/67/Ks0405.png",
             "url": "https://wiki.keyestudio.com/KS0405_Keyestudio_BMP280_Module_(Black_and_Eco-friendly)",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
                     "id": 0
                 }
             ]
-        },
+        },*/
         "ccs811": {
             "text": "Carbon Dioxide Air Quality",
             "addr": "",
@@ -187,6 +196,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/f/fc/0457%E5%9B%BE%E7%89%871.png",
             "url": "https://wiki.keyestudio.com/KS0457_keyestudio_CCS811_Carbon_Dioxide_Air_Quality_Sensor",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -203,6 +213,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/9/9c/KS0054_%284%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0054_keyestudio_BMP180_Digital_Barometric_Pressure_Sensor_Module_for_Arduino",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -219,6 +230,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/1/1d/KS0260.png",
             "url": "https://wiki.keyestudio.com/Ks0260_keyestudio_TTP229L_16-key_Touch_Sensor",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -235,6 +247,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/5/53/Kso276.png",
             "url": "https://wiki.keyestudio.com/Ks0276_keyestudio_MLX90614_Non-contact_Infrared_Temperature_Sensor",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -251,6 +264,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/3/35/Ks0407-1.png",
             "url": "https://wiki.keyestudio.com/KS0407_Keyestudio_TCS34725_Color_Sensor",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -267,6 +281,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "https://wiki.keyestudio.com/images/f/ff/Ks0462%E5%9B%BE%E7%89%871.png",
             "url": "https://wiki.keyestudio.com/KS0462_Keyestudio_MAX30102_Heart_Rate_Sensor",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -283,6 +298,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -299,6 +315,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -315,6 +332,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -331,6 +349,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -347,6 +366,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -363,6 +383,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -379,7 +400,8 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
-            "channels": [
+            "tester": false,
+            "config": [
                 {
                     "type": "I2C",
                     "id": 0
@@ -395,6 +417,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -411,6 +434,7 @@ let listAllSensors = {
             "min_max": false,
             "urlImage": "",
             "url": "",
+            "tester": false,
             "channels": [
                 {
                     "type": "I2C",
@@ -420,6 +444,25 @@ let listAllSensors = {
         }
     },
     "DigiAnalog": {
+        "photo_interrupter": {
+            "text": "Digital Buzzer",
+            "file": "digital",
+            "is_input": true,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/9/9c/KS0009_%283%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0009_keyestudio_Photo_Interrupter_Module",
+            "numberPin": 1,
+            "tester": true,
+            "channels": [
+                {
+                    "type": "Digital",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        /*"hc_sr04": {},*/
         "buzzer_digi": {
             "text": "Digital Buzzer",
             "file": "digital",
@@ -429,6 +472,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/7/7d/KS0349_5-1.png",
             "url": "https://wiki.keyestudio.com/Ks0018_keyestudio_Digital_Buzzer_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -446,6 +490,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/a/af/KS0019_%284%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0019_keyestudio_Passive_Buzzer_module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -463,6 +508,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/b/b0/Ks0011.png",
             "url": "https://wiki.keyestudio.com/Ks0011_keyestudio_5V_Relay_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -480,6 +526,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/7/75/KS0010_%284%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0010_keyestudio_3W_LED_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -497,6 +544,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/3/38/Ks0016-1.png",
             "url": "https://wiki.keyestudio.com/KS0016_Keyestudio_White_LED_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -514,6 +562,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/4/4d/Ks0232-1.png",
             "url": "https://wiki.keyestudio.com/Ks0232_keyestudio_Red_LED_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -531,6 +580,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/d/da/Ks0233-1.png",
             "url": "https://wiki.keyestudio.com/Ks0233_keyestudio_Green_LED_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -548,6 +598,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/b/b2/Ks0234-1.png",
             "url": "https://wiki.keyestudio.com/Ks0234_keyestudio_Yellow_LED_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -565,6 +616,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/f/ff/Ks0235-1.png",
             "url": "https://wiki.keyestudio.com/Ks0235_keyestudio_Blue_LED_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -582,6 +634,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/d/db/KS0020_%282%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0020_keyestudio_Hall_Magnetic_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
@@ -599,9 +652,82 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/8/86/Ks0038.png",
             "url": "https://wiki.keyestudio.com/Ks0038_keyestudio_Reed_Switch_Module",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "rotation_analog": {
+            "text": "analog rotation (potentiometre)",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "min_max": true,
+            "urlImage": "https://wiki.keyestudio.com/images/2/2e/KS0014_%283%29.jpg",
+            "url": "https://wiki.keyestudio.com/Ks0014_keyestudio_Analog_Rotation_Sensor",
+            "numberPin": 1,
+            "tester": true,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "moisture_sensor": {
+            "text": "Capacitive Moisture Sensor (Corrosion-Resistant)",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "min_max": true,
+            "urlImage": "https://files.seeedstudio.com/wiki/Grove-Capacitive_Moisture_Sensor_Corrosion_Resistant/img/main.jpg",
+            "url": "https://wiki.seeedstudio.com/Grove-Capacitive_Moisture_Sensor-Corrosion-Resistant/",
+            "numberPin": 1,
+            "tester": true,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "LM358": {
+            "text": "light sensor",
+            "file": "analog",
+            "is_input": false,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://files.seeedstudio.com/wiki/Grove_Light_Sensor/images/cover.jpg",
+            "url": "https://wiki.seeedstudio.com/Grove-Light_Sensor/",
+            "numberPin": 1,
+            "tester": true,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "sound_analog": { // le seeed studio marche bien, mais pas celui de keyestudio
+            "text": "sound analog sensor",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "min_max": true,
+            "urlImage": "https://wiki.keyestudio.com/images/7/79/Ks0068_7-1.png",
+            "url": "https://wiki.seeedstudio.com/Grove-Sound_Sensor/",//https://wiki.keyestudio.com/Ks0084_keyestudio_New_sensor_kit_with_2560_R3#Project_12:_Analog_Sound_Sensor",
+            "numberPin": 1,
+            "tester": true,
+            "channels": [
+                {
+                    "type": "Analog",
                     "id": 0,
                     "pin": 0
                 }
@@ -616,6 +742,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -633,6 +760,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/2/23/KS0041_%283%29.png",
             "url": "https://wiki.keyestudio.com/Ks0041_keyestudio_Analog_Alcohol_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -650,6 +778,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/4/45/Ks0042.jpg",
             "url": "https://wiki.keyestudio.com/Ks0042_keyestudio_MQ-4_Gas_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -667,6 +796,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/1/19/Ks0043.jpg",
             "url": "https://wiki.keyestudio.com/Ks0043_keyestudio_MQ-5_Gas_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -684,6 +814,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/0/0e/Ks0044.jpg",
             "url": "https://wiki.keyestudio.com/Ks0044_keyestudio_MQ-6_Gas_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -701,6 +832,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/3/35/Ks0045.png",
             "url": "https://wiki.keyestudio.com/Ks0045_keyestudio_MQ-7_Carbon_Monoxide_Gas_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -718,6 +850,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/3/31/Ks0046.jpg",
             "url": "https://wiki.keyestudio.com/Ks0046_keyestudio_MQ-8_Hydrogen_Gas_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -735,6 +868,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0040_keyestudio_Analog_Gas_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -752,6 +886,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/3/30/KS0040_%285%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0047_keyestudio_MQ135_Air_Quality_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -769,6 +904,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/a/a4/Ks0209.png",
             "url": "https://wiki.keyestudio.com/Ks0209_keyestudio_9G_Servo_Motor_Blue_90%C2%B0",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -786,6 +922,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/e/ee/Ks0466-1.png",
             "url": "https://wiki.keyestudio.com/KS0466_Keyestudio_AD_KEY_Button_Module(Black_and_Eco-friendly)",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -794,7 +931,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "knock_sensor": {
+        /*"knock_sensor": {
             "text": "Knock Sensor",
             "file": "analog",
             "is_input": true,
@@ -803,6 +940,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/c/c9/Ks0024.png",
             "url": "https://wiki.keyestudio.com/Ks0024_keyestudio_Knock_Sensor_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -810,7 +948,7 @@ let listAllSensors = {
                     "pin": 0
                 }
             ]
-        },
+        },*/
         "tilt": {
             "text": "Digital Tilt",
             "file": "digital",
@@ -820,6 +958,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/2/29/KS0025_%283%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0025_keyestudio_Digital_Tilt_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -837,6 +976,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/4/46/KS0031_%284%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0031_keyestudio_Capacitive_Touch_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -854,6 +994,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/9/92/Ks0036.png",
             "url": "https://wiki.keyestudio.com/Ks0036_keyestudio_Flame_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
@@ -871,6 +1012,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/f/f6/KS0037_%282%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0037_keyestudio_Vibration_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
@@ -888,6 +1030,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/0/02/KS0051_obstacle_detector.png",
             "url": "https://wiki.keyestudio.com/Ks0051_keyestudio_Infrared_Obstacle_Avoidance_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -896,7 +1039,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "line_tracking": {
+        /*"line_tracking": {
             "text": "Line Tracking Sensor",
             "file": "digital",
             "is_input": true,
@@ -905,6 +1048,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/e/ea/KS0349_9-1.png",
             "url": "https://wiki.keyestudio.com/Ks0050_keyestudio_Line_Tracking_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
@@ -912,7 +1056,8 @@ let listAllSensors = {
                     "pin": 0
                 }
             ]
-        },
+        },*/
+        /*"mma8452q": {},*/
         "pir": {
             "text": "PIR Motion Sensor",
             "file": "digital",
@@ -922,6 +1067,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/a/a2/Ks0052_PIR_motion.png",
             "url": "https://wiki.keyestudio.com/Ks0052_keyestudio_PIR_Motion_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
@@ -939,6 +1085,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/4/4a/0346-1.png",
             "url": "https://wiki.keyestudio.com/KS0346_Keyestudio_Non-contact_Liquid_Level_Sensor(Black_and_Friendly)",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
@@ -956,6 +1103,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/e/e9/%E6%97%A0%E6%A0%87%E9%A2%98-0034.png",
             "url": "https://wiki.keyestudio.com/Ks0034_keyestudio_DHT11_Temperature_and_Humidity_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Digital",
@@ -973,6 +1121,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/e/ec/Ks0029-.png",
             "url": "https://wiki.keyestudio.com/Ks0029_keyestudio_Digital_Push_Button",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -990,6 +1139,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/2/20/211.png",
             "url": "https://wiki.keyestudio.com/Ks0021_keyestudio_Collision_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -1007,6 +1157,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/a/a2/Ks0279_%E6%BB%91%E8%B0%83%E7%94%B5%E4%BD%8D%E5%99%A8.png",
             "url": "https://wiki.keyestudio.com/Ks0279_keyestudio_Slide_Potentiometer_Module_for_Arduino",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1017,13 +1168,14 @@ let listAllSensors = {
         },
         "pulse_rate": {
             "text": "Pulse Rate Monitor",
-            "file": "analog",
+            "file": "pulse_rate",
             "is_input": true,
             "is_display": false,
             "min_max": true,
             "urlImage": "https://wiki.keyestudio.com/images/0/09/Ks0015-2.png",
             "url": "https://wiki.keyestudio.com/Ks0015_keyestudio_Pulse_Rate_Monitor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1032,7 +1184,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "lm35": {
+        /*"lm35": {
             "text": "Linear Temperature",
             "file": "analog",
             "is_input": true,
@@ -1041,6 +1193,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/4/47/Ks0022-2.png",
             "url": "https://wiki.keyestudio.com/Ks0022_keyestudio_LM35_Linear_Temperature_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1048,7 +1201,7 @@ let listAllSensors = {
                     "pin": 0
                 }
             ]
-        },
+        },*/
         "photocell": {
             "text": "Photocell",
             "file": "analog",
@@ -1058,6 +1211,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/0/0b/KS0028_%284%29.jpg",
             "url": "https://wiki.keyestudio.com/Ks0028_keyestudio_Photocell_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1073,8 +1227,9 @@ let listAllSensors = {
             "is_display": false,
             "min_max": true,
             "urlImage": "https://wiki.keyestudio.com/images/2/22/Ks0033.png",
-            "url": "https://wiki.keyestudio.com/Ks0033_keyestudio_Analog_Temperature_Sensor",
+            "url": "https://wiki.keyestudio.com/Ks0033_keyestudio_Analog_Temperature_Sensor",//https://wiki.seeedstudio.com/Grove-Temperature_Sensor_V1.2/
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1092,6 +1247,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/3/36/Ks0035%281%29.png",
             "url": "https://wiki.keyestudio.com/KS0035_Microphone_Sound_Sensor_with_Potentiometer",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1101,14 +1257,15 @@ let listAllSensors = {
             ]
         },
         "water_sensor": {
-            "text": "Slide Potentiometer Module",
+            "text": "Water Sensor",
             "file": "analog",
             "is_input": true,
             "is_display": false,
             "min_max": true,
             "urlImage": "https://wiki.keyestudio.com/images/c/c3/Ks0048%281%29.png",
-            "url": "",
+            "url": "https://wiki.keyestudio.com/Ks0048_keyestudio_Water_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1126,6 +1283,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/f/f2/KS0049.jpg",
             "url": "https://wiki.keyestudio.com/Ks0049_keyestudio_Soil_Humidity_Sensor",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1143,6 +1301,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/6/60/KS0098.jpg",
             "url": "https://wiki.keyestudio.com/Ks0098_keyestudio_TEMT6000_Ambient_Light_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1160,6 +1319,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/c/c4/2031.png",
             "url": "https://wiki.keyestudio.com/Ks0203_keyestudio_Steam_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1177,6 +1337,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/9/9c/2041.png",
             "url": "https://wiki.keyestudio.com/Ks0273_keyestudio_GY-ML8511_Ultraviolet_Sensor_Module",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1194,6 +1355,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/6/67/Ks0272-1-1.png",
             "url": "https://wiki.keyestudio.com/Ks0272_keyestudio_Analog_Piezoelectric_Ceramic_Vibration_Sensor",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1211,6 +1373,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/f/f0/KS0309.png",
             "url": "https://wiki.keyestudio.com/Ks0309_Keyestudio_Thin-film_Pressure_Sensor_(Black_and_Eco-friendly)",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1228,6 +1391,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/8/86/Ks0171.png",
             "url": "https://wiki.keyestudio.com/Ks0171_keyestudio_XD-58C_Pulse_Sensor_Module",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1245,6 +1409,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/e/ed/KS0273-.png",
             "url": "",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1262,6 +1427,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/6/61/Ks0450-1.png",
             "url": "https://wiki.keyestudio.com/KS0450_Keyestudio_Vibration_Motor_Module_(Black_and_Eco-friendly)",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1279,6 +1445,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/0/03/Ks0168.png",
             "url": "https://wiki.keyestudio.com/Ks0168_keyestudio_L9110_fan_control_module",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
@@ -1296,6 +1463,7 @@ let listAllSensors = {
             "urlImage": "https://wiki.keyestudio.com/images/b/be/Ks0194-_servo.png",
             "url": "https://wiki.keyestudio.com/Ks0194_keyestudio_Micro_Servo",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Analog",
@@ -1314,6 +1482,7 @@ let listAllSensors = {
             "min_max": false,
             "url": "",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -1330,6 +1499,7 @@ let listAllSensors = {
             "min_max": false,
             "url": "",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "Digital",
@@ -1346,7 +1516,8 @@ let listAllSensors = {
             "min_max": false,
             "url": "",
             "numberPin": 1,
-            "channels": [
+            "tester": true,
+            "config": [
                 {
                     "type": "I2C",
                     "id": 0
@@ -1361,6 +1532,7 @@ let listAllSensors = {
             "min_max": false,
             "url": "https://wiki.seeedstudio.com/Grove-I2C_High_Accuracy_Temp&Humi_Sensor-SHT35/",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "I2C",
@@ -1376,6 +1548,7 @@ let listAllSensors = {
             "min_max": false,
             "url": "https://wiki.seeedstudio.com/Grove-I2C_High_Accuracy_Temp&Humi_Sensor-SHT35/",
             "numberPin": 1,
+            "tester": true,
             "channels": [
                 {
                     "type": "I2C",
@@ -1391,6 +1564,7 @@ let listAllSensors = {
             "min_max": true,
             "url": "",
             "numberPin": 1,
+            "tester": false,
             "channels": [
                 {
                     "type": "Analog",
