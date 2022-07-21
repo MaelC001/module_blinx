@@ -1490,7 +1490,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "CS100A" : { // input - output
+        "cs100a" : { // input - output
             "text": "Quick Connectors Ultrasonic Module",
             "file": "digital",
             "is_input": true,
