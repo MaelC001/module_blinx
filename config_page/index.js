@@ -1471,6 +1471,152 @@ let listAllSensors = {
                     "pin": 0
                 }
             ]
+        },
+        "gp2y014au": {
+            "text": "PM2.5 Shield",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/9/93/Ks0196.png",
+            "url": "https://wiki.keyestudio.com/Ks0196_keyestudio_PM2.5_Shield",
+            "numberPin": 1,
+            "tester": false,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "CS100A" : { // input - output
+            "text": "Quick Connectors Ultrasonic Module",
+            "file": "digital",
+            "is_input": true,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/9/96/0511-1.png",
+            "url": "https://wiki.keyestudio.com/KS0511_Keyestudio_Quick_Connectors_Ultrasonic_Module(CS100A_Chip/Black/Environment-friendly)",
+            "numberPin": 2,
+            "tester": false,
+            "channels": [
+                {
+                    "type": "Digital",
+                    "id": 0,
+                    "pin": 0
+                },
+                {
+                    "type": "Digital",
+                    "id": 1,
+                    "pin": 0
+                }
+            ]
+        },
+        "ms1100" : {
+            "text": "Formaldehyde Benzene VOC Gas Sensor",
+            "file": "ana_digi",
+            "is_input": true,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/d/d9/Ks0451-1.png",
+            "url": "https://wiki.keyestudio.com/KS0451_Keyestudio_MS1100_Formaldehyde_Benzene_VOC_Gas_Sensor",
+            "numberPin": 2,
+            "tester": false,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                },
+                {
+                    "type": "Digital",
+                    "id": 1,
+                    "pin": 0
+                }
+            ]
+        },
+        "electomagnet": {
+            "text": "Electromagnet Module",
+            "file": "analog",
+            "is_input": false,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/d/df/KS0320_%E5%9B%BE%E7%89%871.png",
+            "url": "https://wiki.keyestudio.com/KS0320_Keyestudio_Electromagnet_Module_(Black_and_Environmental-friendly)",
+            "numberPin": 1,
+            "tester": false,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "4550ntu" : {
+            "text": "Turbidity Sensor V1.0",
+            "file": "analog",
+            "is_input": true,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/1/17/0414%E5%9B%BE%E7%89%871.png",
+            "url": "https://wiki.keyestudio.com/KS0414_Keyestudio_Turbidity_Sensor_V1.0",
+            "numberPin": 1,
+            "tester": false,
+            "channels": [
+                {
+                    "type": "Analog",
+                    "id": 0,
+                    "pin": 0
+                }
+            ]
+        },
+        "relay2":{
+            "text": "Dual Relay",
+            "file": "digital",
+            "is_input": false,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/f/f6/Ks0057.png",
+            "url": "https://wiki.keyestudio.com/Ks0057_keyestudio_Dual_Relay_Module",
+            "numberPin": 2,
+            "tester": true,
+            "channels": [
+                {
+                    "type": "Digital",
+                    "id": 0,
+                    "pin": 0
+                },
+                {
+                    "type": "Digital",
+                    "id": 1,
+                    "pin": 0
+                }
+            ]
+        },
+        "a4988":{
+            "text": "Reprap Stepper Motor Driver",
+            "file": "digital",
+            "is_input": false,
+            "is_display": false,
+            "min_max": false,
+            "urlImage": "https://wiki.keyestudio.com/images/1/18/Ks0281.png",
+            "url": "https://wiki.keyestudio.com/Ks0281_Keyestudio_Reprap_Stepper_Motor_Driver",
+            "numberPin": 2,
+            "tester": false,
+            "channels": [
+                {
+                    "type": "Digital",
+                    "id": 0,
+                    "pin": 0
+                },
+                {
+                    "type": "Digital",
+                    "id": 1,
+                    "pin": 0
+                }
+            ]
         }
     },
     "In": {
