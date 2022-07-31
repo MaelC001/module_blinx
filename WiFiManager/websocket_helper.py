@@ -79,6 +79,38 @@ def server_handshake(sock, accept_webrepl = True, only_webrepl = False):
         http_handler(sock, get_path, get_args)
         return False
 
+def webrepl_handler(sock, webkey):
+    if DEBUG:
+        print("Sec-WebSocket-Key:", webkey, len(webkey))
+
+    d = hashlib.sha1(webkey)
+    d.update(b"258EAFA5-E914-47DA-95CA-C5AB0DC85B11")
+    respkey = d.digest()
+    respkey = binascii.b2a_base64(respkey)[:-1]
+    if DEBUG:
+        print("respkey:", respkey)
+
+    sock.send(
+        b"""\
+HTTP/1.1 101 Switching Protocols\r
+Upgrade: websocket\r
+Connection: Upgrade\r
+Sec-WebSocket-Accept: """
+    )
+    sock.send(respkey)
+    sock.send("\r\n\r\n")
+
+
+    ws = uwebsocket.websocket(sock, True)
+    print(ws)
+    ws = _webrepl._webrepl(ws)
+    print(ws)
+    sock.setblocking(False)
+    # notify REPL on socket incoming data (ESP32/ESP8266-only)
+    if hasattr(uos, "dupterm_notify"):
+        sock.setsockopt(socket.SOL_SOCKET, 20, uos.dupterm_notify)
+    uos.dupterm(ws)
+
 def http_handler(client, get_path, get_args):
     action = ['', 'codeboot', 'wifi_manager', 'configure', 'blinx']
 
@@ -150,36 +182,3 @@ def wifi_connect(client, get_args):
     else:
         response = html_template.wifi_manager_error
     return response % dict(ssid=ssid)
-
-def webrepl_handler(sock, webkey):
-    if DEBUG:
-        print("Sec-WebSocket-Key:", webkey, len(webkey))
-
-    d = hashlib.sha1(webkey)
-    d.update(b"258EAFA5-E914-47DA-95CA-C5AB0DC85B11")
-    respkey = d.digest()
-    respkey = binascii.b2a_base64(respkey)[:-1]
-    if DEBUG:
-        print("respkey:", respkey)
-
-    sock.send(
-        b"""\
-HTTP/1.1 101 Switching Protocols\r
-Upgrade: websocket\r
-Connection: Upgrade\r
-Sec-WebSocket-Accept: """
-    )
-    sock.send(respkey)
-    sock.send("\r\n\r\n")
-
-
-    ws = uwebsocket.websocket(sock, True)
-    print(ws)
-    ws = _webrepl._webrepl(ws)
-    print(ws)
-    sock.setblocking(False)
-    # notify REPL on socket incoming data (ESP32/ESP8266-only)
-    if hasattr(uos, "dupterm_notify"):
-        sock.setsockopt(socket.SOL_SOCKET, 20, uos.dupterm_notify)
-    uos.dupterm(ws)
-
