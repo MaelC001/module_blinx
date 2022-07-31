@@ -12,16 +12,34 @@ try:
 except:
     import hashlib
 
-DEBUG = 0
+import uwebsocket
+import html_template
+import network
+import time
+wlan_sta=network.WLAN(network.STA_IF)
 
+DEBUG = True
+_webrepl = None
+uos = None
+socket = None
 
 def read_socket(sock):
+    get_path = ''
+    get_args = {}
+
     clr = sock.makefile("rwb", 0)
     print(clr)
     l = clr.readline()
     print(l)
-    print(repr(l))
-    DEBUG = True
+    get_path = str(l).split(' ')[1][1:]
+    print(get_path)
+    if '?' in get_path:
+        t = get_path.split('?')
+        get_path = t[0]
+        for i in t[1].split('&'):
+            tt = i.split('=')
+            get_args[tt[0]] = '='.join(tt[1:])
+    #print(repr(l))
     # sys.stdout.write(repr(l))
 
     webkey = None
@@ -40,15 +58,100 @@ def read_socket(sock):
         if h == b"Sec-WebSocket-Key":
             webkey = v
 
-    return webkey
+    return webkey, get_path, get_args
 
 
-def server_handshake(sock):
-    webkey = read_socket(sock)
+def server_handshake(sock, accept_webrepl = True, only_webrepl = False):
+    webkey, get_path, get_args = read_socket(sock)
 
-    if not webkey:
+    print(webkey, get_path, accept_webrepl, webkey and get_path == 'webrepl' and accept_webrepl)
+    if only_webrepl and not webkey:
         raise OSError("Not a websocket request")
 
+    if only_webrepl or (webkey and accept_webrepl):
+        if DEBUG:
+            print('websocket')
+        webrepl_handler(sock, webkey)
+        return True
+    elif not webkey:
+        if DEBUG:
+            print('html')
+        http_handler(sock, get_path, get_args)
+        return False
+
+def http_handler(client, get_path, get_args):
+    action = ['', 'codeboot', 'wifi_manager', 'configure', 'blinx']
+
+    html = '<p>error 404, path not find</p>'
+    status_code = 404
+
+    if get_path in action:
+        status_code = 200
+        if get_path == '':
+            if network.WLAN(network.STA_IF).isconneted():
+                html = html_template.codeboot
+            else:
+                html = html_template.wifi_manager
+        elif get_path == 'codeboot':
+            html = html_template.codeboot
+        elif get_path == 'wifi_manager':
+            html = html_template.wifi_manager()
+        elif get_path == 'configure':
+            html = wifi_connect()
+            if html == False:
+                return
+        elif get_path == 'blinx':
+            html = 'TODO'
+    send_response_html(client, html, status_code = status_code)
+
+def send_response_html(client,payload,status_code=200):
+    def send_header(client,status_code=200,content_length=None ):
+        client.sendall("HTTP/1.0 {} OK\r\n".format(status_code))
+        client.sendall("Content-Type: text/html\r\n")
+        if content_length is not None:
+            client.sendall("Content-Length: {}\r\n".format(content_length))
+        client.sendall("\r\n")
+
+    content_length=len(payload)
+    send_header(client,status_code,content_length)
+    if content_length>0:
+        client.sendall(payload)
+    client.close()
+
+
+def wifi_connect(client, get_args):
+    if 'ssid' not in get_args or 'password' not in get_args:
+        send_response_html(client,"Parameters not found",status_code=400)
+        return False
+    # version 1.9 compatibility
+    try:
+        ssid=get_args['ssid'].decode("utf-8").replace("%3F","?").replace("%21","!")
+        password=get_args['password'].decode("utf-8").replace("%3F","?").replace("%21","!")
+    except Exception:
+        ssid=get_args['ssid'].replace("%3F","?").replace("%21","!")
+        password=get_args['password'].replace("%3F","?").replace("%21","!")
+
+    if len(ssid)==0:
+        send_response_html(client,"SSID must be provided",status_code=400)
+        return False
+
+    wlan_sta.connect(ssid,password)
+    connected = False
+    for _ in range(100):
+        connected=wlan_sta.isconnected()
+        if connected:
+            break
+        time.sleep(0.1)
+        if DEBUG:
+            print('.',end='')
+
+    if connected:
+        response = html_template.wifi_manager_success
+    else:
+        response = html_template.wifi_manager_error
+    return response % dict(ssid=ssid)
+
+def webrepl_handler(sock, webkey):
     if DEBUG:
         print("Sec-WebSocket-Key:", webkey, len(webkey))
 
@@ -70,27 +173,13 @@ Sec-WebSocket-Accept: """
     sock.send("\r\n\r\n")
 
 
-# Very simplified client handshake, works for MicroPython's
-# websocket server implementation, but probably not for other
-# servers.
-def client_handshake(sock):
-    cl = sock.makefile("rwb", 0)
-    cl.write(
-        b"""\
-GET / HTTP/1.1\r
-Host: echo.websocket.org\r
-Connection: Upgrade\r
-Upgrade: websocket\r
-Sec-WebSocket-Key: foo\r
-\r
-"""
-    )
-    l = cl.readline()
-    #    print(l)
-    while 1:
-        l = cl.readline()
-        if l == b"\r\n":
-            break
+    ws = uwebsocket.websocket(sock, True)
+    print(ws)
+    ws = _webrepl._webrepl(ws)
+    print(ws)
+    sock.setblocking(False)
+    # notify REPL on socket incoming data (ESP32/ESP8266-only)
+    if hasattr(uos, "dupterm_notify"):
+        sock.setsockopt(socket.SOL_SOCKET, 20, uos.dupterm_notify)
+    uos.dupterm(ws)
 
-
-#        sys.stdout.write(l)

@@ -2,16 +2,23 @@
 import socket
 import uos
 import network
-import uwebsocket
 import websocket_helper
 import _webrepl
 
 listen_s = None
 client_s = None
 
+websocket_helper._webrepl = _webrepl
+websocket_helper.socket = socket
+accept_webrepl = None
+only_webrepl = None
 
-def setup_conn(port, accept_handler):
-    global listen_s
+def setup_conn(port, accept_handler, accept_webrepl_boolean, only_webrepl_boolean):
+    global listen_s, accept_webrepl, only_webrepl
+
+    accept_webrepl = accept_webrepl_boolean
+    only_webrepl = only_webrepl_boolean
+
     listen_s = socket.socket()
     listen_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -25,7 +32,10 @@ def setup_conn(port, accept_handler):
     for i in (network.AP_IF, network.STA_IF):
         iface = network.WLAN(i)
         if iface.active():
-            print("WebREPL daemon started on ws://%s:%d" % (iface.ifconfig()[0], port))
+            if accept_webrepl or only_webrepl:
+                print("WebREPL daemon started on ws://%s:%d" % (iface.ifconfig()[0], port))
+            if not only_webrepl:
+                print("web site daemon started on http://%s:%d" % (iface.ifconfig()[0], port))
     return listen_s
 
 
@@ -34,23 +44,20 @@ def accept_conn(listen_sock):
     cl, remote_addr = listen_sock.accept()
     prev = uos.dupterm(None)
     uos.dupterm(prev)
+    websocket_helper.uos = uos
     if prev:
         print("\nConcurrent WebREPL connection from", remote_addr, "rejected")
         cl.close()
         return
     print("\nWebREPL connection from:", remote_addr)
-    client_s = cl
-    websocket_helper.server_handshake(cl)
-    webrepl_handler(cl)
 
-def webrepl_handler(cl):
-    ws = uwebsocket.websocket(cl, True)
-    ws = _webrepl._webrepl(ws)
-    cl.setblocking(False)
-    # notify REPL on socket incoming data (ESP32/ESP8266-only)
-    if hasattr(uos, "dupterm_notify"):
-        cl.setsockopt(socket.SOL_SOCKET, 20, uos.dupterm_notify)
-    uos.dupterm(ws)
+    stop = websocket_helper.server_handshake(cl, accept_webrepl = accept_webrepl, only_webrepl = only_webrepl)
+
+    if stop:
+        client_s = cl
+    else:
+        uos.dupterm(None)
+        websocket_helper.uos = uos
 
 def wifi_manager_handler():
     pass
@@ -62,13 +69,14 @@ def codeboot_handler():
 def stop():
     global listen_s, client_s
     uos.dupterm(None)
+    websocket_helper.uos = uos
     if client_s:
         client_s.close()
     if listen_s:
         listen_s.close()
 
 
-def start(port=8266, password=None, accept_handler=accept_conn):
+def start(port=80, password=None, accept_handler=accept_conn, accept_webrepl = False, only_webrepl = False):
     stop()
     webrepl_pass = password
     if webrepl_pass is None:
@@ -80,7 +88,7 @@ def start(port=8266, password=None, accept_handler=accept_conn):
             print("WebREPL is not configured, run 'import webrepl_setup'")
 
     _webrepl.password(webrepl_pass)
-    s = setup_conn(port, accept_handler)
+    s = setup_conn(port, accept_handler, accept_webrepl, only_webrepl)
 
     if accept_handler is None:
         print("Starting webrepl in foreground mode")
@@ -91,5 +99,5 @@ def start(port=8266, password=None, accept_handler=accept_conn):
         print("Started webrepl in manual override mode")
 
 
-def start_foreground(port=8266, password=None):
+def start_foreground(port=80, password=None):
     start(port, password, None)
