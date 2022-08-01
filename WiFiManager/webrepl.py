@@ -8,6 +8,8 @@ import _webrepl
 listen_s = None
 client_s = None
 
+read_input = None
+
 websocket_helper._webrepl = _webrepl
 websocket_helper.socket = socket
 accept_webrepl = None
@@ -101,3 +103,8 @@ def start(port=80, password=None, accept_handler=accept_conn, accept_webrepl = F
 
 def start_foreground(port=80, password=None):
     start(port, password, None)
+
+def change_rpc(func):
+    global read_input
+    read_input = func
+    websocket_helper.read_input = func

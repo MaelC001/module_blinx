@@ -22,6 +22,7 @@ DEBUG = True
 _webrepl = None
 uos = None
 socket = None
+read_input = None
 
 def read_socket(sock):
     get_path = ''
