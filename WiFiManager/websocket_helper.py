@@ -183,3 +183,12 @@ def wifi_connect(client, get_args):
     else:
         response = html_template.wifi_manager_error
     return response % dict(ssid=ssid)
+
+
+def read_input_rpc(method, params, func = read_input, sender = ''):
+    j = {
+        'method': method,
+        'params': params,
+        'id': 0,
+    }
+    func(j, how_send = sender)
