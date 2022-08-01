@@ -137,18 +137,27 @@ def http_handler(client, get_path, get_args):
             html = 'TODO'
     send_response_html(client, html, status_code = status_code)
 
-def send_response_html(client,payload,status_code=200):
-    def send_header(client,status_code=200,content_length=None ):
-        client.sendall("HTTP/1.0 {} OK\r\n".format(status_code))
-        client.sendall("Content-Type: text/html\r\n")
-        if content_length is not None:
-            client.sendall("Content-Length: {}\r\n".format(content_length))
-        client.sendall("\r\n")
+def send_response_html(client, html_code, status_code = 200):
+    """send the code of the web page to the user
 
-    content_length=len(payload)
-    send_header(client,status_code,content_length)
+    Args:
+        client: the client
+        html_code (str): the code of the html page
+        status_code (int, optional): the status of the page 200:ok, 404:not found ... Defaults to 200.
+    """
+    content_length=len(html_code)
+
+    # send the header of the page
+    client.sendall("HTTP/1.0 {} OK\r\n".format(status_code))
+    client.sendall("Content-Type: text/html\r\n")
+    if content_length is not None:
+        client.sendall("Content-Length: {}\r\n".format(content_length))
+    client.sendall("\r\n")
+
+    # send the content of the page
     if content_length>0:
-        client.sendall(payload)
+        client.sendall(html_code)
+
     client.close()
 
 
@@ -156,7 +165,7 @@ def wifi_connect(client, get_args):
     if 'ssid' not in get_args or 'password' not in get_args:
         send_response_html(client,"Parameters not found",status_code=400)
         return False
-    # version 1.9 compatibility
+
     try:
         ssid=get_args['ssid'].decode("utf-8").replace("%3F","?").replace("%21","!")
         password=get_args['password'].decode("utf-8").replace("%3F","?").replace("%21","!")
