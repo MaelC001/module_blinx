@@ -45,31 +45,31 @@ assert repl.decode_input(b"{'params': {'value': 2}, 'method': 'led', 'id' : 1}\n
 
 
 # TODO
-# register
-# verification
+    # register
+    # verification
 
-# decode_input
-# read_input
+    # decode_input
+    # read_input
 
-# write_file
-# read_file
-# create_file
-# remove_file
-# list_file
+    # write_file
+    # read_file
+    # create_file
+    # remove_file
+    # list_file
 
-# wifi
-# wifi_active
-# wifi_connect
-# wifi_server
+    # wifi
+    # wifi_active
+    # wifi_connect
+    # wifi_server
 
-# remove_all_function_sensor
-# sensor_stop
-# config_sensor
-# get_sensors
-# display_sensors
-# output_sensors
-# scan_i2c
-# save_sensor_while_request
-# verification_list_sensor
+    # remove_all_function_sensor
+    # sensor_stop
+    # config_sensor
+    # get_sensors
+    # display_sensors
+    # output_sensors
+    # scan_i2c
+    # save_sensor_while_request
+    # verification_list_sensor
 
-# ota_update
+    # ota_update

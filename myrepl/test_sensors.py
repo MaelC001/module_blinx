@@ -6,6 +6,7 @@ import time
 #    return
 
 import sensors
-# recordDataPart1
-# wait
-# recordDataPart2
+
+# TODO
+    # register
+    # get_all_function_sensor

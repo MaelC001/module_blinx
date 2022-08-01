@@ -588,7 +588,7 @@ def ota_update():
   """
     update the firmware of the microcontroller
   """
-  from .ota_updater import OTAUpdater
+  from ota_updater import OTAUpdater
   otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'app', secrets_file = "secrets.py")
   otaUpdater.install_update_if_available()
   del (otaUpdater)
