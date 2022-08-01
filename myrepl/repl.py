@@ -140,9 +140,9 @@ def decode_input(input, send = True, how_send = sender, printMessage = False, de
       how_send(j)
     return
 
-  read_input(j, send, how_send, printMessage, debug)
+  decode_input(j, send, how_send, printMessage, debug)
 
-def read_input(j, send = True, how_send = sender, printMessage = False, debug = False):
+def decode_input(j, send = True, how_send = sender, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -303,28 +303,28 @@ def wifi():
   """
   return {
     'wlan_sta' : {
-      'active' : wlan_sta.active(),
-      'isconnected' : wlan_sta.isconnected(),
+      'active' : wlan_sta.active(), 
+      'isconnected' : wlan_sta.isconnected(), 
       'scan' : wlan_sta.scan() if wlan_sta.active() else [], # all the wifi the microcontroller scan
       'config' : {
         "ifcongif" : wlan_sta.ifconfig(), # the ip, netmask ...
         "mac" : wlan_sta.config('mac'), # the mac address
         "ssid" : wlan_sta.config('essid'), # the ssid of the wifi connected
         "dhcp_hostname" : wlan_sta.config('dhcp_hostname'), # the hostname of the microcontroller (for the mdns)
-      },
-    },
+      }, 
+    }, 
     'wlan_ap' : {
-      'active' : wlan_ap.active(),
-      'isconnected' : wlan_ap.isconnected(),
+      'active' : wlan_ap.active(), 
+      'isconnected' : wlan_ap.isconnected(), 
       'config' : {
-        "ifcongif" : wlan_ap.ifconfig(),
-        "mac" : wlan_ap.config('mac'),
-        "ssid" : wlan_ap.config('essid'),
-        "channel" : wlan_ap.config('channel'),
-        "hidden" : wlan_ap.config('hidden'),
-        "authmode" : wlan_ap.config('authmode'),
-      },
-    },
+        "ifcongif" : wlan_ap.ifconfig(), 
+        "mac" : wlan_ap.config('mac'), 
+        "ssid" : wlan_ap.config('essid'), 
+        "channel" : wlan_ap.config('channel'), 
+        "hidden" : wlan_ap.config('hidden'), 
+        "authmode" : wlan_ap.config('authmode'), 
+      }, 
+    }, 
   }
 
 @register('wifi_active', "")
@@ -508,7 +508,7 @@ def scan_i2c(addr = None):
 
 def save_sensor_while_request(time_before):
   """
-  when we get the data form the sensors for the user,
+  when we get the data form the sensors for the user, 
   we have to continue to capture the data
   """
   present = time.ticks_ms()
