@@ -106,9 +106,9 @@ async def receiver():
     # wait for the input
     data = await sreader.readline()
     # read the input
-    read_input(data, send = True, debug = True)
+    decode_input(data, send = True, debug = True)
 
-def read_input(input, send = True, how_send = sender, printMessage = False, debug = False):
+def decode_input(input, send = True, how_send = sender, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -140,6 +140,16 @@ def read_input(input, send = True, how_send = sender, printMessage = False, debu
       how_send(j)
     return
 
+  read_input(j, send, how_send, printMessage, debug)
+
+def read_input(j, send = True, how_send = sender, printMessage = False, debug = False):
+  """we will read the input and try to decode it, then we will try to execute it.
+
+  Args:
+      input (bytes): the input of the user
+      send (bool, optional): do we send the info on the serial port?. Defaults to True.
+      debug (bool, optional): do we send info by print?. Defaults to False.
+  """
   # try to read the parameter of the json
   # then the parameter of the method
   # to execute the method with the parameter
