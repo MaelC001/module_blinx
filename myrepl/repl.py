@@ -108,7 +108,7 @@ async def receiver():
     # read the input
     read_input(data, send = True, debug = True)
 
-def read_input(input, send = True, printMessage = False, debug = False):
+def read_input(input, send = True, how_send = sender, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -137,7 +137,7 @@ def read_input(input, send = True, printMessage = False, debug = False):
     elif printMessage:
       print(j)
     if send:
-      sender(j)
+      how_send(j)
     return
 
   # try to read the parameter of the json
@@ -162,7 +162,7 @@ def read_input(input, send = True, printMessage = False, debug = False):
       elif printMessage:
         print(j)
       if send:
-        sender(j)
+        how_send(j)
       return
 
     # method exist ?
@@ -175,7 +175,7 @@ def read_input(input, send = True, printMessage = False, debug = False):
         elif printMessage:
           print(reply)
         if send:
-          sender(reply)
+          how_send(reply)
       elif isinstance(args, dict):
         reply = __register[cmd](id = id, **args)
         if debug:
@@ -183,7 +183,7 @@ def read_input(input, send = True, printMessage = False, debug = False):
         elif printMessage:
           print(reply)
         if send:
-          sender(reply)
+          how_send(reply)
       else :
         # if the args is not a list or a dict we have a error
         j = {}
@@ -194,7 +194,7 @@ def read_input(input, send = True, printMessage = False, debug = False):
         elif printMessage:
           print(j)
         if send:
-          sender(j)
+          how_send(j)
     else :
       # if the command don't exist we have a error :
       j = {}
@@ -205,7 +205,7 @@ def read_input(input, send = True, printMessage = False, debug = False):
       elif printMessage:
         print(j)
       if send:
-        sender(j)
+        how_send(j)
   except Exception as e:
     # if an error appear, we send the error message
     #error = str(e)
@@ -221,7 +221,7 @@ def read_input(input, send = True, printMessage = False, debug = False):
     elif printMessage:
       print(j)
     if send:
-      sender(j)
+      how_send(j)
 
 
 @register('write', "")
