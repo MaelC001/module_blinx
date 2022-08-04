@@ -55,7 +55,7 @@ class DUP(io.IOBase):
     return str(self.s)
 
 # the register for the user function
-def register(name, sub_function = ""):
+def register(name, sub_function = False):
   def wrapper(fn):
     def inner_wrapper(*args, id, **kwargs):
       error = ""
@@ -140,9 +140,9 @@ def decode_input(input, send = True, how_send = sender, printMessage = False, de
       how_send(j)
     return
 
-  decode_input(j, send, how_send, printMessage, debug)
+  read_input(j, send, how_send, printMessage, debug)
 
-def decode_input(j, send = True, how_send = sender, printMessage = False, debug = False):
+def read_input(j, send = True, how_send = sender, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -219,10 +219,10 @@ def decode_input(j, send = True, how_send = sender, printMessage = False, debug 
   except Exception as e:
     # if an error appear, we send the error message
     #error = str(e)
-    if id:
-      error_id = id
-    else:
-      error_id = None
+    #if id:
+    #  error_id = id
+    #else:
+    error_id = None
     j = {}
     j['error'] = {"code": -32600, "message": "Invalid Request"}
     j['id'] = error_id
@@ -234,7 +234,7 @@ def decode_input(j, send = True, how_send = sender, printMessage = False, debug 
       how_send(j)
 
 
-@register('write', "")
+@register('write', False)
 def write_file(name, text, format = 'w', do_verification = True):
   """
   write in a file
@@ -252,7 +252,7 @@ def write_file(name, text, format = 'w', do_verification = True):
   f.close()
   return ''
 
-@register('read', "")
+@register('read', False)
 def read_file(name):
   """
   read a file
@@ -265,7 +265,7 @@ def read_file(name):
   f.close()
   return r
 
-@register('create', "")
+@register('create', False)
 def create_file(name):
   """
   create a file
@@ -277,7 +277,7 @@ def create_file(name):
   f.close()
   return ''
 
-@register('remove', "")
+@register('remove', False)
 def remove_file(name):
   """
   remove a file
@@ -288,7 +288,7 @@ def remove_file(name):
   os.remove(name)
   return ''
 
-@register('liste', "")
+@register('liste', False)
 def list_file():
   """
   do the list of the file
@@ -296,7 +296,7 @@ def list_file():
   """
   return os.listdir()
 
-@register('wifi', "")
+@register('wifi', False)
 def wifi():
   """
     we return all the wifi information
@@ -327,7 +327,7 @@ def wifi():
     }, 
   }
 
-@register('wifi_active', "")
+@register('wifi_active', False)
 def wifi_active(active = True):
   """active the wifi
 
@@ -339,7 +339,7 @@ def wifi_active(active = True):
     wlan_sta.disconnect()
   return ''
 
-@register('wifi_connect', "")
+@register('wifi_connect', False)
 def wifi_connect(ssid = '', password = ''):
   """connect the microcontroller to wifi
 
@@ -362,7 +362,7 @@ def wifi_connect(ssid = '', password = ''):
   time.sleep(0.1)
   return wlan_sta.isconnected()
 
-@register('wifi_server', "")
+@register('wifi_server', False)
 def wifi_server(ssid = '', password = '', auth = 3, active = True):
   """create a wifi server
 
@@ -378,7 +378,7 @@ def wifi_server(ssid = '', password = '', auth = 3, active = True):
     wlan_ap.active(True)
   return ''
 
-@register('sensors_stop', "")
+@register('sensors_stop', False)
 def sensor_stop():
   """
   stop all sensor
@@ -389,7 +389,7 @@ def sensor_stop():
   #sensors.__listSensor.clear()
   return 'sensor stopped'
 
-@register('configSensor', "")
+@register('configSensor', False)
 def config_sensor(dictConfig):
   """
   for config the sensors with custom names
@@ -402,7 +402,7 @@ def config_sensor(dictConfig):
   sensors.get_all_function_sensor()
   return 'change config success'
 
-@register('remove_config', "remove_file")
+@register('remove_config', True)
 def remove_all_function_sensor():
   """
     remove the last config for the sensor (remove the python file of the function)
@@ -422,7 +422,7 @@ def remove_all_function_sensor():
   del sys.modules['listSensorUser']
   return 'success'
 
-@register('sensors_output', "")
+@register('sensors_output', False)
 def output_sensors(sensor_name, array_value):
   """
     give a command to the ouput sensor
@@ -435,7 +435,7 @@ def output_sensors(sensor_name, array_value):
   Blinx.sensors_output[sensor_name]['sensor'].write(array_value)
   return 'Done'
 
-@register('display', "")
+@register('display', False)
 def display_sensors(sensor_name, func_name, *array_value):
   """
     give a command to a display sensor
@@ -448,7 +448,7 @@ def display_sensors(sensor_name, func_name, *array_value):
   Blinx.display_sensors[sensor_name]['sensor'].function(func_name, *array_value)
   return 'Done'
 
-@register('get_sensors', "")
+@register('get_sensors', False)
 def get_sensors(list_sensors, times = '1s'):
   """
   get the data form the sensors in the list
@@ -492,7 +492,7 @@ def get_sensors(list_sensors, times = '1s'):
   blinxSensor.tampon = False
   return text
 
-@register('scan_i2c', "")
+@register('scan_i2c', False)
 def scan_i2c(addr = None):
   """scan the i2c bus and look if a address is in the
 
@@ -583,7 +583,7 @@ for the debugging, we will simulate the serial port
 
 
 # https://github.com/rdehuyss/micropython-ota-updater
-@register('updateFirmware', "")
+@register('updateFirmware', False)
 def ota_update():
   """
     update the firmware of the microcontroller
