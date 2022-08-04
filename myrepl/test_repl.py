@@ -57,28 +57,28 @@ repl.__register = __register
 
 
 # test read_input function
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = return) == {'result': array_file, 'id': 1}
-assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'create', 'id' : None}, how_send = return) == {'result': '', 'id': None}
-assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'create', 'id' : 0}, how_send = return) == {'id': 0, 'error': {'code': -32000, 'message': 'a.txt don\'t have a correct value'}}
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : 0}, how_send = return) == {'result': ['a.txt'] + array_file, 'id': 0}
-assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}, how_send = return) == {'result': '', 'id': 1}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = 'return') == {'result': array_file, 'id': 1}
+assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'create', 'id' : None}, how_send = 'return') == {'result': '', 'id': None}
+assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'create', 'id' : 0}, how_send = 'return') == {'id': 0, 'error': {'code': -32000, 'message': 'a.txt don\'t have a correct value'}}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : 0}, how_send = 'return') == {'result': ['a.txt'] + array_file, 'id': 0}
+assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}, how_send = 'return') == {'result': '', 'id': 1}
 
-assert repl.read_input({'params': {'name': 'a.txt', 'text': 'bonjour'}, 'method': 'write', 'id' : 1}, how_send = return) == {'result': '', 'id': 1}
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = return) == {'result': ['a.txt'] + array_file, 'id': 1}
-assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}, how_send = return) == {'result': 'bonjour', 'id': 1}
+assert repl.read_input({'params': {'name': 'a.txt', 'text': 'bonjour'}, 'method': 'write', 'id' : 1}, how_send = 'return') == {'result': '', 'id': 1}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = 'return') == {'result': ['a.txt'] + array_file, 'id': 1}
+assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}, how_send = 'return') == {'result': 'bonjour', 'id': 1}
 
-assert repl.read_input({'params': {'name': 'a.txt', 'text': ' m', 'format': 'a'}, 'method': 'write', 'id' : 1}, how_send = return) == {'result': '', 'id': 1}
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = return) == {'result': ['a.txt'] + array_file, 'id': 1}
-assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}, how_send = return) == {'result': 'bonjour m', 'id': 1}
+assert repl.read_input({'params': {'name': 'a.txt', 'text': ' m', 'format': 'a'}, 'method': 'write', 'id' : 1}, how_send = 'return') == {'result': '', 'id': 1}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = 'return') == {'result': ['a.txt'] + array_file, 'id': 1}
+assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'read', 'id' : 1}, how_send = 'return') == {'result': 'bonjour m', 'id': 1}
 
-assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'remove', 'id' : 1}, how_send = return) == {'result': '', 'id': 1}
-assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'remove', 'id' : 1}, how_send = return) == {'id': 1, 'error': {'code': -32000, 'message': 'a.txt don\'t have a correct value'}}
-assert repl.read_input({'params': {'name': 10}, 'method': 'read', 'id' : 1}, how_send = return) == {'id': 1, 'error': {'code': -32000, 'message': 'the type of 10 isn\'t < class \'str\' > '}}
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = return) == {'result': array_file, 'id': 1}
+assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'remove', 'id' : 1}, how_send = 'return') == {'result': '', 'id': 1}
+assert repl.read_input({'params': {'name': 'a.txt'}, 'method': 'remove', 'id' : 1}, how_send = 'return') == {'id': 1, 'error': {'code': -32000, 'message': 'a.txt don\'t have a correct value'}}
+assert repl.read_input({'params': {'name': 10}, 'method': 'read', 'id' : 1}, how_send = 'return') == {'id': 1, 'error': {'code': -32000, 'message': 'the type of 10 isn\'t < class \'str\' > '}}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = 'return') == {'result': array_file, 'id': 1}
 
-assert repl.read_input({'params': {'value': 0}, 'method': 'led', 'id' : 1}, how_send = return) == {'result': '', 'id': 1}
-assert repl.read_input({'params': {'value': 1}, 'method': 'led', 'id' : 1}, how_send = return) == {'result': '', 'id': 1}
-assert repl.read_input({'params': {'value': 2}, 'method': 'led', 'id' : 1}, how_send = return) == {'id': 1, 'error': {'code': -32000, 'message': '2 don\'t have a correct value'}}
+assert repl.read_input({'params': {'value': 0}, 'method': 'led', 'id' : 1}, how_send = 'return') == {'result': '', 'id': 1}
+assert repl.read_input({'params': {'value': 1}, 'method': 'led', 'id' : 1}, how_send = 'return') == {'result': '', 'id': 1}
+assert repl.read_input({'params': {'value': 2}, 'method': 'led', 'id' : 1}, how_send = 'return') == {'id': 1, 'error': {'code': -32000, 'message': '2 don\'t have a correct value'}}
 
 
 # test function rpc :
@@ -100,21 +100,21 @@ assert repl.list_file() == array_file
 
 
 # test read_input function
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = return) == {'result': array_file, 'id': 1}
-assert repl.read_input({'method':'liste', 'params':[], 'id' : '1'}, how_send = return) == {'result': array_file, 'id': '1'}
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : None}, how_send = return) == {'result': array_file, 'id': None}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = 'return') == {'result': array_file, 'id': 1}
+assert repl.read_input({'method':'liste', 'params':[], 'id' : '1'}, how_send = 'return') == {'result': array_file, 'id': '1'}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : None}, how_send = 'return') == {'result': array_file, 'id': None}
 
-assert repl.read_input({'method':'liste', 'params':{}}, how_send = return) == {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None}
-assert repl.read_input({'method':'liste', 'params':{}, 'id' : [1]}, how_send = return) == {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None}
-assert repl.read_input({'method':0, 'params':{}, 'id' : 1}, how_send = return) == {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None}
+assert repl.read_input({'method':'liste', 'params':{}}, how_send = 'return') == {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None}
+assert repl.read_input({'method':'liste', 'params':{}, 'id' : [1]}, how_send = 'return') == {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None}
+assert repl.read_input({'method':0, 'params':{}, 'id' : 1}, how_send = 'return') == {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None}
 
-assert repl.read_input({'method':'aaasssafddsgdf', 'params':{}, 'id' : 1}, how_send = return) == {'result': {"code": -32601, "message": "Method not found"}, 'id': None}
-assert repl.read_input({'method':'liste', 'params':'sdfds', 'id' : 1}, how_send = return) == {'result': {"code": -32602, "message": "Invalid params"} 'id': None}
-assert repl.read_input({'method':'liste', 'params':12.34, 'id' : 1}, how_send = return) == {'result': {"code": -32602, "message": "Invalid params"} 'id': None}
+assert repl.read_input({'method':'aaasssafddsgdf', 'params':{}, 'id' : 1}, how_send = 'return') == {'result': {"code": -32601, "message": "Method not found"}, 'id': None}
+assert repl.read_input({'method':'liste', 'params':'sdfds', 'id' : 1}, how_send = 'return') == {'result': {"code": -32602, "message": "Invalid params"}, 'id': None}
+assert repl.read_input({'method':'liste', 'params':12.34, 'id' : 1}, how_send = 'return') == {'result': {"code": -32602, "message": "Invalid params"}, 'id': None}
 
 # test decode_input function
-assert repl.decode_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n", how_send = return) == {'result': array_file, 'id': 1}
-assert repl.decode_input(b"{'method':'liste', 'params':{}, 'id' 1}\n", how_send = return) == {'error': {"code": -32700, "message": "Parse error"}, 'id': 1}
+assert repl.decode_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n", how_send = 'return') == {'result': array_file, 'id': 1}
+assert repl.decode_input(b"{'method':'liste', 'params':{}, 'id' 1}\n", how_send = 'return') == {'error': {"code": -32700, "message": "Parse error"}, 'id': 1}
 
 
 
