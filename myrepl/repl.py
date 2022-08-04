@@ -18,6 +18,7 @@ import sys, json, io
 
 from machine import Pin, I2C, ADC, PWM, UART
 import blinxSensor, sensors, network
+from ota_updater import OTAUpdater
 
 # the class with all the sensor
 Blinx = blinxSensor.Blinx()
@@ -41,6 +42,9 @@ wlan_sta = network.WLAN(network.STA_IF)
 wlan_sta.active(True)
 wlan_ap = network.WLAN(network.AP_IF)
 wlan_ap.active(False)
+
+# the ota updater
+otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'main', secrets_file = None)
 
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
@@ -588,7 +592,4 @@ def ota_update():
   """
     update the firmware of the microcontroller
   """
-  from ota_updater import OTAUpdater
-  otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'app', secrets_file = "secrets.py")
   otaUpdater.install_update_if_available()
-  del (otaUpdater)
