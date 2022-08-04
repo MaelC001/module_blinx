@@ -44,7 +44,7 @@ wlan_ap = network.WLAN(network.AP_IF)
 wlan_ap.active(False)
 
 # the ota updater
-otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'main', secrets_file = None)
+otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'main', secrets_file = '__config.json')
 
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
