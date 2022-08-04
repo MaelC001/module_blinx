@@ -1,7 +1,8 @@
+from textwrap import indent
 import uos
 import network
 from flashbdev import bdev
-
+import json
 
 def wifi():
     import ubinascii
@@ -43,10 +44,15 @@ reprogram MicroPython.
 def setup():
     check_bootsec()
     print("Performing initial setup")
+    print("wifi:")
     wifi()
+    print('other:')
     uos.VfsLfs2.mkfs(bdev)
     vfs = uos.VfsLfs2(bdev)
     uos.mount(vfs, "/")
+    print("config file:")
+    config_file_blinx
+    print('boot file:')
     with open("boot.py", "w") as f:
         f.write("""\
 #import esp
@@ -65,3 +71,10 @@ display.show()
 #repl.launch()
 """)
     return vfs
+
+
+
+def config_file_blinx():
+    f = open("config_file.json", "w")
+    j = {'id':'a'}
+    f.write(json.loads(j, indent = 4))
