@@ -62,51 +62,51 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue('test3' in repl.__register)
         self.assertTrue('test4' in repl.__register)
 
-        self.assertEqual(repl.__register['test1']('a', id = 0), {"result":'a', 'id': 0})
-        self.assertEqual(repl.__register['test2']('a', id = 0), {"error":{"code": -32000, "message": 'error'}, 'id': 0})
-        self.assertEqual(repl.__register['test3']('a', id = 0), {"result":'a', 'id': 0})
-        self.assertEqual(repl.__register['test4']('a', id = 0), {"error":{"code": -32000, "message": 'error'}, 'id': 0})
+        self.assertDictEqual(repl.__register['test1']('a', id = 0), {"result":'a', 'id': 0})
+        self.assertDictEqual(repl.__register['test2']('a', id = 0), {"error":{"code": -32000, "message": 'error'}, 'id': 0})
+        self.assertDictEqual(repl.__register['test3']('a', id = 0), {"result":'a', 'id': 0})
+        self.assertDictEqual(repl.__register['test4']('a', id = 0), {"error":{"code": -32000, "message": 'error'}, 'id': 0})
 
         repl.__register = __register
 
     def test_file_func(self):
         # test function rpc :
-        self.assertEqual(repl.list_file(), array_file)
-        self.assertEqual(repl.create_file(name = 'a.txt'), '')
+        self.assertListEqual(repl.list_file(), array_file)
+        self.assertMultiLineEqual(repl.create_file(name = 'a.txt'), '')
         with self.assertRaises(FileExistsError):
             repl.create_file(name = 'a.txt')
-        self.assertEqual(repl.list_file(), ['a.txt'] + array_file)
-        self.assertEqual(repl.read_file(name = 'a.txt'), '')
-        self.assertEqual(repl.write_file(name = 'a.txt', text = 'bonjour'), '')
-        self.assertEqual(repl.read_file(name = 'a.txt'), 'bonjour')
-        self.assertEqual(repl.write_file(name = 'a.txt', text = ' m', format = 'a'), '')
-        self.assertEqual(repl.read_file(name = 'a.txt'), 'bonjour m')
-        self.assertEqual(repl.write_file(name = 'a.txt', text = ' m', format = 'w'), '')
-        self.assertEqual(repl.remove_file(name = 'a.txt'), '')
+        self.assertListEqual(repl.list_file(), ['a.txt'] + array_file)
+        self.assertMultiLineEqual(repl.read_file(name = 'a.txt'), '')
+        self.assertMultiLineEqual(repl.write_file(name = 'a.txt', text = 'bonjour'), '')
+        self.assertMultiLineEqual(repl.read_file(name = 'a.txt'), 'bonjour')
+        self.assertMultiLineEqual(repl.write_file(name = 'a.txt', text = ' m', format = 'a'), '')
+        self.assertMultiLineEqual(repl.read_file(name = 'a.txt'), 'bonjour m')
+        self.assertMultiLineEqual(repl.write_file(name = 'a.txt', text = ' m', format = 'w'), '')
+        self.assertMultiLineEqual(repl.remove_file(name = 'a.txt'), '')
         with self.assertRaises(FileNotFoundError):
             repl.create_file(name = 'a.txt')
         with self.assertRaises(FileNotFoundError):
             repl.read_file(name = 'a.txt')
-        self.assertEqual(repl.list_file(), array_file)
+        self.assertListEqual(repl.list_file(), array_file)
 
     def test_ead_input(self):
         # test read_input function
-        self.assertEqual(repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = 'return'), {'result': array_file, 'id': 1})
-        self.assertEqual(repl.read_input({'method':'liste', 'params':[], 'id' : '1'}, how_send = 'return'), {'result': array_file, 'id': '1'})
-        self.assertEqual(repl.read_input({'method':'liste', 'params':{}, 'id' : None}, how_send = 'return'), {'result': array_file, 'id': None})
+        self.assertDictEqual(repl.read_input({'method':'liste', 'params':{}, 'id' : 1}, how_send = 'return'), {'result': array_file, 'id': 1})
+        self.assertDictEqual(repl.read_input({'method':'liste', 'params':[], 'id' : '1'}, how_send = 'return'), {'result': array_file, 'id': '1'})
+        self.assertDictEqual(repl.read_input({'method':'liste', 'params':{}, 'id' : None}, how_send = 'return'), {'result': array_file, 'id': None})
 
-        self.assertEqual(repl.read_input({'method':'liste', 'params':{}}, how_send = 'return'), {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None})
-        self.assertEqual(repl.read_input({'method':'liste', 'params':{}, 'id' : [1]}, how_send = 'return'), {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None})
-        self.assertEqual(repl.read_input({'method':0, 'params':{}, 'id' : 1}, how_send = 'return'), {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None})
+        self.assertDictEqual(repl.read_input({'method':'liste', 'params':{}}, how_send = 'return'), {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None})
+        self.assertDictEqual(repl.read_input({'method':'liste', 'params':{}, 'id' : [1]}, how_send = 'return'), {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None})
+        self.assertDictEqual(repl.read_input({'method':0, 'params':{}, 'id' : 1}, how_send = 'return'), {'result': {"code": -32600, "message": "Invalid Request"}, 'id': None})
 
-        self.assertEqual(repl.read_input({'method':'aaasssafddsgdf', 'params':{}, 'id' : 1}, how_send = 'return'), {'result': {"code": -32601, "message": "Method not found"}, 'id': None})
-        self.assertEqual(repl.read_input({'method':'liste', 'params':'sdfds', 'id' : 1}, how_send = 'return'), {'result': {"code": -32602, "message": "Invalid params"}, 'id': None})
-        self.assertEqual(repl.read_input({'method':'liste', 'params':12.34, 'id' : 1}, how_send = 'return'), {'result': {"code": -32602, "message": "Invalid params"}, 'id': None})
+        self.assertDictEqual(repl.read_input({'method':'aaasssafddsgdf', 'params':{}, 'id' : 1}, how_send = 'return'), {'result': {"code": -32601, "message": "Method not found"}, 'id': None})
+        self.assertDictEqual(repl.read_input({'method':'liste', 'params':'sdfds', 'id' : 1}, how_send = 'return'), {'result': {"code": -32602, "message": "Invalid params"}, 'id': None})
+        self.assertDictEqual(repl.read_input({'method':'liste', 'params':12.34, 'id' : 1}, how_send = 'return'), {'result': {"code": -32602, "message": "Invalid params"}, 'id': None})
 
     def test_file_func(self):
         # test decode_input function
-        self.assertEqual(repl.decode_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n", how_send = 'return'), {'result': array_file, 'id': 1})
-        self.assertEqual(repl.decode_input(b"{'method':'liste', 'params':{}, 'id' 1}\n", how_send = 'return'), {'error': {"code": -32700, "message": "Parse error"}, 'id': 1})
+        self.assertDictEqual(repl.decode_input(b"{'method':'liste', 'params':{}, 'id' : 1}\n", how_send = 'return'), {'result': array_file, 'id': 1})
+        self.assertDictEqual(repl.decode_input(b"{'method':'liste', 'params':{}, 'id' 1}\n", how_send = 'return'), {'error': {"code": -32700, "message": "Parse error"}, 'id': 1})
 
 
 
@@ -147,4 +147,4 @@ class TestStringMethods(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
