@@ -458,7 +458,7 @@ def get_sensors(list_sensors, times = '1s'):
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
-  blinxSensor.tampon = True
+  blinxSensor.buffer = True
   time_before = time.time()
 
   text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
@@ -493,7 +493,7 @@ def get_sensors(list_sensors, times = '1s'):
       index_data += 1
     text += '\n' + data_all_sensor
 
-  blinxSensor.tampon = False
+  blinxSensor.buffer = False
   return text
 
 @register('scan_i2c', False)
@@ -562,7 +562,7 @@ async def save_all_sensor():
     Blinx.save(time.ticks_ms())
 
     present = time.ticks_ms()
-    diffTime = 1000 - blinxSensor.diffTicks(time_before, present)
+    diffTime = 1000 - blinxSensor.diff_ticks(time_before, present)
     if diffTime > 0:
       await asyncio.sleep_ms(diffTime)
 
