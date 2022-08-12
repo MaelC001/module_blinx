@@ -115,12 +115,13 @@ async function read() {
     } finally {
         reader.releaseLock();
         //text = text.split(cle)[0];
-        //console.log(text);
+        console.log(text);
         return text;
     }
 }
 
 async function cmd(method, arg = [], idCmd = id) {
+    console.log(method, arg, idCmd);
     write(method, arg, idCmd, repl=false);
     return await read();
 }
@@ -179,7 +180,7 @@ async function config_sensor_serial(json_config, json_sensor) {
         verify_json(e, json => {});
         Promise.all(json_config.map(move_mpy)).then(e => etape3(e));
         async function move_mpy(name) {
-            var file = name + '.mpy';
+            var file = name + '.py'; // '.mpy';
             var url = url_mpy + file;
             var content = await getText(url);
             var method = 'write';
