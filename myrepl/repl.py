@@ -389,7 +389,7 @@ def sensor_stop():
   arg : none
   """
   global Blinx
-  Blinx = blinxSensor.Blinx()
+  Blinx = blinxSensor.Blinx({}, None)
   #sensors.__listSensor.clear()
   return 'sensor stopped'
 
@@ -516,7 +516,7 @@ def save_sensor_while_request(time_before):
   we have to continue to capture the data
   """
   present = time.ticks_ms()
-  diffTime = 1000 - blinxSensor.diffTicks(time_before, present)
+  diffTime = 1000 - blinxSensor.diff_ticks(time_before, present)
 
   if diffTime <= 0:
     time_before = present
