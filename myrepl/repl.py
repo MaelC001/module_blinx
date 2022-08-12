@@ -436,7 +436,7 @@ def output_sensors(sensor_name, array_value):
       array_value (list): the data to write for each channel
   """
   verification(sensor_name, str, Blinx.output_sensors)
-  Blinx.sensors_output[sensor_name]['sensor'].write(array_value)
+  Blinx.output_sensors[sensor_name]['sensor'].write(array_value)
   return 'Done'
 
 @register('display', False)
@@ -532,12 +532,12 @@ def verification_list_sensor(list_sensors):
   name_sensors = []
   function_sensors = []
   for sensor in list_sensors:
-    verification(sensor, str, Blinx.sensors_input)
+    verification(sensor, str, Blinx.input_sensors)
     text += ';' + sensor
-    name = Blinx.sensors_input[sensor]['name']
-    for i in Blinx.sensors_input[sensor]['sensor'].arrayChannel:
+    name = Blinx.input_sensors[sensor]['name']
+    for i in Blinx.input_sensors[sensor]['sensor'].arrayChannel:
       name_sensors.append(name+i.id)
-    function_sensors.append(Blinx.sensors_input[sensor]['sensor'])
+    function_sensors.append(Blinx.input_sensors[sensor]['sensor'])
   return text, name_sensors, function_sensors
 
 
