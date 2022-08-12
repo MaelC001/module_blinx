@@ -21,7 +21,7 @@ import blinxSensor, sensors, network
 from ota_updater import OTAUpdater
 
 # the class with all the sensor
-Blinx = blinxSensor.Blinx()
+Blinx = blinxSensor.Blinx({}, None)
 
 # connection to i2c
 i2c = I2C(sda = Pin(4), scl = Pin(5))
