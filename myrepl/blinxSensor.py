@@ -1,6 +1,8 @@
 from machine import Pin, ADC, PWM, I2C
 from time import sleep_ms
-import sensors, time
+import time
+
+sensors = None
 
 # do we do a conversion
 buffer = False
