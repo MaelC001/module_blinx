@@ -20,6 +20,8 @@ from machine import Pin, I2C, ADC, PWM, UART
 import blinxSensor, sensors, network
 from ota_updater import OTAUpdater
 
+blinxSensor.sensors = sensors
+
 # the class with all the sensor
 Blinx = blinxSensor.Blinx({}, None)
 
@@ -402,8 +404,8 @@ def config_sensor(dictConfig):
   """
   global Blinx
   verification(dictConfig, dict)
-  Blinx = blinxSensor.Blinx(dictConfig, i2c)
   sensors.get_all_function_sensor()
+  Blinx = blinxSensor.Blinx(dictConfig, i2c)
   return 'change config success'
 
 @register('remove_config', True)
