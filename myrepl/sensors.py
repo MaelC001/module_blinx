@@ -41,7 +41,7 @@ def get_all_function_sensor():
   except:
     return
   list_sensors = listSensorUser.list_sensors
-  for i in listSensorUser.array:
+  for i in list_sensors:
     a = __import__(i)
     info = a.info
     names = info['name']
