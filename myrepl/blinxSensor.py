@@ -42,7 +42,7 @@ class Blinx():
                 temp = {'name' : sensor, 'sensor' : sensors.__list_sensors[sensor]['create'](i2c, *config)}
             else:
                 channels = config['channels']
-                temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  is_input, i2c, min, max)}
+                temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  input = is_input, i2c = i2c, min = min, max = max)}
 
             #self.sensors[new_name] = temp
 
