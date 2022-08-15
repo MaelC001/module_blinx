@@ -557,7 +557,7 @@ def sensors_create_dict():
     """
     array_time_value = [1, 10, 60, 600, 3600]
     array_time_name = ['1s', '10s', '1m', '10m', '1h']
-    array_time_size = [300] * 5
+    array_time_size = [300, 180, 120, 144, 168] # 5min, 30min, 2h, 24h, 7j
     array_time_offset = [0, 0, 1, 2, 3]
     array_next_time = next_time(array_time_value)
     before = None
