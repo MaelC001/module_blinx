@@ -106,7 +106,7 @@ class Sensor():
         """create all the channel"""
         for channel in channels:
             if channel['type'] == "I2C":
-                waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+channel['id']]['waiting']
+                waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+str(channel['id'])]['waiting']
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
             t = Channel._configure(channel, self.sensor_type, self.i2c, self.input)
