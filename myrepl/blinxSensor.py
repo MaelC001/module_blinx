@@ -210,9 +210,9 @@ class Channel():
     def _configure(channel, sensor_type, i2c, input):
         if channel['type'] == "I2C":
             id = channel['id']
-            function_byte = sensors.__list_sensors[sensor_type]['byte'+id]['func']
-            waiting_time = sensors.__list_sensors[sensor_type]['byte'+id]['waiting']
-            function_data = sensors.__list_sensors[sensor_type]['data'+id]['func']
+            function_byte = sensors.__list_sensors[sensor_type]['byte'+str(id)]['func']
+            waiting_time = sensors.__list_sensors[sensor_type]['byte'+str(id)]['waiting']
+            function_data = sensors.__list_sensors[sensor_type]['data'+str(id)]['func']
 
             # the address of the sensor I2C
             addr = sensors.__list_sensors[sensor_type]['args']['addr']
@@ -223,8 +223,8 @@ class Channel():
             return I2CChannel(i2c, addr, number_byte_receive, code_to_send, waiting_time, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, id = id, input = input), {}
         elif channel['type'] == "Analog":
             id = channel['id']
-            function_byte = sensors.__list_sensors[sensor_type]['byte'+id]['func']
-            function_data = sensors.__list_sensors[sensor_type]['data'+id]['func']
+            function_byte = sensors.__list_sensors[sensor_type]['byte'+str(id)]['func']
+            function_data = sensors.__list_sensors[sensor_type]['data'+str(id)]['func']
 
             pin = channel['pin']
             p1 = channel['p1']
