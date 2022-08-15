@@ -20,7 +20,7 @@ ticks_max = 2**30
 class Blinx():
     def __init__(self, configs, i2c):
         # list of all the sensor
-        self.sensors = {}
+        #self.sensors = {}
         # list of all the input sensor
         self.input_sensors = {}
         # list of all the output sensor
@@ -44,7 +44,7 @@ class Blinx():
                 channels = config['channels']
                 temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  is_input, i2c, min, max)}
 
-            self.sensors[new_name] = temp
+            #self.sensors[new_name] = temp
 
             if is_input :
                 self.input_sensors[new_name] = temp
