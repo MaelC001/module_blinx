@@ -392,7 +392,7 @@ def sensor_stop():
   """
   global Blinx
   Blinx = blinxSensor.Blinx({}, None)
-  #sensors.__listSensor.clear()
+  #sensors.__list_sensors.clear()
   return 'sensor stopped'
 
 @register('configSensor', False)
@@ -413,12 +413,12 @@ def remove_all_function_sensor():
   """
     remove the last config for the sensor (remove the python file of the function)
   """
-  sensors.__listSensor.clear()
+  sensors.__list_sensors.clear()
   try:
     import listSensorUser
   except:
     return 'no config'
-  for i in listSensorUser.array:
+  for i in listSensorUser.list_sensors:
     try:
       remove_file(i+'.py')
       del sys.modules[i]
@@ -469,7 +469,7 @@ def get_sensors(list_sensors, times = '1s'):
     text += '\n' + str(time.time())
     for i in range(len(name_sensors)):
       time_before = save_sensor_while_request(time_before)
-      sensor_info = sensors.__listSensor[name_sensors[i]]['immediate'](i2c, function_sensors[name_sensors[i]].pin_sensor)
+      sensor_info = sensors.__list_sensors[name_sensors[i]]['immediate'](i2c, function_sensors[name_sensors[i]].pin_sensor)
       text += ';' + str(sensor_info)
     return text
   else :
