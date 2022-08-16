@@ -19,6 +19,7 @@ import sys, json, io
 from machine import Pin, I2C, ADC, PWM, UART
 import blinxSensor, sensors, network
 from ota_updater import OTAUpdater
+import webServer
 
 blinxSensor.sensors = sensors
 
@@ -568,7 +569,9 @@ async def save_all_sensor():
     if diffTime > 0:
       await asyncio.sleep_ms(diffTime)
 
-def launch():
+def launch(site = False):
+  if site:
+    webServer.start()
   os.dupterm(uart, 1)
   os.dupterm(None, 1)
   loop = asyncio.get_event_loop()
