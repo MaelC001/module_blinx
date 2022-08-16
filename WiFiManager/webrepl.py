@@ -80,16 +80,18 @@ def stop():
 
 def start(port=80, password=None, accept_handler=accept_conn, accept_webrepl = False, only_webrepl = False):
     stop()
-    webrepl_pass = password
-    if webrepl_pass is None:
-        try:
-            import webrepl_cfg
+    if accept_webrepl or only_webrepl:
+        webrepl_pass = password
+        if webrepl_pass is None:
+            try:
+                import webrepl_cfg
 
-            webrepl_pass = webrepl_cfg.PASS
-        except:
-            print("WebREPL is not configured, run 'import webrepl_setup'")
+                webrepl_pass = webrepl_cfg.PASS
+            except:
+                print("WebREPL is not configured, run 'import webrepl_setup'")
 
-    _webrepl.password(webrepl_pass)
+        _webrepl.password(webrepl_pass)
+
     s = setup_conn(port, accept_handler, accept_webrepl, only_webrepl)
 
     if accept_handler is None:
