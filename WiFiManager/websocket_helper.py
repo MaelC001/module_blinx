@@ -196,7 +196,7 @@ def wifi_connect(client, get_args):
         response = html_template.wifi_manager_error
     return response % dict(ssid=ssid)
 
-def read_input_rpc(client = None, status_code = 202, method = '', params = [], id = 0, func = decode_input):
+def read_input_rpc(client = None, status_code = 202, method = '', params = [], id = 0):
     def sender_to_html(text):
         if isinstance(text, dict):
             text = json.dumps(text)
@@ -209,4 +209,4 @@ def read_input_rpc(client = None, status_code = 202, method = '', params = [], i
         'params': params,
         'id': id,
     }
-    func(j, how_send = sender_to_html)
+    decode_input(j, how_send = sender_to_html)
