@@ -16,6 +16,7 @@ import uwebsocket
 import html_template
 import network
 import time
+import json
 wlan_sta=network.WLAN(network.STA_IF)
 
 DEBUG = True
@@ -135,11 +136,11 @@ def http_handler(client, get_path, get_args):
             if html == False:
                 return
         elif get_path == 'blinx':
-            read_input_rpc(**get_args)
+            read_input_rpc(client = client, status_code = status_code, **get_args)
             return
     send_response_html(client, html, status_code = status_code)
 
-def send_response_html(client, html_code, status_code = 200):
+def send_response_html(client, html_code, status_code = 200, type = 'text/html'):
     """send the code of the web page to the user
 
     Args:
@@ -151,7 +152,7 @@ def send_response_html(client, html_code, status_code = 200):
 
     # send the header of the page
     client.sendall("HTTP/1.0 {} OK\r\n".format(status_code))
-    client.sendall("Content-Type: text/html\r\n")
+    client.sendall("Content-Type: "+type+"\r\n")
     if content_length is not None:
         client.sendall("Content-Length: {}\r\n".format(content_length))
     client.sendall("\r\n")
@@ -195,9 +196,14 @@ def wifi_connect(client, get_args):
         response = html_template.wifi_manager_error
     return response % dict(ssid=ssid)
 
-def read_input_rpc(method = '', params = [], id = 0, func = decode_input):
-    def sender_to_html():
-        pass
+def read_input_rpc(client = None, status_code = 202, method = '', params = [], id = 0, func = decode_input):
+    def sender_to_html(text):
+        if isinstance(text, dict):
+            text = json.dumps(text)
+            send_response_html(client, text, status_code = status_code, type = 'application/json')
+        else :
+            text += '\n'
+            send_response_html(client, text, status_code = status_code)
     j = {
         'method': method,
         'params': params,
