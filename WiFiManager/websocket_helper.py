@@ -23,6 +23,7 @@ _webrepl = None
 uos = None
 socket = None
 read_input = None
+decode_input = None
 
 def read_socket(sock):
     get_path = ''
@@ -134,7 +135,8 @@ def http_handler(client, get_path, get_args):
             if html == False:
                 return
         elif get_path == 'blinx':
-            html = 'TODO'
+            read_input_rpc(**get_args)
+            return
     send_response_html(client, html, status_code = status_code)
 
 def send_response_html(client, html_code, status_code = 200):
@@ -193,11 +195,12 @@ def wifi_connect(client, get_args):
         response = html_template.wifi_manager_error
     return response % dict(ssid=ssid)
 
-
-def read_input_rpc(method, params, func = read_input, sender = ''):
+def read_input_rpc(method = '', params = [], id = 0, func = decode_input):
+    def sender_to_html():
+        pass
     j = {
         'method': method,
         'params': params,
-        'id': 0,
+        'id': id,
     }
-    func(j, how_send = sender)
+    func(j, how_send = sender_to_html)
