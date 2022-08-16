@@ -571,6 +571,7 @@ async def save_all_sensor():
 
 def launch(site = False):
   if site:
+    webServer.websocket_helper.decode_input = decode_input
     webServer.start()
   os.dupterm(uart, 1)
   os.dupterm(None, 1)
