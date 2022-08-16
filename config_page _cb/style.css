@@ -30,12 +30,6 @@
     background-color: #fff1a3 !important;
 }
 
-.line {
-    position: absolute;
-    width: 1px;
-    background-color: red;
-}
-
 .listSensorPort2 {
     overflow-x: hidden;
     overflow-y: scroll;
