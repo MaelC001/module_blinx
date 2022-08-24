@@ -21,6 +21,9 @@ def register(fn, name, etape, waiting = 0, args = {}):
 
 
 def get_all_function_sensor():
+  """
+      Get all the info for each file for sensors
+  """
   __list_sensors.clear()
   try:
     import listSensorUser
@@ -28,7 +31,9 @@ def get_all_function_sensor():
     return
   list_sensors = listSensorUser.list_sensors
   for i in list_sensors:
+    # import the file
     a = __import__(i)
+    # get the info
     info = a.info
     names = info['name']
     for name in names:
