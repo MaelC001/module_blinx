@@ -5,6 +5,9 @@ wlan_sta=network.WLAN(network.STA_IF)
 codeboot = ''
 
 def wifi_manager():
+    """
+        template of the wifi manager : https://github.com/tayfunulu/WiFiManager
+    """
     ssids=sorted(ssid.decode('utf-8') for ssid,*_ in wlan_sta.scan())
     html = """\
         <html>
@@ -18,6 +21,7 @@ def wifi_manager():
                     <tbody>
     """
 
+    # add all
     while len(ssids):
         ssid=ssids.pop(0)
         html += """\

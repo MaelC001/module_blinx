@@ -165,6 +165,9 @@ def send_response_html(client, html_code, status_code = 200, type = 'text/html')
 
 
 def wifi_connect(client, get_args):
+    """
+        To connect to wifi
+    """
     if 'ssid' not in get_args or 'password' not in get_args:
         send_response_html(client,"Parameters not found",status_code=400)
         return False
@@ -197,6 +200,9 @@ def wifi_connect(client, get_args):
     return response % dict(ssid=ssid)
 
 def read_input_rpc(client = None, status_code = 202, method = '', params = [], id = 0):
+    """
+        the rpc via wifi
+    """
     def sender_to_html(text):
         if isinstance(text, dict):
             text = json.dumps(text)
