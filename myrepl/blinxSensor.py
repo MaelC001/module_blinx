@@ -28,6 +28,7 @@ class Blinx():
         # list of all the output sensor
         self.display_sensors = {}
         for sensor, config in configs.items():
+            # get info for the sensors
             new_name = config['new_name']
             is_input = config['is_input']
             is_display = config['is_display']
@@ -37,6 +38,7 @@ class Blinx():
             if new_name == '':
                 new_name = sensor
 
+            # create the sensor
             if is_display:
                 config = config['config']
                 temp = {'name' : sensor, 'sensor' : sensors.__list_sensors[sensor]['create'](i2c, *config)}
@@ -46,6 +48,7 @@ class Blinx():
 
             #self.sensors[new_name] = temp
 
+            # stock the sensor
             if is_input :
                 self.input_sensors[new_name] = temp
             elif is_display :
