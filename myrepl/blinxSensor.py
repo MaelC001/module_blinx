@@ -577,8 +577,8 @@ def sensors_create_dict():
         temp_dict[name_time] = {
             'size' : array_time_size[i], 
             'times' : array_next_time[i], 
-            'value' : array_time_value[i], 
-            'offset' : array_time_offset[i], 
+            'value' : array_time_value[i] * 1000, 
+            'offset' : array_time_offset[i] * 1000, 
             'before' : before, 
         }
         before = name_time
@@ -592,9 +592,9 @@ def next_time(arrayTime):
     if it is 96s, the next time we have 60s it is 120s
     """
     array_next_time = []
-    present = time.time()
+    present_time, present_ticks = time.time(), time.ticks_ms()
     for i in arrayTime:
-        temp_time = present + (i - (present % i))
+        temp_time = present_ticks + (i - (present_time % i)) * 1000
         array_next_time.append(temp_time)
 
     return array_next_time
