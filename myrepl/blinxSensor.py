@@ -593,6 +593,8 @@ def next_time(arrayTime):
     """
     array_next_time = []
     present_time, present_ticks = time.time(), time.ticks_ms()
+
+
     for i in arrayTime:
         temp_time = present_ticks + (i - (present_time % i)) * 1000
         array_next_time.append(temp_time)
