@@ -286,14 +286,19 @@ class Channel():
             temp = self.dic[i]
             before = temp['before']
             next = temp['next']
+            print(0,before, next, temp['times'], temp['offset'], value_brut, time, temp['times'] + temp['offset'])
             if (temp['times'] + temp['offset']) <= time:
+                print(1)
                 # is it a mean of the reply of before ?
                 if before == None :
+                    print(2)
                     value = value_brut
                 else:
+                    print(3)
                     buffer_before = self.dic[before]['buffer']
                     last_time = temp['times'] - next
                     array = buffer_before.get_partial(last_time)
+                    print(4, array)
                     s = self.sum_bytes(array[0], buffer_before.data_size)
                     value = int(s/array[1])
                     value = value.to_bytes(buffer_before.data_size, 'big')
