@@ -473,7 +473,7 @@ class Buffer():
     def fix_missing_data(self, time):
         """correct the missing data : put the 'null' bytes in missing data"""
         if self.missing(time):
-            self.append(self.null, time - 1)
+            self.append(self.null, time - 1000)
 
     def set_time(self, time):
         """change the time"""
@@ -486,7 +486,7 @@ class Buffer():
         self._data = bytearray()
         for _ in range(self.size*self.data_size) :
             self._data += self.null
-        self.time = -1
+        self.time = - 1000
 
 class CircularBuffer(Buffer):
     def __init__(self, name, size, step = 1, time = 0, null = b'\xff\xff', error = b'\xff\xfe', data_size = 2):
