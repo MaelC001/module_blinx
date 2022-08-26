@@ -549,7 +549,7 @@ def verification_list_sensor(list_sensors):
     text += ';' + sensor
     name = Blinx.input_sensors[sensor]['name']
     for i in Blinx.input_sensors[sensor]['sensor'].channels:
-      name_sensors.append(name+i.id)
+      name_sensors.append(name+'-'+str(i.id))
     function_sensors.append(Blinx.input_sensors[sensor]['sensor'])
   return text, name_sensors, function_sensors
 
