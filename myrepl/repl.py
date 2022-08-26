@@ -464,7 +464,7 @@ def get_sensors(list_sensors, times = '1s'):
   blinxSensor.buffer = True
   time_before = time.time()
 
-  text, name_sensors, function_sensors, size_buffer = verification_list_sensor(list_sensors)
+  text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
   # immedate data of the sensor
   if times == '0s':
     text += '\n' + str(time.time())
