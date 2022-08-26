@@ -454,7 +454,7 @@ class Buffer():
     def get_index(self, index):
         """get the data of a index (in accordance with the present data (index 0)) to the present data"""
         diff_boucle = ticks_boucle - self.ticks_boucle
-        time_ns = time_ns - ticks_max * diff_boucle
+        time_ticks_ns = time_ns - ticks_max * diff_boucle
         diff = self.data_index - index - 1
         if self.data_index == 0:
             time_data = self.size * self.step
@@ -463,7 +463,7 @@ class Buffer():
         elif self.data_index <= index:
             time_data = self.time - (diff - self.data_index)
         index_data = diff*self.data_size
-        return self._data[index_data], time_data + time_ns #  : index_data+self.data_size
+        return self._data[index_data], time_data + time_ticks_ns #  : index_data+self.data_size
 
     def last_time(self):
         """last time we stock a data"""
