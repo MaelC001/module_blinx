@@ -464,7 +464,7 @@ def get_sensors(list_sensors, times = '1s'):
   blinxSensor.buffer = True
   time_before = time.time()
 
-  text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
+  text, name_sensors, function_sensors, size_buffer = verification_list_sensor(list_sensors)
   # immedate data of the sensor
   if times == '0s':
     text += '\n' + str(time.time())
@@ -477,9 +477,9 @@ def get_sensors(list_sensors, times = '1s'):
     # capture all the data from each sensor the user want the data
     data_all_sensor = ''
     index_data = 0
-    size_buffer = 300
+    size_buffer_max = 300
 
-    while index_data < size_buffer:
+    while index_data < size_buffer_max:
 
       text_time_stamp = ''
       for i in range(len(function_sensors)):
@@ -487,13 +487,23 @@ def get_sensors(list_sensors, times = '1s'):
         name_sensors[i] = name_sensors[i]
         time_before = save_sensor_while_request(time_before)
 
-        for y in func.getIndex(times, index_data, True):
-          data_sensor, time_data_sensor = y
-          text_time_stamp += ';' + data_sensor
-
-      data_all_sensor = time_data_sensor + ';' + text_time_stamp + data_all_sensor
-
-      index_data += 1
+        for y in func.get_index(times, index_data, True):
+          if y[0] == b'\xff\xff':
+            break
+          elif y[0] == b'\xff\xfe':
+            data_sensor, time_data_sensor = 'error', y[1]
+            text_time_stamp += ';' + data_sensor
+          else:
+            data_sensor, time_data_sensor = y
+            text_time_stamp += ';' + data_sensor
+        else:
+          continue
+        break
+      else:
+        data_all_sensor = time_data_sensor + ';' + text_time_stamp + data_all_sensor
+        index_data += 1
+        continue
+      break
     text += '\n' + data_all_sensor
 
   blinxSensor.buffer = False
@@ -538,7 +548,7 @@ def verification_list_sensor(list_sensors):
     verification(sensor, str, Blinx.input_sensors)
     text += ';' + sensor
     name = Blinx.input_sensors[sensor]['name']
-    for i in Blinx.input_sensors[sensor]['sensor'].arrayChannel:
+    for i in Blinx.input_sensors[sensor]['sensor'].channels:
       name_sensors.append(name+i.id)
     function_sensors.append(Blinx.input_sensors[sensor]['sensor'])
   return text, name_sensors, function_sensors
