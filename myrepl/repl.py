@@ -484,7 +484,6 @@ def get_sensors(list_sensors, times = '1s'):
       text_time_stamp = ''
       for i in range(len(function_sensors)):
         func = function_sensors[i]
-        name_sensors[i] = name_sensors[i]
         time_before = save_sensor_while_request(time_before)
 
         for y in func.get_index(times, index_data, True):
