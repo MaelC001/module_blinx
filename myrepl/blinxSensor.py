@@ -142,7 +142,7 @@ class Sensor():
         result = []
         for i in self.channels:
             data = i.get_index(time, index, translate = translate)
-            if translate and (min > 0 and max > min):
+            if translate and (min > 0 and max > min) and not (data[0] == b'\xff\xff' or data[0] == b'\xff\xfe'):
                 t = data[0]
                 t = int.from_bytes(t, 'big')
                 if t <= min:
@@ -326,8 +326,10 @@ class Channel():
     def get_index(self, time, index, translate = True):
         """ get the data for a index """
         temp = self.dic[time]['buffer']
+        if index >= temp.data_size:
+            return b'\xff\xff', time
         data, time = temp.get_index(index)
-        if translate:
+        if translate and not (data == b'\xff\xff' or data == b'\xff\xfe'):
             return self.translation_data_function(data), time
         return data, time
 
@@ -473,7 +475,7 @@ class Buffer():
     def fix_missing_data(self, time):
         """correct the missing data : put the 'null' bytes in missing data"""
         if self.missing(time):
-            self.append(self.null, time - 1000)
+            self.append(self.error, time - 1000)
 
     def set_time(self, time):
         """change the time"""
