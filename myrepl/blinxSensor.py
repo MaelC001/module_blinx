@@ -102,6 +102,7 @@ class Sensor():
         # the min max value to calcul the %
         self.min = min
         self.max = max
+        self.diff_min_max = self.max - self.min
         # create all the channel
         self._create_channels(channels)
 
@@ -142,16 +143,15 @@ class Sensor():
         result = []
         for i in self.channels:
             data = i.get_index(time, index, translate = translate)
-            if translate and (min > 0 and max > min) and not (data[0] == b'\xff\xff' or data[0] == b'\xff\xfe'):
+            if translate and (self.min > 0 and self.max > self.min) and not (data[0] == b'\xff\xff' or data[0] == b'\xff\xfe'):
                 t = data[0]
-                if t <= min:
+                if t <= self.min:
                     result = 0
-                elif t >= max:
+                elif t >= self.max:
                     result = 100
                 else :
-                    temp = t - min
-                    diff = max - min
-                    result = int(temp/diff * 100)
+                    temp = t - self.min
+                    result = int(temp/self.diff_min_max * 100)
                 data[0] = result
             result.append(data)
         return result
