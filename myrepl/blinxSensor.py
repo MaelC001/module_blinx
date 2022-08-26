@@ -403,7 +403,7 @@ class I2CChannel(Channel):
 
 # Buffers
 class Buffer():
-    def __init__(self, size, step = 1, time = 0, null = b'\xff\xff', data_size = 2):
+    def __init__(self, size, step = 1, time = 0, null = b'\xff\xff', error = b'\xff\xfe', data_size = 2):
         # the real index in the byte array
         self.real_index = 0
         # the index for the each data, it is not equal to the realIndex, 
@@ -417,8 +417,10 @@ class Buffer():
         self.data_size = data_size
         # it is the number of data stock
         self.size = size
-        # the code for error
+        # the code for null
         self.null = null
+        # the code for error
+        self.error = error
         # number of boucle of the ticks
         self.ticks_boucle = ticks_boucle
         # the byte array for data
@@ -491,11 +493,9 @@ class Buffer():
 
 class CircularBuffer(Buffer):
     def __init__(self, name, size, step = 1, time = 0, null = b'\xff\xff', error = b'\xff\xfe', data_size = 2):
-        # the code for error
-        self.error = error
         # the nam of the sensor
         self.name = name
-        super().__init__(size, step = step, time = time, null = null, data_size = data_size)
+        super().__init__(size, step = step, time = time, null = null, error = error, data_size = data_size)
 
     def get_partial(self, time_stamp):
         """get partial data, with the timeStamp"""
