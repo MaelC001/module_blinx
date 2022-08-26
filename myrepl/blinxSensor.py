@@ -144,7 +144,6 @@ class Sensor():
             data = i.get_index(time, index, translate = translate)
             if translate and (min > 0 and max > min) and not (data[0] == b'\xff\xff' or data[0] == b'\xff\xfe'):
                 t = data[0]
-                t = int.from_bytes(t, 'big')
                 if t <= min:
                     result = 0
                 elif t >= max:
@@ -153,7 +152,7 @@ class Sensor():
                     temp = t - min
                     diff = max - min
                     result = int(temp/diff * 100)
-                data[0] = result.to_bytes(i.data_size, 'big')
+                data[0] = result
             result.append(data)
         return result
 
