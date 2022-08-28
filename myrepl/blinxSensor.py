@@ -191,7 +191,7 @@ class Channel():
             # the dic of information of the channel + their buffer (if a input sensor)
             self.dic = {}
             # the buffer for when we convert the data
-            self.buffer = Buffer(30)
+            self.buffer = Buffer(10, time = -1)
             for key, config in sensors_create_dict().items():
                 size = config['size']
                 times = config['times']
@@ -261,10 +261,10 @@ class Channel():
             we are converting the data, we record the new data in a buffer (only each 1s)
             when we finish the convert we will move the data from the buffer to the log
         """
-        print(self.buffer.time)
+        print('00-',self.buffer.time)
         if self.buffer.time == -1:
             self.buffer.set_time(time - 1000)
-        print(self.buffer.time)
+        print('01-',self.buffer.time)
         value = self.read()
         self.buffer.append(value, time)
 
@@ -414,7 +414,7 @@ class Buffer():
         # value index is the value of one index
         # if the index is 2, and step = 1, then we are at 2s
         # if the index is 2, and step = 10, then we are at 20s ...
-        self.step = step * 1000
+        self.step = step
         # it is the number of byte to stock the data
         self.data_size = data_size
         # it is the number of data stock
