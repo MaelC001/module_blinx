@@ -506,6 +506,7 @@ def get_sensors(list_sensors, times = '1s'):
     text += '\n' + data_all_sensor
 
   blinxSensor.buffer = False
+  Blinx.buffer_to_log()
   return text
 
 @register('scan_i2c', False)
