@@ -491,15 +491,15 @@ def get_sensors(list_sensors, times = '1s'):
             break
           elif y[0] == b'\xff\xfe':
             data_sensor, time_data_sensor = 'error', y[1]
-            text_time_stamp += ';' + data_sensor
+            text_time_stamp += ';' + str(data_sensor)
           else:
             data_sensor, time_data_sensor = y
-            text_time_stamp += ';' + data_sensor
+            text_time_stamp += ';' + str(data_sensor)
         else:
           continue
         break
       else:
-        data_all_sensor = time_data_sensor + ';' + text_time_stamp + data_all_sensor
+        data_all_sensor = str(time_data_sensor) + text_time_stamp + '\n' + data_all_sensor
         index_data += 1
         continue
       break
