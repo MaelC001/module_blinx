@@ -275,9 +275,10 @@ class Channel():
             to the log and do the mean for the different time
         """
         self.buffer.set_time(-1)
-        lenArray = 30
+        lenArray = self.buffer.data_index
 
-        for index in range(lenArray):
+        for i in range(lenArray):
+                index = (lenArray - 1) - i
                 value_brut, time = self.buffer.get_index(index)
                 self.save_value_in_log(time, value_brut)
         self.buffer.clear()
