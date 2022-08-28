@@ -261,8 +261,10 @@ class Channel():
             we are converting the data, we record the new data in a buffer (only each 1s)
             when we finish the convert we will move the data from the buffer to the log
         """
+        print(self.buffer.time)
         if self.buffer.time == -1:
-            self.buffer.set_time(time)
+            self.buffer.set_time(time - 1000)
+        print(self.buffer.time)
         value = self.read()
         self.buffer.append(value, time)
 
@@ -412,7 +414,7 @@ class Buffer():
         # value index is the value of one index
         # if the index is 2, and step = 1, then we are at 2s
         # if the index is 2, and step = 10, then we are at 20s ...
-        self.step = step
+        self.step = step * 1000
         # it is the number of byte to stock the data
         self.data_size = data_size
         # it is the number of data stock
@@ -473,7 +475,10 @@ class Buffer():
 
     def missing(self, time):
         """do we have missing data"""
-        return diff_ticks(self.last_time() + self.step, time) > 0
+        last = self.last_time()
+        diff = diff_ticks(last + self.step, time)
+        print('missing',(last, self.step), time, diff)
+        return diff > 0
 
     def fix_missing_data(self, time):
         """correct the missing data : put the 'null' bytes in missing data"""
