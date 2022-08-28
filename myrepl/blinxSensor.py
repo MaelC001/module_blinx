@@ -300,9 +300,13 @@ class Channel():
                     last_time = temp['times'] - next
                     array = buffer_before.get_partial(last_time)
                     print(4, array)
-                    s = self.sum_bytes(array[0], buffer_before.data_size)
-                    value = int(s/array[1])
-                    value = value.to_bytes(buffer_before.data_size, 'big')
+                    if array[1] != 0:
+                        s = self.sum_bytes(array[0], buffer_before.data_size)
+                        value = int(s/array[1])
+                        value = value.to_bytes(buffer_before.data_size, 'big')
+                    else:
+                        print('error')
+                        value = self.error
                 temp['buffer'].append(value, time)
                 temp['times'] = time + next
 
