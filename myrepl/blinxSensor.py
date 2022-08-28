@@ -263,7 +263,7 @@ class Channel():
         """
         print('00-',self.buffer.time)
         if self.buffer.time == -1:
-            self.buffer.set_time(time - 1000)
+            self.buffer.set_time(self.dic['1s']['buffer'].time)
         print('01-',self.buffer.time)
         value = self.read()
         self.buffer.append(value, time)
@@ -276,11 +276,14 @@ class Channel():
         """
         self.buffer.set_time(-1)
         lenArray = self.buffer.data_index
+        print('0-',lenArray)
 
         for i in range(lenArray):
-                index = (lenArray - 1) - i
-                value_brut, time = self.buffer.get_index(index)
-                self.save_value_in_log(time, value_brut)
+            index = (lenArray - 1) - i
+            print('1-',index, i)
+            value_brut, time = self.buffer.get_index(index)
+            print('2-', value_brut, (time, self.dic['1s']['buffer'].time))
+            self.save_value_in_log(time, value_brut)
         self.buffer.clear()
 
     def save_value_in_log(self, time, value_brut):
