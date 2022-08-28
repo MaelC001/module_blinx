@@ -77,7 +77,7 @@ class Blinx():
     def buffer_to_log(self):
         # move the buffer to the log
         for i in self.input_sensors.values():
-            i['sensor'].buffer_to_log(time)
+            i['sensor'].buffer_to_log()
 
 
 # Sensors
@@ -164,7 +164,7 @@ class Sensor():
     def buffer_to_log(self):
         # move the buffer to log
         for i in self.channels:
-            i.buffer_to_log(time)
+            i.buffer_to_log()
 
 
 # Channels
