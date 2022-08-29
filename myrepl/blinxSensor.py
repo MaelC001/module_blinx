@@ -263,7 +263,7 @@ class Channel():
         """
         print('00-',self.buffer.time)
         if self.buffer.time == -1:
-            self.buffer.set_time(self.dic['1s']['buffer'].time)
+            self.buffer.set_time(time - 1)
         print('01-',self.buffer.time)
         value = self.read()
         self.buffer.append(value, time)
@@ -485,7 +485,7 @@ class Buffer():
         """do we have missing data"""
         last = self.last_time()
         diff = diff_ticks(last + self.step, time)
-        print('missing',(last, self.step), time, diff)
+        print('missing' if diff > 0 else 'mi-',(last, self.step), time, diff)
         return diff > 0
 
     def fix_missing_data(self, time):
