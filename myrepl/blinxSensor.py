@@ -338,7 +338,7 @@ class Channel():
     def get_index(self, time, index, translate = True):
         """ get the data for a index """
         temp = self.dic[time]['buffer']
-        if index >= temp.data_size:
+        if index >= temp.data_index:
             return b'\xff\xff', time
         data, time = temp.get_index(index)
         if translate and not (data == b'\xff\xff' or data == b'\xff\xfe'):
