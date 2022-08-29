@@ -481,6 +481,7 @@ def get_sensors(list_sensors, times = '1s'):
     size_buffer_max = 300
 
     while index_data < size_buffer_max:
+      print(index_data)
 
       text_time_stamp = ''
       for i in range(len(function_sensors)):
@@ -488,6 +489,7 @@ def get_sensors(list_sensors, times = '1s'):
         time_before = save_sensor_while_request(time_before)
 
         for y in func.get_index(times, index_data, True):
+          print(y)
           if y[0] == b'\xff\xff':
             break
           elif y[0] == b'\xff\xfe':
@@ -533,7 +535,7 @@ def save_sensor_while_request(time_before):
   diffTime = 1000 - blinxSensor.diff_ticks(time_before, present)
 
   if diffTime <= 0:
-    time_before = present
+    time_before = time_before + 1000
     Blinx.save(present)
   return time_before
 
