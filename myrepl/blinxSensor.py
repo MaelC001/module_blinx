@@ -177,12 +177,13 @@ class Channel():
         self.translation_byte_function = translation_byte_function
         # the function to translate the data
         self.translation_data_function = translation_data_function
-        # the error code
-        self.error = error
-        # id of the channel
-        self.id = id
         # data size
         self.data_size = data_size
+        # the error code
+        if self.data_size == 1 and len(error) > 1:
+            self.error = error[len(error) - 1 : len(error)]
+        # id of the channel
+        self.id = id
 
         # is it a channel of a input sensor
         self.input = input
@@ -198,7 +199,7 @@ class Channel():
                 step = config['value']
 
                 temp = {}
-                temp['buffer'] = CircularBuffer(name, size, step, times, error = error, data_size=self.data_size)
+                temp['buffer'] = CircularBuffer(name, size, step, times, error = self.error, data_size=self.data_size)
                 temp['before'] = config['before']
                 temp['offset'] = config['offset']
                 temp['times'] = times
@@ -441,12 +442,13 @@ class Buffer():
         # the timestamp in index 0
         self.time = time
 
-    def append(self, value, time):
+    def append(self, value, time, verify = True):
         """
         verify if we don't miss data and if we have to reset the index
         then add the 2 bytes of information
         """
-        self.fix_missing_data(time)
+        if verify:
+            self.fix_missing_data(time)
         self.reset_index(time)
         for i in range(self.data_size):
             self._data[self.real_index] = value[i]
@@ -490,8 +492,15 @@ class Buffer():
 
     def fix_missing_data(self, time):
         """correct the missing data : put the 'null' bytes in missing data"""
-        if self.missing(time):
-            self.append(self.error, time - 1000)
+        offset = 0
+        while True:
+            if self.missing(time - offset):
+                offset += 1000
+            else:
+                break
+        while offset > 0:
+            self.append(self.error, time - offset, verify = False)
+            offset -= 1000
 
     def set_time(self, time):
         """change the time"""
