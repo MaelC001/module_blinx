@@ -462,7 +462,8 @@ def get_sensors(list_sensors, times = '1s'):
   if the time is 0s, we want the data form now
   """
   blinxSensor.buffer = True
-  time_before = time.time()
+  present_ticks = time.ticks_ms()
+  time_before = present_ticks - present_ticks % 1000
 
   text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
   # immedate data of the sensor
