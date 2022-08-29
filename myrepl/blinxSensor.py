@@ -182,6 +182,8 @@ class Channel():
         # the error code
         if self.data_size == 1 and len(error) > 1:
             self.error = error[len(error) - 1 : len(error)]
+        else:
+            self.error = error
         # id of the channel
         self.id = id
 
