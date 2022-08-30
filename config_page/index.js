@@ -139,7 +139,7 @@ let listAllSensors = {
         "ssd1306_oled": {
             "text": "OLED Display OLED",
             "addr": "",
-            "file": "display",
+            "file": "display_ssd1306",
             "is_input": false,
             "is_display": true,
             "min_max": false,
@@ -1656,7 +1656,7 @@ let listAllSensors = {
         },
         "ssd13006": {
             "text": "Screen",
-            "file": "display",
+            "file": "display_ssd1306",
             "is_input": false,
             "is_display": true,
             "min_max": false,
