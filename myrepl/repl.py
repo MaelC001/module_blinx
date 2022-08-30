@@ -421,11 +421,11 @@ def remove_all_function_sensor():
     return 'no config'
   for i in listSensorUser.list_sensors:
     try:
-      remove_file(i+'.py')
+      remove_file(i+'.py', id = 0)
       del sys.modules[i]
     except:
       continue
-  remove_file("listSensorUser.py")
+  remove_file("listSensorUser.py", id = 0)
   del sys.modules['listSensorUser']
   return 'success'
 
