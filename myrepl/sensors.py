@@ -30,6 +30,7 @@ def get_all_function_sensor():
   except:
     return
   list_sensors = listSensorUser.list_sensors
+  list_names = listSensorUser.list_names
   for i in list_sensors:
     # import the file
     a = __import__(i)
@@ -37,7 +38,7 @@ def get_all_function_sensor():
     info = a.info
     names = info['name']
     for name in names:
-      if name in list_sensors:
+      if name in list_names:
         infoSensor = info['info']
         functions = info['channels']
         for id, infoChannel in functions.items():
