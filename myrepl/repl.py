@@ -452,8 +452,7 @@ def display_sensors(sensor_name, func_name, array_value): #*array_value):
       func_name (str): the function we want to use for the command
   """
   verification(sensor_name, str, Blinx.display_sensors)
-  Blinx.display_sensors[sensor_name]['sensor'].function(func_name, *array_value)
-  return 'Done'
+  return Blinx.display_sensors[sensor_name]['sensor'].function(func_name, *array_value)
 
 @register('get_sensors', False)
 def get_sensors(list_sensors, times = '1s'):
