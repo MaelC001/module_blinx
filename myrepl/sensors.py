@@ -41,6 +41,7 @@ def get_all_function_sensor():
       if name in list_names:
         infoSensor = info['info']
         functions = info['channels']
+        waiting = 0
         for id, infoChannel in functions.items():
           waiting = infoChannel['waiting']
           dictFunctions = infoChannel['functionsId']
