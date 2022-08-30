@@ -1664,10 +1664,8 @@ let listAllSensors = {
             "numberPin": 1,
             "tester": true,
             "config": [
-                {
-                    "type": "I2C",
-                    "id": 0
-                }
+                128,
+                64
             ]
         },
         'sht3x_tem':{ // "sht3x_temp": {

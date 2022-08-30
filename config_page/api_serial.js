@@ -173,7 +173,7 @@ function verify_json(e, func) {
     }
 }
 
-async function config_sensor_serial(json_config, json_sensor) {
+async function config_sensor_serial(json_config, json_sensor, json_sensor_name) {
     var method = 'remove_config';
     cmd(method, idCmd = id).then(e => etape2(e));
     async function etape2(e) {
@@ -194,7 +194,7 @@ async function config_sensor_serial(json_config, json_sensor) {
             var method = 'write';
             var arg = {
                 'name': 'listSensorUser.py',
-                'text': "list_sensors = [\"" + json_config.toString().replaceAll(',','","')+"\"]",
+                'text': "list_sensors, list_names = [\"" + json_config.toString().replaceAll(',','","')+"\"], [\"" + json_sensor_name.toString().replaceAll(',','","')+"\"]",
             };
             cmd(method, arg = arg, idCmd = id).then(e => etape4(e));
             async function etape4(e) {

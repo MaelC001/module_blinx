@@ -4,6 +4,7 @@ function config_sensor(e) {
     } else {
         let json_config = [];
         let json_sensor = {};
+        let json_sensor_name = [];
 
         let portAD = infoUserSensor[0].concat(infoUserSensor[2]);
         let portI2C = infoUserSensor[1];
@@ -36,8 +37,9 @@ function config_sensor(e) {
 
         console.log(json_config);
         console.log(json_sensor);
+        console.log(json_sensor_name);
 
-        config_sensor_serial(json_config, json_sensor);
+        config_sensor_serial(json_config, json_sensor, json_sensor_name);
 
         function SensorFunction(type, info) {
             if (Object.keys(info).length > 0) {
@@ -96,6 +98,8 @@ function config_sensor(e) {
                 config = 'config';
             }
             json_sensor[info['name']][config] = listAllSensors[type][value][config];
+
+            json_sensor_name.push(info['name']);
         }
     }
 }
