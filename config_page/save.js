@@ -34,12 +34,10 @@ function config_sensor(e) {
             }
         }
 
-        aaaaa = json_config;
-        aaaab = json_sensor;
         console.log(json_config);
         console.log(json_sensor);
 
-        //config_sensor_serial(json_config, json_sensor);
+        config_sensor_serial(json_config, json_sensor);
 
         function SensorFunction(type, info) {
             if (Object.keys(info).length > 0) {
@@ -60,11 +58,14 @@ function config_sensor(e) {
                 let t = _(val + 'Config').children[0];
                 if (t.children.length == 2) {
                     info['userName'] = t.children[0].children[0].value;
+                    info['borne_min'] = -1;
+                    info['borne_max'] = -1;
                 } else {
                     info['userName'] = t.children[0].children[0].children[0].value;
                     info['borne_min'] = t.children[1].children[0].children[0].value;
                     info['borne_max'] = t.children[2].children[0].children[0].value;
                 }
+                console.log(val)
                 json_config_push('In', val);
                 if (val == 'screen') {
                     json_sensor_push('In', info, true);
@@ -75,17 +76,13 @@ function config_sensor(e) {
         }
 
         function json_config_push(type, name) {
-            let file = listAllSensors[type][name]['file']
+            let file = listAllSensors[type][name]['file'];
             if(!json_config.includes(file)){
                 json_config.push(file);
             }
         }
 
         function json_sensor_push(type, info, display = false) {
-            let config = 'channels';
-            if(display){
-                config = 'config';
-            }
             let value = info['idSensor'];
             json_sensor[info['name']] = {
                 'new_name': info['userName'],
@@ -93,8 +90,12 @@ function config_sensor(e) {
                 'is_display': listAllSensors[type][value]['is_display'],
                 'min': info['borne_min'],
                 'max': info['borne_max'],
-                'config': listAllSensors[type][value][config],
             }
+            let config = 'channels';
+            if(display){
+                config = 'config';
+            }
+            json_sensor[info['name']][config] = listAllSensors[type][value][config];
         }
     }
 }

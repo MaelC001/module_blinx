@@ -69,39 +69,39 @@ let templatePortI2C = "\
 </div>";
 let templatePortSensorInMicro = "\
 <div class='$idSensor$ columnFlex' id='$idSensor$'>\
-    <div class='buttonActivate$idSensorMaj$'>\
+    <div class='buttonActivate_$idSensor$'>\
         <div class='ui toggle checkbox'>\
             <input type='checkbox' name='public' onclick='sensorInMicroConfig(this, \"$idSensor$\")'>\
-            <label>$idSensorMaj$</label>\
+            <label>$SensorMaj$</label>\
         </div><br>\
     </div>\
     <div id='$idSensor$Config' class='columnFlex'>\
-        <div class='action$idSensorMaj$'>\
+        <div class='action_$idSensor$'>\
             <div class='ui mini input'>\
                 <input type='text' placeholder='Name for the sensor'>\
             </div><br>\
         </div>\
-        <div class='info$idSensorMaj$'>\
+        <div class='info_$idSensor$'>\
             <p>Info</p><br>\
         </div>\
     </div>\
 </div>";
 let templatePortSensorInMicroMinMax = "\
 <div class='$idSensor$ columnFlex' id='$idSensor$'>\
-    <div class='buttonActivate$idSensorMaj$'>\
+    <div class='buttonActivate_$idSensor$'>\
         <div class='ui toggle checkbox'>\
             <input type='checkbox' name='public' onclick='sensorInMicroConfig(this, \"$idSensor$\")'>\
-            <label>$idSensorMaj$</label>\
+            <label>$SensorMaj$</label>\
         </div><br>\
     </div>\
     <div id='$idSensor$Config' class='columnFlex'>\
-        <div class='action$idSensorMaj$ blocSensor'>\
-            <div class='nameInput$idSensorMaj$'>\
+        <div class='action_$idSensor$ blocSensor'>\
+            <div class='nameInput_$idSensor$'>\
                 <div class='ui mini input'>\
                     <input type='text' placeholder='Name for the sensor'>\
                 </div><br>\
             </div>\
-            <div class='minInput$idSensorMaj$'>\
+            <div class='minInput_$idSensor$'>\
                 <div class='ui right labeled mini input'>\
                     <input type='text' placeholder='Min'>\
                     <a class='ui tag label'>\
@@ -109,7 +109,7 @@ let templatePortSensorInMicroMinMax = "\
                     </a>\
                 </div><br>\
             </div>\
-            <div class='maxInput$idSensorMaj$'>\
+            <div class='maxInput_$idSensor$'>\
                 <div class='ui right labeled mini input'>\
                     <input type='text' placeholder='Max'>\
                     <a class='ui tag label'>\
@@ -118,7 +118,7 @@ let templatePortSensorInMicroMinMax = "\
                 </div><br>\
             </div>\
         </div>\
-        <div class='info$idSensorMaj$'>\
+        <div class='info_$idSensor$'>\
             <p>Info</p><br>\
         </div>\
     </div>\

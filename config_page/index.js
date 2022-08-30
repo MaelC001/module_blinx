@@ -15,7 +15,7 @@ let numberOfPortAnalogDigi = [{
         'numberPortAD': '2',
     },
 ];
-let sensorInMicro = ['led', 'button', 'screen', 'temperature', 'humidity'];
+let sensorInMicro = ['led', 'button', 'screen', 'sht3x_tem', 'sht3x_hum'];
 let sensorInMicroPlus = ['light'];
 let infoButtonGeneral = [{
     'idButton': 'SaveConfig',
@@ -139,7 +139,7 @@ let listAllSensors = {
         "ssd1306_oled": {
             "text": "OLED Display OLED",
             "addr": "",
-            "file": "display_ssd1306",
+            "file": "display",
             "is_input": false,
             "is_display": true,
             "min_max": false,
@@ -1654,7 +1654,7 @@ let listAllSensors = {
                 }
             ]
         },
-        "ssd13006": {
+        'screen':{ // "ssd13006": {
             "text": "Screen",
             "file": "display_ssd1306",
             "is_input": false,
@@ -1670,9 +1670,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "sht3x_temp": {
+        'sht3x_tem':{ // "sht3x_temp": {
             "text": "temperature sht3x",
-            "file": "sht3x_temp",
+            "file": "sht3x_tem",
             "is_input": true,
             "is_display": false,
             "min_max": false,
@@ -1686,9 +1686,9 @@ let listAllSensors = {
                 }
             ]
         },
-        "sht3x_humi": {
+        'sht3x_hum':{ // "sht3x_humi": {
             "text": "humidity sht3x",
-            "file": "sht3x_humi",
+            "file": "sht3x_hum",
             "is_input": true,
             "is_display": false,
             "min_max": false,

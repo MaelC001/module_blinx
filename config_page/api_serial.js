@@ -83,7 +83,7 @@ function write(method, arg, idCmd, repl = true) {
             'id': idCmd
         }) + returnLignString;
     }
-    method = encoder.encode(method);
+    //method = encoder.encode(method);
     console.log(method);
     var writer = port.writable.getWriter();
     //writer.write(method);
@@ -128,7 +128,7 @@ async function cmd(method, arg = [], idCmd = id) {
 
 async function read_all_file(callback) {
     var method = 'liste_file';
-    cmd(method, idCmd = id).then(e => back(e, id));
+    cmd(method, arg={}, idCmd = id).then(e => back(e, id));
     async function back(e, id) {
         var json = JSON.parse(e);
         if (!json['error']) {
@@ -186,20 +186,20 @@ async function config_sensor_serial(json_config, json_sensor) {
             var method = 'write';
             var arg = {
                 'name': file,
-                'value': content
+                'text': content
             };
             return cmd(method, arg = arg, idCmd = id);
         }
         async function etape3(e) {
             var method = 'write';
             var arg = {
-                'name': 'config_file.py',
-                'value': "array = [\"" + json_config.toString().replaceAll(',','","')+"\"]",
+                'name': 'listSensorUser.py',
+                'text': "list_sensors = [\"" + json_config.toString().replaceAll(',','","')+"\"]",
             };
             cmd(method, arg = arg, idCmd = id).then(e => etape4(e));
             async function etape4(e) {
-                var method = 'config_sensor';
-                var arg = json_sensor;
+                var method = 'configSensor';
+                var arg = {'dictConfig' : json_sensor};
                 cmd(method, arg = arg, idCmd = id);
             }
         }

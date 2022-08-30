@@ -93,13 +93,15 @@ function loadPAge() {
         textHtmlTemp += '</div>';
         textHtmlTemp += '<div class="rowFlex">';
         sensorInMicro.forEach(id => {
+            let t = listAllSensors['In'][id]['text'];
             let temp = templatePortSensorInMicro.replaceAll('$idSensor$', id);
-            temp = temp.replaceAll('$idSensorMaj$', strUcFirst(id));
+            temp = temp.replaceAll('$SensorMaj$', strUcFirst(t));
             textHtmlTemp += temp;
         });
         sensorInMicroPlus.forEach(id => {
+            let t = listAllSensors['In'][id]['text'];
             let temp = templatePortSensorInMicroMinMax.replaceAll('$idSensor$', id);
-            temp = temp.replaceAll('$idSensorMaj$', strUcFirst(id));
+            temp = temp.replaceAll('$SensorMaj$', strUcFirst(t));
             textHtmlTemp += temp;
         });
         textHtmlTemp += '</div>';
