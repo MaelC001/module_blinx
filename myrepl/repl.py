@@ -461,11 +461,13 @@ def get_sensors(list_sensors, times = '1s'):
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
-  blinxSensor.buffer = True
   present_ticks = time.ticks_ms()
-  time_before = present_ticks - present_ticks % 1000
+  time_before = present_ticks - present_ticks % 100
 
   text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
+
+  blinxSensor.buffer = True
+
   # immedate data of the sensor
   if times == '0s':
     text += '\n' + str(time.time())
