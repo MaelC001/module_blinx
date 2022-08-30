@@ -8,7 +8,7 @@ def register(fn, name, etape, waiting = 0, args = {}):
   def wrapper(fn):
     
     tempo = {'func' : fn, 'waiting' : waiting}
-    if etape != 'create':
+    if etape == 'create':
       tempo = fn
 
     if name in __list_sensors:
