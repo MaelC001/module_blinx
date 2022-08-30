@@ -6,11 +6,15 @@ infoSensorI2C = {}
 # register for function who calculate the brut donnee
 def register(fn, name, etape, waiting = 0, args = {}):
   def wrapper(fn):
+    
+    tempo = {'func' : fn, 'waiting' : waiting}
+    if etape != 'create':
+      tempo = fn
 
     if name in __list_sensors:
-      __list_sensors[name][etape] = {'func' : fn, 'waiting' : waiting}
+      __list_sensors[name][etape] = tempo
     else :
-      __list_sensors[name] = {etape : {'func' : fn, 'waiting' : waiting}}
+      __list_sensors[name] = {etape : tempo}
 
     if etape == 'immediate':
       __list_sensors[name]['args'] = args
