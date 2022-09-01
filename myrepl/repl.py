@@ -439,7 +439,17 @@ def output_sensors(sensor_name, array_value):
       array_value (list): the data to write for each channel
   """
   verification(sensor_name, str, Blinx.output_sensors)
-  Blinx.output_sensors[sensor_name]['sensor'].write(array_value)
+  array_value_format = []
+  for i in array_value:
+    if isinstance(i, str):
+        try:
+          t = int(i)
+        except ValueError as e:
+          t = i
+        array_value_format.append(t)
+    else:
+      array_value_format.append(i)
+  Blinx.output_sensors[sensor_name]['sensor'].write(array_value_format)
   return 'Done'
 
 @register('display', False)
