@@ -56,9 +56,23 @@ To use it : `./mpy-cross pythonFile.py`
 The different modules :
 
 - the repl/rpc module :
+    - file `repl.py` have all the function you can call with the rpc, do the receiver/sender for the message and the async loop between the rpc and the 'get data from sensor' loop
+    - file `sensors.py` read all the file for the sensors
+    - file `blinxSensor.py` have the class for blinx, witch have sensor (a class). Each sensor have different channel/pin (a class). And each channel stock the data of him, at different time (in a circular buffer, a class)
 - the repl/rpc by wifi + web server :
+    - a modify the webrepl of micropython, so he can get `HTML` requests and not only `WS`
+    - By default, the rpc and the web server is activated, and the webrepl of micropython is deactivated. But you can diactivate rpc/web server and/or activate the webrepl of micropython
+    - for the path :
+        - the `/` (by `GET` request):
+            - if connected to wifi, it will be codeboot page
+            - else it will be the wifi manager
+        - the `/codeboot` (by `GET` request) will be the codeboot page
+        - the `/wifi_manager` (by `GET` request) will be the wifi manager
+        - the `/blinx` (by `POST` request) will be the rpc
     - the wifi manager is from [tayfunulu/WiFiManager](https://github.com/tayfunulu/WiFiManager)
-- otaUpdater (from [rdehuyss/micropython-ota-updater](https://github.com/rdehuyss/micropython-ota-updater))
+- ota updater :
+    - from [rdehuyss/micropython-ota-updater](https://github.com/rdehuyss/micropython-ota-updater)
+    - for update firmware of micropython, using a release form github
 
 
 How to put the modules in a firmware of micropython :
