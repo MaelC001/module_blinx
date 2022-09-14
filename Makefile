@@ -1,15 +1,10 @@
 NAME=docker-micropython-esp8266
-CONTAINER_ID=
 docker_name=blinxcb
 
-all : docker build arg move
+all : docker build move
 
-move: docker build arg
+move: docker build
 	docker cp "$(NAME):micropython/ports/esp8266/build-GENERIC/firmware-combined.bin" ./esp8266_micropython_build.bin
-
-arg: docker build
-	$(eval CONTAINER_ID=$(shell cat docker-micropython/tempo.txt))
-	echo $(CONTAINER_ID)
 
 build: docker
 	docker run -it -d --name $(NAME) $(docker_name)/$(NAME):latest bash \
