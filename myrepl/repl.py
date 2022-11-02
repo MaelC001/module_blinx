@@ -65,32 +65,22 @@ class DUP(io.IOBase):
 def register(name, sub_function = False):
   def wrapper(fn):
     def inner_wrapper(*args, id, **kwargs):
-      error = ""
       output = ""
-      message = ""
       # execute the function and capture the error
       try:
         # the output of the function
         output = fn(*args, **kwargs)
+        # if the function use a user function, then we have to check the other function as well
+        if sub_function and type(output) == dict:
+          if 'error' in output:
+            return {'error' : output['error'], 'id': id}
+          elif 'result' in output:
+            return {'result' : output['result'], 'id': id}
+        return {'result' : output, 'id': id}
       except Exception as e:
         # the error of the function
-        error = str(e)
-      finally:
-        # we create the json to return
-        message = "result"
-        if error :
-          message = "error"
-          output = {"code": -32000, "message": error}
+        return {'error' : {"code": -32000, "message": str(e)}, 'id': id}
 
-        # if the function use a user function, then we have to check the other function as well
-        elif sub_function and type(output) == dict:
-          if 'error' in output:
-            message = 'error'
-            output = output['error']
-          elif 'result' in output:
-            output = output['result']
-
-        return {message : output, 'id': id}
     __register[name] = inner_wrapper
     return inner_wrapper
   return wrapper
@@ -99,9 +89,7 @@ def sender(text):
   """send message to serial port in json"""
   if isinstance(text, dict):
     text = json.dumps(text)
-  text += '\n'
   uart.write(text)
-
 
 async def receiver():
   """
@@ -135,10 +123,10 @@ def decode_input(input, send = True, how_send = sender, printMessage = False, de
   except Exception as e:
     # if an error appear, we send the error message and we stop the function
     #error = str(e)
-    error_id = None
-    j = {}
-    j['error'] = {"code": -32700, "message": "Parse error"}
-    j['id'] = error_id
+    j = {
+      'error' : {"code": -32700, "message": "Parse error"},
+      'id' : None,
+    }
     if debug:
       print(2, j, str(e), line)
     elif printMessage:
@@ -171,9 +159,10 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
     test_id_3 = id is None
     test_cmd = isinstance(cmd, str)
     if not(test_id_1 or test_id_2 or test_id_3) or not(test_cmd):
-      j = {}
-      j['error'] = {"code": -32600, "message": "Invalid Request"}
-      j['id'] = None
+      j = {
+        'error' : {"code": -32600, "message": "Invalid Request"},
+        'id' : None,
+      }
       if debug:
         print(3, j, test_id_1, test_id_2, test_id_3, test_cmd)
       elif printMessage:
@@ -203,9 +192,10 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
           how_send(reply)
       else :
         # if the args is not a list or a dict we have a error
-        j = {}
-        j['error'] = {"code": -32602, "message": "Invalid params"}
-        j['id'] = id
+        j = {
+          'error' : {"code": -32602, "message": "Invalid params"},
+          'id' : id,
+        }
         if debug:
           print(6, j, type(args))
         elif printMessage:
@@ -214,9 +204,10 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
           how_send(j)
     else :
       # if the command don't exist we have a error :
-      j = {}
-      j['error'] = {"code": -32601, "message": "Method not found"}
-      j['id'] = id
+      j = {
+        'error' : {"code": -32601, "message": "Method not found"},
+        'id' : id,
+      }
       if debug:
         print(7, j, cmd, __register.keys)
       elif printMessage:
@@ -229,10 +220,10 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
     #if id:
     #  error_id = id
     #else:
-    error_id = None
-    j = {}
-    j['error'] = {"code": -32600, "message": "Invalid Request"}
-    j['id'] = error_id
+    j = {
+      'error' : {"code": -32600, "message": "Invalid Request"},
+      'id' : None,
+    }
     if debug:
       print(8, j, str(e))
     elif printMessage:
@@ -312,7 +303,7 @@ def wifi():
     'wlan_sta' : {
       'active' : wlan_sta.active(), 
       'isconnected' : wlan_sta.isconnected(), 
-      'scan' : wlan_sta.scan() if wlan_sta.active() else [], # all the wifi the microcontroller scan
+#      'scan' : wlan_sta.scan() if wlan_sta.active() else [], # all the wifi the microcontroller scan
       'config' : {
         "ifcongif" : wlan_sta.ifconfig(), # the ip, netmask ...
         "mac" : wlan_sta.config('mac'), # the mac address
