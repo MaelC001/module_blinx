@@ -87,9 +87,19 @@ def register(name, sub_function = False):
 
 def sender(text):
   """send message to serial port in json"""
-  if isinstance(text, dict):
-    text = json.dumps(text)
+  if isinstance(text, dict) or isinstance(text, list):
+    uart.write(json.dumps(text))
+    uart.write('\n')
+    return
   uart.write(text)
+  uart.write('\n')
+
+def senderDonneeSensor(donne):
+  """send message to serial port in json"""
+  if isinstance(donne, dict) or isinstance(donne, list):
+    uart.write(json.dumps(donne))
+    return
+  uart.write(donne)
 
 async def receiver():
   """
@@ -180,7 +190,7 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
           print(4, reply)
         elif printMessage:
           print(reply)
-        if send:
+        if send and cmd != 'get_sensors':
           how_send(reply)
       elif isinstance(args, dict):
         reply = __register[cmd](id = id, **args)
@@ -188,7 +198,7 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
           print(5, reply)
         elif printMessage:
           print(reply)
-        if send:
+        if send and cmd != 'get_sensors':
           how_send(reply)
       else :
         # if the args is not a list or a dict we have a error
@@ -461,10 +471,14 @@ def get_sensors(list_sensors, times = '1s'):
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
+  senderDonneeSensor("{'id':0,'result':[")
   present_ticks = time.ticks_ms()
   time_before = present_ticks - present_ticks % 100
 
   text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
+  senderDonneeSensor(name_sensors)
+  senderDonneeSensor(",['")
+  senderDonneeSensor(text)
 
   blinxSensor.buffer = True
 
@@ -475,10 +489,9 @@ def get_sensors(list_sensors, times = '1s'):
       time_before = save_sensor_while_request(time_before)
       sensor_info = sensors.__list_sensors[name_sensors[i]]['immediate'](i2c, function_sensors[name_sensors[i]].pin_sensor)
       text += ';' + str(sensor_info)
-    return text
+    senderDonneeSensor(text)
   else :
     # capture all the data from each sensor the user want the data
-    data_all_sensor = ''
     index_data = 0
     size_buffer_max = 300
 
@@ -504,15 +517,16 @@ def get_sensors(list_sensors, times = '1s'):
           continue
         break
       else:
-        data_all_sensor = str(time_data_sensor) + text_time_stamp + '\n' + data_all_sensor
+        senderDonneeSensor("','")
+        senderDonneeSensor(str(time_data_sensor))
+        senderDonneeSensor(text_time_stamp)
         index_data += 1
         continue
       break
-    text += '\n' + data_all_sensor
 
   blinxSensor.buffer = False
   Blinx.buffer_to_log()
-  return text
+  senderDonneeSensor("']}\n")
 
 @register('scan_i2c', False)
 def scan_i2c(addr = None):
