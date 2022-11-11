@@ -16,7 +16,7 @@ except:
 
 import sys, json, io
 
-from machine import Pin, I2C, ADC, PWM, UART
+from machine import Pin, I2C, SoftI2C, ADC, PWM, UART
 import blinxSensor, sensors, network
 from ota_updater import OTAUpdater
 import webServer
@@ -27,12 +27,10 @@ blinxSensor.sensors = sensors
 Blinx = blinxSensor.Blinx({}, None)
 
 # connection to i2c
-i2c = I2C(sda = Pin(4), scl = Pin(5))
+#i2c = I2C(sda = Pin(4), scl = Pin(5))
+#i2c = I2C(sda = Pin(5), scl = Pin(6))
+i2c = SoftI2C(sda = Pin(5), scl = Pin(6))
 
-# serial port
-baud_rate = 115200
-uart = UART(0, baud_rate)
-uart.init(baudrate = baud_rate, rxbuf = 200)
 
 # the loop async
 loop = None
@@ -88,25 +86,25 @@ def register(name, sub_function = False):
 def sender(text):
   """send message to serial port in json"""
   if isinstance(text, dict) or isinstance(text, list):
-    uart.write(json.dumps(text))
-    uart.write('\n')
+    sys.stdout.write(json.dumps(text))
+    sys.stdout.write('\n')
     return
-  uart.write(text)
-  uart.write('\n')
+  sys.stdout.write(text)
+  sys.stdout.write('\n')
 
 def senderDonneeSensor(donne):
   """send message to serial port in json"""
   if isinstance(donne, dict) or isinstance(donne, list):
-    uart.write(json.dumps(donne))
+    sys.stdout.write(json.dumps(donne))
     return
-  uart.write(donne)
+  sys.stdout.write(donne)
 
 async def receiver():
   """
     receive information by the serial port in json
     and execute the function with the given argument
   """
-  sreader = asyncio.StreamReader(uart)
+  sreader = asyncio.StreamReader(sys.stdin)
   while True:
     # wait for the input
     data = await sreader.readline()
@@ -125,11 +123,13 @@ def decode_input(input, send = True, how_send = sender, printMessage = False, de
     # try to transform bytes to str
     line = input.decode('utf-8').rstrip()
     if debug:
-      print(0, line)
+      #print(0, line)
+      pass
     # try to parse the json
     j = json.loads(line)
     if debug:
-      print(1, j)
+      #print(1, j)
+      pass
   except Exception as e:
     # if an error appear, we send the error message and we stop the function
     #error = str(e)
@@ -138,9 +138,11 @@ def decode_input(input, send = True, how_send = sender, printMessage = False, de
       'id' : None,
     }
     if debug:
-      print(2, j, str(e), line)
+      #print(2, j, str(e), line)
+      pass
     elif printMessage:
-      print(j)
+      #print(j)
+      pass
     if send:
       how_send(j)
     return
@@ -174,9 +176,11 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
         'id' : None,
       }
       if debug:
-        print(3, j, test_id_1, test_id_2, test_id_3, test_cmd)
+        #print(3, j, test_id_1, test_id_2, test_id_3, test_cmd)
+        pass
       elif printMessage:
-        print(j)
+        #print(j)
+        pass
       if send:
         how_send(j)
       return
@@ -187,17 +191,21 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
       if isinstance(args, list):
         reply = __register[cmd](*args, id = id)
         if debug:
-          print(4, reply)
+          #print(4, reply)
+          pass
         elif printMessage:
-          print(reply)
+          #print(reply)
+          pass
         if send and cmd != 'get_sensors':
           how_send(reply)
       elif isinstance(args, dict):
         reply = __register[cmd](id = id, **args)
         if debug:
-          print(5, reply)
+          #print(5, reply)
+          pass
         elif printMessage:
-          print(reply)
+          #print(reply)
+          pass
         if send and cmd != 'get_sensors':
           how_send(reply)
       else :
@@ -207,9 +215,11 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
           'id' : id,
         }
         if debug:
-          print(6, j, type(args))
+          #print(6, j, type(args))
+          pass
         elif printMessage:
-          print(j)
+          #print(j)
+          pass
         if send:
           how_send(j)
     else :
@@ -219,9 +229,11 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
         'id' : id,
       }
       if debug:
-        print(7, j, cmd, __register.keys)
+        #print(7, j, cmd, __register.keys)
+        pass
       elif printMessage:
-        print(j)
+        #print(j)
+        pass
       if send:
         how_send(j)
   except Exception as e:
@@ -235,9 +247,11 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
       'id' : None,
     }
     if debug:
-      print(8, j, str(e))
+      #print(8, j, str(e))
+      pass
     elif printMessage:
-      print(j)
+      #print(j)
+      pass
     if send:
       how_send(j)
 
@@ -496,7 +510,7 @@ def get_sensors(list_sensors, times = '1s'):
     size_buffer_max = 300
 
     while index_data < size_buffer_max:
-      print(index_data)
+      #print(index_data)
 
       text_time_stamp = ''
       for i in range(len(function_sensors)):
@@ -504,7 +518,7 @@ def get_sensors(list_sensors, times = '1s'):
         time_before = save_sensor_while_request(time_before)
 
         for y in func.get_index(times, index_data, True):
-          print(y)
+          #print(y)
           if y[0] == b'\xff\xff':
             break
           elif y[0] == b'\xff\xfe':
@@ -602,8 +616,8 @@ def launch(site = False):
   if site:
     webServer.websocket_helper.decode_input = decode_input
     webServer.start()
-  os.dupterm(uart, 1)
-  os.dupterm(None, 1)
+  #os.dupterm(uart, 0)
+  #os.dupterm(None, 0)
   loop = asyncio.get_event_loop()
   loop.create_task(receiver())
   loop.create_task(save_all_sensor())
