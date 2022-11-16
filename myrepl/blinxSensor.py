@@ -247,6 +247,11 @@ class Channel():
             id = channel['id']
             pin = channel['pin']
             return DigitalChannel(pin, name = sensor_type, id = id, input = input), {'pin' : pin}
+        elif channel['type'] == "Function":
+            id = channel['id']
+            functionRead = channel['functionRead']
+            functionWrite = channel['functionWrite']
+            return functionChannel(i2c, functionRead, functionWrite, name = sensor_type, id = id, input = input), {}
 
     def read(self):
         raise NotImplementedError
@@ -413,6 +418,22 @@ class I2CChannel(Channel):
         self.i2c.writeto(self.addr, value)
     def read_i2c(self):
         return self.translation_byte_function(self.i2c.readfrom(self.addr, self.byte_receive), self.error, self.old_data)
+
+class functionChannel(Channel):
+    def __init__(self, i2c, functionRead, functionWrite, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : b'\x01' if x else b'\x00', translation_data_function = lambda x:x, id = '', input = True):
+        # here we don't have a specific transformation to do to the sensor data, so we will return the data
+        # but, some sensors may have some transformations to do
+
+        # the i2c bus
+        self.i2c = i2c
+        self.functionRead = functionRead
+        self.functionWrite = functionWrite
+
+        super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input)
+    def read(self):
+        return self.functionRead()
+    def write(self, value):
+        self.functionWrite(value)
 
 # Buffers
 class Buffer():
