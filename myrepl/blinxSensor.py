@@ -249,8 +249,8 @@ class Channel():
             return DigitalChannel(pin, name = sensor_type, id = id, input = input), {'pin' : pin}
         elif channel['type'] == "Function":
             id = channel['id']
-            functionRead = channel['functionRead']
-            functionWrite = channel['functionWrite']
+            functionRead = sensors.__list_sensors[sensor_type]['functionRead']
+            functionWrite = sensors.__list_sensors[sensor_type]['functionWrite']
             return functionChannel(i2c, functionRead, functionWrite, name = sensor_type, id = id, input = input), {}
 
     def read(self):
@@ -426,14 +426,15 @@ class functionChannel(Channel):
 
         # the i2c bus
         self.i2c = i2c
+        self.id = id
         self.functionRead = functionRead
         self.functionWrite = functionWrite
 
         super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input)
     def read(self):
-        return self.functionRead()
+        return self.functionRead(self.id)
     def write(self, value):
-        self.functionWrite(value)
+        self.functionWrite(self.id, value)
 
 # Buffers
 class Buffer():
