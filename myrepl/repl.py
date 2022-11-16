@@ -512,7 +512,10 @@ def get_sensors(list_sensors, times = '1s'):
     while index_data < size_buffer_max:
       #print(index_data)
 
-      text_time_stamp = ''
+      #text_time_stamp = ''
+      #time_data_sensor = 0
+      dateShow = True
+      senderDonneeSensor("','")
       for i in range(len(function_sensors)):
         func = function_sensors[i]
         time_before = save_sensor_while_request(time_before)
@@ -523,21 +526,22 @@ def get_sensors(list_sensors, times = '1s'):
             break
           elif y[0] == b'\xff\xfe':
             data_sensor, time_data_sensor = 'error', y[1]
-            text_time_stamp += ';' + str(data_sensor)
+            #text_time_stamp += ';' + str(data_sensor)
           else:
             data_sensor, time_data_sensor = y
-            text_time_stamp += ';' + str(data_sensor)
+            #text_time_stamp += ';' + str(data_sensor)
+          if dateShow:
+            senderDonneeSensor(time_data_sensor)
+            dateShow = False
+          senderDonneeSensor(';')
+          senderDonneeSensor(data_sensor)
         else:
           continue
         break
       else:
-        senderDonneeSensor("','")
-        senderDonneeSensor(str(time_data_sensor))
-        senderDonneeSensor(text_time_stamp)
         index_data += 1
         continue
       break
-
   blinxSensor.buffer = False
   Blinx.buffer_to_log()
   senderDonneeSensor("']}\n")
