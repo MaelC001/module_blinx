@@ -20,6 +20,7 @@ from machine import Pin, I2C, SoftI2C, ADC, PWM, UART
 import blinxSensor, sensors, network
 from ota_updater import OTAUpdater
 import webServer
+import binascii
 
 blinxSensor.sensors = sensors
 
@@ -485,6 +486,7 @@ def get_sensors(list_sensors, times = '1s'):
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
+  crc = 0
   senderDonneeSensor("{'id':0,'result':[")
   present_ticks = time.ticks_ms()
   time_before = present_ticks - present_ticks % 100
@@ -504,6 +506,7 @@ def get_sensors(list_sensors, times = '1s'):
       sensor_info = sensors.__list_sensors[name_sensors[i]]['immediate'](i2c, function_sensors[name_sensors[i]].pin_sensor)
       text += ';' + str(sensor_info)
     senderDonneeSensor(text)
+    crc = binascii.crc32(bytes(text,'utf-8'))
   else :
     # capture all the data from each sensor the user want the data
     index_data = 0
@@ -532,9 +535,12 @@ def get_sensors(list_sensors, times = '1s'):
             #text_time_stamp += ';' + str(data_sensor)
           if dateShow:
             senderDonneeSensor(time_data_sensor)
+            crc = binascii.crc32(bytes(str(time_data_sensor),'utf-8'), crc)
             dateShow = False
           senderDonneeSensor(';')
+          crc = binascii.crc32(bytes(';','utf-8'), crc)
           senderDonneeSensor(data_sensor)
+          crc = binascii.crc32(data_sensor, crc)
         else:
           continue
         break
@@ -544,7 +550,9 @@ def get_sensors(list_sensors, times = '1s'):
       break
   blinxSensor.buffer = False
   Blinx.buffer_to_log()
-  senderDonneeSensor("']}\n")
+  senderDonneeSensor("'],[")
+  senderDonneeSensor(crc)
+  senderDonneeSensor("]}\n")
 
 @register('scan_i2c', False)
 def scan_i2c(addr = None):
