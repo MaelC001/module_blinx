@@ -123,28 +123,39 @@ The syntax :
 Example :
 
 ```python
+# use the usb connection, get the data from the sensors : toto and bob, for the time '1s' :
 readFile('blinx://usb/toto/bob/1s')
+# use the usb connection, get the data from the sensors : toto, for the time '10s' :
 readFile('blinx://usb/toto/10s')
+# use the wifi connection (with the ip), get the data from the sensors : toto, for the time '10s' :
 readFile('blinx://192.168.0.100/toto/10s')
+# use the wifi connection (with the hostname : 'blinx' [the mdns protocol]),
+# get the data from the sensors : toto and bob, for the time '10m' :
 readFile('blinx://blinx.local/toto/bob/10m')
 
+# use the usb connection, modify the output sensors : toto, modify the value by '0' :
 writeFile('blinx://usb/sensors_output/toto', '0')
+# use the wifi connection (with the ip), modify the output sensors : bob, modify the value by [0,2,7,14,5] :
 writeFile('blinx://192.168.0.101/sensors_output/bob', '0,2,7,14,5')
-writeFile('blinx://blinx.local/display/toto', 'text,Hello Word,1,1,0')
-writeFile('blinx://blinx.local/display/toto', 'show')
+# use the wifi connection (with the hostname : 'blinxNmb43' [the mdns protocol]),
+# modify the display : toto, for modify use the function 'text', with args : ['Hello Word',1,1,0] :
+writeFile('blinx://blinxNmb43.local/display/toto', 'text,Hello Word,1,1,0')
+# use the wifi connection (with the hostname : 'blinxNmb43' [the mdns protocol]),
+# modify the display : toto, for modify use the function 'show', without args :
+writeFile('blinx://blinxNmb43.local/display/toto', 'show')
 ```
 
 # config page in codeboot :
 
 Action you can do in the config page :
 
-- see the wifi information of the micro-controller :
+1. see the wifi information of the micro-controller :
     - if connected
     - ip
     - hostname
     - ssid
-- config the wifi : give the ssid and password of the wifi
-- config the sensor of the micro-controller
+2. config the wifi : give the ssid and password of the wifi
+3. config the sensor of the micro-controller
 
 When the config page is open, it will see if the page is connected to a micro-controller by usb. If it is not the case, it will try to connect. If success, it will ask the wifi info to the micro-controller
 
@@ -284,10 +295,10 @@ When the config page is open, it will see if the page is connected to a micro-co
 - Blinx :
 - Sensor :
 - Channel :
-  - DigitalChannel :
-  - AnalogChannel :
-  - I2CChannel :
-  - functionChannel :
+  - DigitalChannel
+  - AnalogChannel
+  - I2CChannel
+  - functionChannel
 - Buffer :
   - CircularBuffer :
 - sensors_create_dict :
@@ -313,4 +324,15 @@ When the config page is open, it will see if the page is connected to a micro-co
 ## wifiManager :
 - the connect to wifi, using a web interface
 
+
+
 # code of codeboot, config blinx page :
+- index
+- api_serial
+- save
+- scan
+- select
+- setPage
+- template
+
+
