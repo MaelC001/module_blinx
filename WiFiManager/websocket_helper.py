@@ -223,4 +223,4 @@ def read_input_rpc(client = None, status_code = 202, method = '', params = [], i
         'params': params,
         'id': id,
     }
-    decode_input(j, how_send = sender_to_html)
+    decode_input(j, how_send = sender_to_html, how_send_data = sender_to_html)
