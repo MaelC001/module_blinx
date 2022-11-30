@@ -27,6 +27,9 @@ read_input = None
 decode_input = None
 
 def read_socket(sock):
+    """
+    read the resquest form the socket
+    """
     get_path = ''
     get_args = {}
 
@@ -58,7 +61,7 @@ def read_socket(sock):
         h, v = [x.strip() for x in l.split(b":", 1)]
         if DEBUG:
             print((h, v))
-        if h == b"Sec-WebSocket-Key":
+        if h == b"Sec-WebSocket-Key": # is it a ws/wss requests ?
             webkey = v
 
     return webkey, get_path, get_args
@@ -67,7 +70,9 @@ def read_socket(sock):
 def server_handshake(sock, accept_webrepl = True, only_webrepl = False):
     webkey, get_path, get_args = read_socket(sock)
 
-    print(webkey, get_path, accept_webrepl, webkey and get_path == 'webrepl' and accept_webrepl)
+    if DEBUG:
+        print(webkey, get_path, accept_webrepl, webkey and get_path == 'webrepl' and accept_webrepl)
+
     if only_webrepl and not webkey:
         raise OSError("Not a websocket request")
 
@@ -76,7 +81,7 @@ def server_handshake(sock, accept_webrepl = True, only_webrepl = False):
             print('websocket')
         webrepl_handler(sock, webkey)
         return True
-    elif not webkey:
+    elif not webkey: # if not the webkey, than it is not a ws/wss requests but a html one
         if DEBUG:
             print('html')
         http_handler(sock, get_path, get_args)
@@ -115,7 +120,9 @@ Sec-WebSocket-Accept: """
     uos.dupterm(ws)
 
 def http_handler(client, get_path, get_args):
+    # the different path the user can use
     action = ['', 'codeboot', 'wifi_manager', 'configure', 'blinx']
+    # the '' is for the root, if connected to wifi it will show the codeboot page, else it will show the wifi manager
 
     html = '<p>error 404, path not find</p>'
     status_code = 404
@@ -172,6 +179,7 @@ def wifi_connect(client, get_args):
         send_response_html(client,"Parameters not found",status_code=400)
         return False
 
+    # get the post argument
     try:
         ssid=get_args['ssid'].decode("utf-8").replace("%3F","?").replace("%21","!")
         password=get_args['password'].decode("utf-8").replace("%3F","?").replace("%21","!")

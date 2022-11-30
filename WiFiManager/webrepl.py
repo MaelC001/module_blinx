@@ -8,10 +8,13 @@ import _webrepl
 listen_s = None
 client_s = None
 
+# the read input function for read the input frome the rpc wifi
 read_input = None
 
 websocket_helper._webrepl = _webrepl
 websocket_helper.socket = socket
+
+# accept the webrepl of micropython
 accept_webrepl = None
 only_webrepl = None
 
