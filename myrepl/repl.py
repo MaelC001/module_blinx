@@ -508,6 +508,8 @@ def get_sensors(list_sensors, times = '1s', notAll = True):
   """
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
+  the notAll is for : do we want to have the all message, or to send it piece-by-piece
+  each time we get a new data, we add it to the crc, we send it at the end
   """
   crc = 0
 
