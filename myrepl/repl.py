@@ -17,7 +17,8 @@ except:
 import sys, json, io
 
 from machine import Pin, I2C, SoftI2C, ADC, PWM, UART
-import blinxSensor, sensors, network
+import network
+import blinxSensor, sensors
 from ota_updater import OTAUpdater
 import webServer
 import binascii
@@ -30,7 +31,7 @@ Blinx = blinxSensor.Blinx({}, None)
 # connection to i2c
 #i2c = I2C(sda = Pin(4), scl = Pin(5))
 #i2c = I2C(sda = Pin(5), scl = Pin(6))
-i2c = SoftI2C(sda = Pin(5), scl = Pin(6))
+i2c = SoftI2C(freq=400000, scl=Pin(19, pull=Pin.PULL_UP), sda=Pin(18, pull=Pin.PULL_UP)) # SoftI2C(sda = Pin(5), scl = Pin(6))
 
 
 # the loop async
@@ -47,6 +48,10 @@ wlan_ap.active(False)
 
 # the ota updater
 otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'main', secrets_file = '__config.json')
+
+baud_rate = 9600
+uart = UART(0, baudrate=baud_rate, tx=10, rx=9)  # UART(0, baud_rate)
+uart.init(baudrate = baud_rate, rxbuf = 200)
 
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
@@ -87,25 +92,26 @@ def register(name, sub_function = False):
 def sender(text):
   """send message to serial port in json"""
   if isinstance(text, dict) or isinstance(text, list):
-    sys.stdout.write(json.dumps(text))
-    sys.stdout.write('\n')
+    #sys.stdout.write(json.dumps(text))
+    uart.write(json.dumps(text))
+    uart.write('\n')
     return
-  sys.stdout.write(text)
-  sys.stdout.write('\n')
+  uart.write(text)
+  uart.write('\n')
 
 def senderDonneeSensor(donne):
   """send message to serial port in json"""
   if isinstance(donne, dict) or isinstance(donne, list):
-    sys.stdout.write(json.dumps(donne))
+    uart.write(json.dumps(donne))
     return
-  sys.stdout.write(donne)
+  uart.write(donne)
 
 async def receiver():
   """
     receive information by the serial port in json
     and execute the function with the given argument
   """
-  sreader = asyncio.StreamReader(sys.stdin)
+  sreader = asyncio.StreamReader(uart) # sys.stdin)
   while True:
     # wait for the input
     data = await sreader.readline()
@@ -628,8 +634,8 @@ def launch(site = False):
   if site:
     webServer.websocket_helper.decode_input = decode_input
     webServer.start()
-  #os.dupterm(uart, 0)
-  #os.dupterm(None, 0)
+  os.dupterm(uart, 0)
+  os.dupterm(None, 0)
   loop = asyncio.get_event_loop()
   loop.create_task(receiver())
   loop.create_task(save_all_sensor())
