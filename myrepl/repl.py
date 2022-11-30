@@ -116,9 +116,9 @@ async def receiver():
     # wait for the input
     data = await sreader.readline()
     # read the input
-    decode_input(data, send = True, debug = True)
+    decode_input(data, send = True, how_send_data = None, debug = True)
 
-def decode_input(input, send = True, how_send = sender, printMessage = False, debug = False):
+def decode_input(input, send = True, how_send = sender, how_send_data = senderDonneeSensor, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -154,9 +154,9 @@ def decode_input(input, send = True, how_send = sender, printMessage = False, de
       how_send(j)
     return
 
-  read_input(j, send, how_send, printMessage, debug)
+  read_input(j, send, how_send, how_send_data, printMessage, debug)
 
-def read_input(j, send = True, how_send = sender, printMessage = False, debug = False):
+def read_input(j, send = True, how_send = sender, how_send_data = senderDonneeSensor, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -203,8 +203,11 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
         elif printMessage:
           #print(reply)
           pass
-        if send and cmd != 'get_sensors':
-          how_send(reply)
+        if send:
+          if cmd != 'get_sensors':
+            how_send(reply)
+          elif how_send_data != None:
+            how_send_data(reply)
       elif isinstance(args, dict):
         reply = __register[cmd](id = id, **args)
         if debug:
@@ -213,8 +216,11 @@ def read_input(j, send = True, how_send = sender, printMessage = False, debug = 
         elif printMessage:
           #print(reply)
           pass
-        if send and cmd != 'get_sensors':
-          how_send(reply)
+        if send:
+          if cmd != 'get_sensors':
+            how_send(reply)
+          elif how_send_data != None:
+            how_send_data(reply)
       else :
         # if the args is not a list or a dict we have a error
         j = {
@@ -487,20 +493,31 @@ def display_sensors(sensor_name, func_name, array_value): #*array_value):
   return Blinx.display_sensors[sensor_name]['sensor'].function(func_name, *array_value)
 
 @register('get_sensors', False)
-def get_sensors(list_sensors, times = '1s'):
+def get_sensors(list_sensors, times = '1s', notAll = True):
   """
   get the data form the sensors in the list
   if the time is 0s, we want the data form now
   """
   crc = 0
-  senderDonneeSensor("{'id':0,'result':[")
+
+  if notAll:
+    senderDonneeSensor("{'id':0,'result':[")
+  else :
+    j = {'id':0, 'result':[]}
+
   present_ticks = time.ticks_ms()
   time_before = present_ticks - present_ticks % 100
 
   text, name_sensors, function_sensors = verification_list_sensor(list_sensors)
-  senderDonneeSensor(name_sensors)
-  senderDonneeSensor(",['")
-  senderDonneeSensor(text)
+
+  if notAll:
+    senderDonneeSensor(name_sensors)
+    senderDonneeSensor(",['")
+    senderDonneeSensor(text)
+  else :
+    j['result'].append(name_sensors)
+    j['result'].append([])
+    textAll = text
 
   blinxSensor.buffer = True
 
@@ -511,7 +528,13 @@ def get_sensors(list_sensors, times = '1s'):
       time_before = save_sensor_while_request(time_before)
       sensor_info = sensors.__list_sensors[name_sensors[i]]['immediate'](i2c, function_sensors[name_sensors[i]].pin_sensor)
       text += ';' + str(sensor_info)
-    senderDonneeSensor(text)
+
+    if notAll:
+      senderDonneeSensor("','")
+      senderDonneeSensor(text)
+    else :
+      j['result'][1].append(text)
+
     crc = binascii.crc32(bytes(text,'utf-8'))
   else :
     # capture all the data from each sensor the user want the data
@@ -524,7 +547,12 @@ def get_sensors(list_sensors, times = '1s'):
       #text_time_stamp = ''
       #time_data_sensor = 0
       dateShow = True
-      senderDonneeSensor("','")
+      if notAll:
+        senderDonneeSensor("','")
+      else :
+        j['result'][1].append(textAll)
+        textAll = ""
+
       for i in range(len(function_sensors)):
         func = function_sensors[i]
         time_before = save_sensor_while_request(time_before)
@@ -540,12 +568,25 @@ def get_sensors(list_sensors, times = '1s'):
             data_sensor, time_data_sensor = y
             #text_time_stamp += ';' + str(data_sensor)
           if dateShow:
-            senderDonneeSensor(time_data_sensor)
+            if notAll:
+              senderDonneeSensor(time_data_sensor)
+            else :
+              textAll += time_data_sensor
             crc = binascii.crc32(bytes(str(time_data_sensor),'utf-8'), crc)
             dateShow = False
-          senderDonneeSensor(';')
+          
+          if notAll:
+            senderDonneeSensor(';')
+          else :
+            textAll += ';'
+          
           crc = binascii.crc32(bytes(';','utf-8'), crc)
-          senderDonneeSensor(data_sensor)
+          
+          if notAll:
+            senderDonneeSensor(data_sensor)
+          else :
+            textAll += data_sensor
+          
           crc = binascii.crc32(data_sensor, crc)
         else:
           continue
@@ -556,9 +597,16 @@ def get_sensors(list_sensors, times = '1s'):
       break
   blinxSensor.buffer = False
   Blinx.buffer_to_log()
-  senderDonneeSensor("'],[")
-  senderDonneeSensor(crc)
-  senderDonneeSensor("]}\n")
+  if notAll:
+    senderDonneeSensor("'],[")
+    senderDonneeSensor(crc)
+    senderDonneeSensor("]}\n")
+    return ""
+  else :
+    if textAll != "":
+      j['result'][1].append(textAll)
+    j['result'].append(crc)
+    return j
 
 @register('scan_i2c', False)
 def scan_i2c(addr = None):
