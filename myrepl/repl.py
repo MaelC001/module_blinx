@@ -5,6 +5,7 @@ except:
 
 
 
+# librairy from micropython :
 try:
   import uos as os
 except:
@@ -15,13 +16,16 @@ except:
   import asyncio
 
 import sys, json, io
-
+import network, binascii
 from machine import Pin, I2C, SoftI2C, ADC, PWM, UART
-import network
+
+# my librairy form the rpc :
 import blinxSensor, sensors
+# librairy form the ota updater
 from ota_updater import OTAUpdater
+# librairy for the web server/rpc wifi
 import webServer
-import binascii
+
 
 blinxSensor.sensors = sensors
 
@@ -49,6 +53,7 @@ wlan_ap.active(False)
 # the ota updater
 otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'main', secrets_file = '__config.json')
 
+# connection with the UART
 baud_rate = 9600
 uart = UART(0, baudrate=baud_rate, tx=10, rx=9)  # UART(0, baud_rate)
 uart.init(baudrate = baud_rate, rxbuf = 200)
@@ -204,6 +209,9 @@ def read_input(j, send = True, how_send = sender, how_send_data = senderDonneeSe
           #print(reply)
           pass
         if send:
+          # if we don't want to get the data form the sensor then we send the reply normally
+          # else we will send the data piece by piece in the function, so we have nothing to send
+          # except if the request come from the rpc wifi, then we have to send it all the reply at once
           if cmd != 'get_sensors':
             how_send(reply)
           elif how_send_data != None:
@@ -217,6 +225,9 @@ def read_input(j, send = True, how_send = sender, how_send_data = senderDonneeSe
           #print(reply)
           pass
         if send:
+          # if we don't want to get the data form the sensor then we send the reply normally
+          # else we will send the data piece by piece in the function, so we have nothing to send
+          # except if the request come from the rpc wifi, then we have to send it all the reply at once
           if cmd != 'get_sensors':
             how_send(reply)
           elif how_send_data != None:
