@@ -64,12 +64,6 @@ def accept_conn(listen_sock):
         uos.dupterm(None)
         websocket_helper.uos = uos
 
-def wifi_manager_handler():
-    pass
-def codeboot_handler():
-    pass
-
-
 
 def stop():
     global listen_s, client_s
