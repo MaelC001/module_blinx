@@ -218,6 +218,23 @@ def read_input_rpc(client = None, status_code = 202, method = '', params = [], i
         else :
             text += '\n'
             send_response_html(client, text, status_code = status_code)
+
+    # when we get the arguments they are strings, so we must modify their type
+    params = json.loads(params)
+    id = int(id)
+
+    # if it is the 'get_sensors' method who is call, we don't want pice by piece, we want the all message, so we add a params
+    if method == 'get_sensors':
+        if isinstance(params,dict):
+            params['notAll'] = False
+        elif isinstance(params,list):
+            if len(params) == 1:
+                params.append('1s')
+                params.append(False)
+            elif len(params) == 2:
+                params.append(False)
+            elif len(params) >= 3:
+                params.inset(2, False)
     j = {
         'method': method,
         'params': params,
