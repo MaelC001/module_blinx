@@ -237,10 +237,10 @@ class Channel():
             p3 = channel['p3']
             freq = sensors.__list_sensors[sensor_type]['args']['freq']
             temp = {
-                'pin' : pin, 
-                'p1' : p1, 
-                'p2' : p2, 
-                'p3' : p3, 
+                'pin' : pin,
+                'p1' : p1,
+                'p2' : p2,
+                'p3' : p3,
             }
             return AnalogChannel(pin, p1, p2, p3, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id = id, input = input), temp
         elif channel['type'] == "Digital":
