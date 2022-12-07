@@ -54,9 +54,9 @@ wlan_ap.active(False)
 otaUpdater = OTAUpdater('https://github.com/MaelC001/micropython', github_src_dir = 'src', main_dir = 'main', secrets_file = '__config.json')
 
 # connection with the UART
-baud_rate = 9600
+baud_rate = 76800
 uart = UART(0, baudrate=baud_rate, tx=10, rx=9)  # UART(0, baud_rate)
-uart.init(baudrate = baud_rate, rxbuf = 200)
+uart.init(baudrate = baud_rate)#, rxbuf = 200)
 
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
