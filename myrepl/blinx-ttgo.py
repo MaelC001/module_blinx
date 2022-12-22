@@ -23,6 +23,8 @@ from machine import Pin, I2C, SoftI2C, ADC, PWM, UART
 # from ota_updater import OTAUpdater
 # librairy for the web server/rpc wifi
 # import webServer
+# librairy for bluetooth
+import ble_uart_peripheral
 # librairy for the screen
 from st7789 import ST7789
 
@@ -462,24 +464,27 @@ def verification(value, type_value, possible = [], in_possible = True):
     message = f"{value} don't have a correct value"
     raise TypeError(message)
 
-def launch(site = False):
+def launch(site = False, blue=False):
     p1 = Pin(0, Pin.IN)
     p2 = Pin(35, Pin.IN)
     p1V = p1.value()
     p2V = p2.value()
     if p1V == 0 and p2V == 0:
-        launchBlinx(site = False)
+        launchBlinx(site, blue)
     elif p1V == 0:
-        launchBlinx(site = False)
+        launchBlinx(site, blue)
     elif p2V == 0:
-        launchBlinx(site = False)
+        launchBlinx(site, blue)
     else:
         launchCode()
 
-def launchBlinx(site = False):
+def launchBlinx(site = False, blue=False):
   if site:
     webServer.websocket_helper.decode_input = decode_input
     webServer.start()
+  if blue:
+    ble_uart_peripheral.decode_input = decode_input
+    ble_uart_peripheral.demo()
   os.dupterm(uart, 0)
   os.dupterm(None, 0)
   loop = asyncio.get_event_loop()
@@ -488,7 +493,7 @@ def launchBlinx(site = False):
   loop.run_forever()
 
 def launchCode():
-    import codeTTGO
+    import mainTTGO
 
 
 """

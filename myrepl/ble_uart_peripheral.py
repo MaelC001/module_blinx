@@ -90,10 +90,11 @@ class BLEUART:
 
 uart = None
 decode_input = None
+import json
 
 def demo():
-    print('c')
-    import time
+    #print('c')
+    #import time
     #import binascii
     global uart
 
@@ -106,9 +107,9 @@ def demo():
     def on_rx():
         a = uart.read()
         read_input_rpc(a)
-        b = a.decode()
-        c = b.strip()
-        print("rx: ", c)
+        #b = a.decode()
+        #c = b.strip()
+        #print("rx: ", c)
         #uart.write("reponse : " + c)
 
 
@@ -126,8 +127,6 @@ def demo():
 
     #uart.close()
 
-import json
-
 def read_input_rpc(text):
     """
         the rpc via wifi
@@ -139,8 +138,3 @@ def read_input_rpc(text):
         uart.write('\n')
     decode_input(text, how_send = sender_uart)
 
-print('a')
-if __name__ == "__main__":
-    print('b')
-    demo()
-    print('d')
