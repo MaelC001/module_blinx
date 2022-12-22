@@ -113,18 +113,18 @@ def demo():
 
 
     uart.irq(handler=on_rx)
-    nums = [4, 8, 15, 16, 23, 42]
-    i = 0
+    #nums = [4, 8, 15, 16, 23, 42]
+    #i = 0
 
-    try:
-        while True:
-            uart.write(str(nums[i]) + "\n")
-            i = (i + 1) % len(nums)
-            time.sleep_ms(1000)
-    except KeyboardInterrupt:
-        pass
+    #try:
+    #    while True:
+    #        uart.write(str(nums[i]) + "\n")
+    #        i = (i + 1) % len(nums)
+    #        time.sleep_ms(1000)
+    #except KeyboardInterrupt:
+    #    pass
 
-    uart.close()
+    #uart.close()
 
 import json
 
