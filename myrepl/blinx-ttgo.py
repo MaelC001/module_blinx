@@ -52,6 +52,10 @@ baud_rate = 76800
 uart = UART(0, baudrate=baud_rate, tx=10, rx=9)  # UART(0, baud_rate)
 uart.init(baudrate = baud_rate)#, rxbuf = 200)
 
+if 'app' not in os.listdir():
+    os.mkdir('app')
+sys.path.append('/app')
+
 # class for capture the stdout when `exec`
 class DUP(io.IOBase):
   def __init__(self):
@@ -429,23 +433,23 @@ def display_sensors(func_name, array_value): #*array_value):
       raise ValueError('not the good type of value')
   return ''
 
+@register('removeCode', False)
+def remove_code(): #*array_value):
+    for i in os.listdir('app'):
+        os.remove('app/'+i)
+    return 'Done'
+
+
 @register('updateCode', False)
-def change_code(string, mpy=False): #*array_value):
-    name = 'codeTTGO.py'
-    if name in os.lisdir():
-        os.remove(name)
-    
-    if mpy:
-        name = 'codeTTGO.mpy'
-        if name in os.lisdir():
-            os.remove(name)
-    f = open(name, 'w')
+def change_code(string, name): #*array_value):
+    f = open('app/'+name, 'w')
     f.write(string)
     f.close()
+    return 'Done'
 
 @register('runCode', False)
 def runCode(): #*array_value):
-    import codeTTGO
+    import mainCode
 
 def verification(value, type_value, possible = [], in_possible = True):
   """
