@@ -88,25 +88,29 @@ class BLEUART:
     def _advertise(self, interval_us=500000):
         self._ble.gap_advertise(interval_us, adv_data=self._payload)
 
+uart = None
+decode_input = None
 
 def demo():
     print('c')
     import time
-    import binascii
+    #import binascii
+    global uart
 
     ble = bluetooth.BLE()
     uart = BLEUART(ble)
-    m = ble.config('mac')
-    print(m)
-    print(binascii.hexlify(m[1]))
+    #m = ble.config('mac')
+    #print(m)
+    #print(binascii.hexlify(m[1]))
 
     def on_rx():
         a = uart.read()
+        read_input_rpc(a)
         b = a.decode()
         c = b.strip()
         print("rx: ", c)
-        uart.write("reponse : " + c)
-        
+        #uart.write("reponse : " + c)
+
 
     uart.irq(handler=on_rx)
     nums = [4, 8, 15, 16, 23, 42]
@@ -121,6 +125,19 @@ def demo():
         pass
 
     uart.close()
+
+import json
+
+def read_input_rpc(text):
+    """
+        the rpc via wifi
+    """
+    def sender_uart(text):
+        if isinstance(text, dict):
+            text = json.dumps(text)
+        uart.write(text)
+        uart.write('\n')
+    decode_input(text, how_send = sender_uart)
 
 print('a')
 if __name__ == "__main__":

@@ -115,9 +115,9 @@ async def receiver():
     # wait for the input
     data = await sreader.readline()
     # read the input
-    decode_input(data, send = True, how_send_data = None, debug = True)
+    decode_input(data, send = True, debug = True)
 
-def decode_input(input, send = True, how_send = sender, how_send_data = senderDonneeSensor, printMessage = False, debug = False):
+def decode_input(input, send = True, how_send = sender, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -153,9 +153,9 @@ def decode_input(input, send = True, how_send = sender, how_send_data = senderDo
       how_send(j)
     return
 
-  read_input(j, send, how_send, how_send_data, printMessage, debug)
+  read_input(j, send, how_send, printMessage, debug)
 
-def read_input(j, send = True, how_send = sender, how_send_data = senderDonneeSensor, printMessage = False, debug = False):
+def read_input(j, send = True, how_send = sender, printMessage = False, debug = False):
   """we will read the input and try to decode it, then we will try to execute it.
 
   Args:
@@ -206,10 +206,7 @@ def read_input(j, send = True, how_send = sender, how_send_data = senderDonneeSe
           # if we don't want to get the data form the sensor then we send the reply normally
           # else we will send the data piece by piece in the function, so we have nothing to send
           # except if the request come from the rpc wifi, then we have to send it all the reply at once
-          if cmd != 'get_sensors':
-            how_send(reply)
-          elif how_send_data != None:
-            how_send_data(reply)
+          how_send(reply)
       elif isinstance(args, dict):
         reply = __register[cmd](id = id, **args)
         if debug:
@@ -222,10 +219,7 @@ def read_input(j, send = True, how_send = sender, how_send_data = senderDonneeSe
           # if we don't want to get the data form the sensor then we send the reply normally
           # else we will send the data piece by piece in the function, so we have nothing to send
           # except if the request come from the rpc wifi, then we have to send it all the reply at once
-          if cmd != 'get_sensors':
-            how_send(reply)
-          elif how_send_data != None:
-            how_send_data(reply)
+          how_send(reply)
       else :
         # if the args is not a list or a dict we have a error
         j = {
