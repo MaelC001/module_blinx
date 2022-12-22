@@ -25,6 +25,8 @@ import blinxSensor, sensors
 from ota_updater import OTAUpdater
 # librairy for the web server/rpc wifi
 import webServer
+# librairy for the bluetooth
+import ble_uart_peripheral
 
 
 blinxSensor.sensors = sensors
@@ -691,10 +693,13 @@ async def save_all_sensor():
     if diffTime > 0:
       await asyncio.sleep_ms(diffTime)
 
-def launch(site = False):
+def launch(site = False, blue=False):
   if site:
     webServer.websocket_helper.decode_input = decode_input
     webServer.start()
+  if blue:
+    ble_uart_peripheral.decode_input = decode_input
+    ble_uart_peripheral.demo()
   os.dupterm(uart, 0)
   os.dupterm(None, 0)
   loop = asyncio.get_event_loop()

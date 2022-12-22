@@ -136,5 +136,5 @@ def read_input_rpc(text):
             text = json.dumps(text)
         uart.write(text)
         uart.write('\n')
-    decode_input(text, how_send = sender_uart)
+    decode_input(text, how_send = sender_uart, how_send_data = sender_uart)
 
