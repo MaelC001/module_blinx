@@ -90,13 +90,23 @@ class BLEUART:
 
 
 def demo():
+    print('c')
     import time
+    import binascii
 
     ble = bluetooth.BLE()
     uart = BLEUART(ble)
+    m = ble.config('mac')
+    print(m)
+    print(binascii.hexlify(m[1]))
 
     def on_rx():
-        print("rx: ", uart.read().decode().strip())
+        a = uart.read()
+        b = a.decode()
+        c = b.strip()
+        print("rx: ", c)
+        uart.write("reponse : " + c)
+        
 
     uart.irq(handler=on_rx)
     nums = [4, 8, 15, 16, 23, 42]
@@ -112,6 +122,8 @@ def demo():
 
     uart.close()
 
-
+print('a')
 if __name__ == "__main__":
+    print('b')
     demo()
+    print('d')
