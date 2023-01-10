@@ -479,7 +479,7 @@ def output_sensors(sensor_name, array_value):
       sensor_name (str): the name of the output sensor we want to change
       array_value (list): the data to write for each channel
   """
-  verification(sensor_name, str, Blinx.output_sensors)
+  verification(sensor_name, str, Blinx.sensors)
   array_value_format = []
   for i in array_value:
     if isinstance(i, str):
@@ -490,7 +490,7 @@ def output_sensors(sensor_name, array_value):
         array_value_format.append(t)
     else:
       array_value_format.append(i)
-  Blinx.output_sensors[sensor_name]['sensor'].write(array_value_format)
+  Blinx.sensors[sensor_name]['sensor'].write(array_value_format)
   return 'Done'
 
 @register('display', False)
@@ -659,12 +659,12 @@ def verification_list_sensor(list_sensors):
   name_sensors = []
   function_sensors = []
   for sensor in list_sensors:
-    verification(sensor, str, Blinx.input_sensors)
+    verification(sensor, str, Blinx.sensors)
     text += ';' + sensor
-    name = Blinx.input_sensors[sensor]['name']
-    for i in Blinx.input_sensors[sensor]['sensor'].channels:
+    name = Blinx.sensors[sensor]['name']
+    for i in Blinx.sensors[sensor]['sensor'].channels:
       name_sensors.append(name+'-'+str(i.id))
-    function_sensors.append(Blinx.input_sensors[sensor]['sensor'])
+    function_sensors.append(Blinx.sensors[sensor]['sensor'])
   return text, name_sensors, function_sensors
 
 
