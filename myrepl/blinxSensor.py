@@ -30,7 +30,6 @@ class Blinx():
         for sensor, config in configs.items():
             # get info for the sensors
             new_name = config['new_name']
-            is_input = config['is_input']
             is_display = config['is_display']
             port = config['port']
             pins = config['pins']
@@ -47,7 +46,7 @@ class Blinx():
                 self.display_sensors[new_name] = temp
             else:
                 channels = config['channels']
-                temp = {'name' : sensor, 'sensor' : Sensor(sensor, port, pins, channels,  input = is_input, i2c = i2c, min = min, max = max)}
+                temp = {'name' : sensor, 'sensor' : Sensor(sensor, port, pins, channels, i2c = i2c, min = min, max = max)}
                 self.sensors[new_name] = temp
 
     def save(self, time, input_sensor = True):
@@ -75,15 +74,13 @@ class Blinx():
 
 # Sensors
 class Sensor():
-    def __init__(self, sensor_type, port, pins, channels, input = True, error = b'\xff\xfe', i2c = None, min=-1, max=-1):
+    def __init__(self, sensor_type, port, pins, channels, error = b'\xff\xfe', i2c = None, min=-1, max=-1):
         # the type of sensor
         self.sensor_type = sensor_type
         # the error code
         self.error = error
         # number of byte for each data
         self.size = 2
-        # it is a input or output sensor
-        self.input = input
         # the i2c bus
         self.i2c = i2c
         # the list of the channel of each pin for the sensor
@@ -113,8 +110,8 @@ class Sensor():
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
             channel['pin'] = self.listPins[self.l]
+            t = Channel._configure(channel, self.sensor_type, self.i2c, self.pins[self.l]['read'])
             self.l += 1
-            t = Channel._configure(channel, self.sensor_type, self.i2c, self.input)
             self.channels.append(t[0])
             self.pin_sensor.append(t[1])
 
