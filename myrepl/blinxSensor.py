@@ -96,7 +96,7 @@ class Sensor():
 
         self.port = port
         self.pins = pins
-        self.listPins = listPins[self.port]
+        self.listPins = listPins[self.port] if self.port in [0,1] else []
         self.l = 0
     
         # create all the channel
@@ -109,7 +109,8 @@ class Sensor():
                 waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+str(channel['id'])]['waiting']
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
-            channel['pin'] = self.listPins[self.l]
+            if self.port in [0,1]:
+                channel['pin'] = self.listPins[self.l]
             t = Channel._configure(channel, self.sensor_type, self.i2c, self.pins[self.l]['read'])
             self.l += 1
             self.channels.append(t[0])
