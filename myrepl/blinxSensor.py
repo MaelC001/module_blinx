@@ -17,14 +17,14 @@ ticks_max = 2**30
 # c = b.channels[0]
 # d = c.dic['1s']['buffer']
 
+listPins = [ [2,3],[4,5]]
+
 class Blinx():
     def __init__(self, configs, i2c):
         # list of all the sensor
         #self.sensors = {}
-        # list of all the input sensor
-        self.input_sensors = {}
-        # list of all the output sensor
-        self.output_sensors = {}
+        # list of all the input/output sensor
+        self.sensors = {}
         # list of all the output sensor
         self.display_sensors = {}
         for sensor, config in configs.items():
@@ -32,57 +32,50 @@ class Blinx():
             new_name = config['new_name']
             is_input = config['is_input']
             is_display = config['is_display']
+            port = config['port']
+            pins = config['pins']
             min = config['min']
             max = config['max']
 
             if new_name == '':
                 new_name = sensor
 
-            # create the sensor
+            # create and stock the sensor
             if is_display:
                 config = config['config']
                 temp = {'name' : sensor, 'sensor' : sensors.__list_sensors[sensor]['create'](i2c, *config)}
-            else:
-                channels = config['channels']
-                temp = {'name' : sensor, 'sensor' : Sensor(sensor, channels,  input = is_input, i2c = i2c, min = min, max = max)}
-
-            #self.sensors[new_name] = temp
-
-            # stock the sensor
-            if is_input :
-                self.input_sensors[new_name] = temp
-            elif is_display :
                 self.display_sensors[new_name] = temp
             else:
-                self.output_sensors[new_name] = temp
+                channels = config['channels']
+                temp = {'name' : sensor, 'sensor' : Sensor(sensor, port, pins, channels,  input = is_input, i2c = i2c, min = min, max = max)}
+                self.sensors[new_name] = temp
 
     def save(self, time, input_sensor = True):
         # save the reply of all the sensor
-        dic = self.input_sensors
-        for i in dic.values():
+        for i in self.sensors.values():
             i['sensor'].save(time)
 
     def get_index(self, time, index, translate = True):
         # get the data from a index for all the sensor
         result = []
-        for i in self.input_sensors.values():
+        for i in self.sensors.values():
             result.append(i['sensor'].get_index(time, index, translate = translate))
         return result
 
     def get_time_buffer(self, time):
         # current time of the buffer
-        temp = next(iter(self.input_sensors.keys()))
-        return self.input_sensors[temp]['sensor'].get_time_buffer(time)
+        temp = next(iter(self.sensors.keys()))
+        return self.sensors[temp]['sensor'].get_time_buffer(time)
 
     def buffer_to_log(self):
         # move the buffer to the log
-        for i in self.input_sensors.values():
+        for i in self.sensors.values():
             i['sensor'].buffer_to_log()
 
 
 # Sensors
 class Sensor():
-    def __init__(self, sensor_type, channels, input = True, error = b'\xff\xfe', i2c = None, min=-1, max=-1):
+    def __init__(self, sensor_type, port, pins, channels, input = True, error = b'\xff\xfe', i2c = None, min=-1, max=-1):
         # the type of sensor
         self.sensor_type = sensor_type
         # the error code
@@ -103,6 +96,12 @@ class Sensor():
         self.min = min
         self.max = max
         self.diff_min_max = self.max - self.min
+
+        self.port = port
+        self.pins = pins
+        self.listPins = listPins[self.port]
+        self.l = 0
+    
         # create all the channel
         self._create_channels(channels)
 
@@ -113,19 +112,23 @@ class Sensor():
                 waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+str(channel['id'])]['waiting']
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
+            channel['pin'] = self.listPins[self.l]
+            self.l += 1
             t = Channel._configure(channel, self.sensor_type, self.i2c, self.input)
             self.channels.append(t[0])
             self.pin_sensor.append(t[1])
 
     def read(self):
         temp = []
-        for i in self.channels:
-            temp.append(i.read())
+        for i in range(self.l):
+            if self.pins[i]['read'] == True:
+                temp.append(self.channels[i].read())
         return temp
 
     def write(self, array_value):
-        for i in range(len(self.channels)):
-            self.channels[i].write(array_value[i])
+        for i in range(len(self.l)):
+            if self.pins[i]['write'] == True and array_value[i] != None:
+                self.channels[i].write(array_value[i])
 
     def save(self, time):
         # save the reply of the sensor
@@ -232,17 +235,11 @@ class Channel():
             function_data = sensors.__list_sensors[sensor_type]['data'+str(id)]['func']
 
             pin = channel['pin']
-            p1 = channel['p1']
-            p2 = channel['p2']
-            p3 = channel['p3']
             freq = sensors.__list_sensors[sensor_type]['args']['freq']
             temp = {
                 'pin' : pin,
-                'p1' : p1,
-                'p2' : p2,
-                'p3' : p3,
             }
-            return AnalogChannel(pin, p1, p2, p3, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id = id, input = input), temp
+            return AnalogChannel(pin, name = sensor_type, translation_byte_function = function_byte, translation_data_function = function_data, freq = freq, id = id, input = input), temp
         elif channel['type'] == "Digital":
             id = channel['id']
             pin = channel['pin']
@@ -370,26 +367,19 @@ class DigitalChannel(Channel):
         self.pin.value(value)
 
 class AnalogChannel(Channel):
-    def __init__(self, pin, p1, p2, p3, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, freq = 1000, id = '', input = True):
+    def __init__(self, pin, name, error = b'\xff\xfe', translation_byte_function = lambda x, y, z : x, translation_data_function = lambda x:x, freq = 1000, id = '', input = True):
         # here we don't have a specific transformation to do to the sensor data, so we will return the data
         # but, some sensors may have some transformations to do
 
         # the pin for the output
-        self.pin = Pin(pin, Pin.OUT)
-        self.pwm = PWM(pin)
+        self.pin = pin
+        self.Pin = Pin(pin, Pin.OUT)
+        self.pwm = PWM(self.Pin)
         self.pwm.freq(freq)
-
-        # the pin for the input
-        self.p1 = p1
-        self.p2 = p2
-        self.p3 = p3
-
+    
         super().__init__(name = name, error = error, translation_byte_function = translation_byte_function, translation_data_function = translation_data_function, id = id, input = input)
     def read(self):
-        Pin(0, mode = Pin.OUT).value(self.p1)
-        Pin(2, mode = Pin.OUT).value(self.p2)
-        Pin(15, mode = Pin.OUT).value(self.p3)
-        return self.translation_byte_function(ADC(0).read(), self.error, self.old_data)
+        return self.translation_byte_function(ADC(self.pin).read(), self.error, self.old_data)
     def write(self, value):
         self.pwm.duty(value)
 
