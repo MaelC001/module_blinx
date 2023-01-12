@@ -17,7 +17,13 @@ ticks_max = 2**30
 # c = b.channels[0]
 # d = c.dic['1s']['buffer']
 
-listPins = [ [2,3],[4,5]]
+listPins = [
+    [2,3], # port 1 analog/digital
+    [4,5], # port 2 analog/digital
+    1,     # pin for led
+    1,     # pin for bottom 1
+    1,     # pin for bottom 2
+ ]
 
 class Blinx():
     def __init__(self, configs, i2c):
@@ -98,7 +104,10 @@ class Sensor():
         self.port = port
         self.pins = pins
         self.spliter = spliter
-        self.listPins = listPins[self.port] if self.port in [0,1] else []
+        self.sensorType1 = self.port in [0,1]
+        self.sensorType2 = self.port in range(2,len(listPins))
+        self.listPins = listPins[self.port] if (self.sensorType1 or self.sensorType2) else None
+
         self.l = 0
     
         # create all the channel
@@ -111,8 +120,10 @@ class Sensor():
                 waiting_time = sensors.__list_sensors[self.sensor_type]['byte'+str(channel['id'])]['waiting']
                 if self.waiting < waiting_time:
                     self.waiting = waiting_time
-            if self.port in [0,1]:
+            if self.sensorType1:
                 channel['pin'] = self.listPins[self.l+self.listPins]
+            elif self.sensorType2:
+                channel['pin'] = self.listPins
             t = Channel._configure(channel, self.sensor_type, self.i2c, self.pins[self.l]['read'])
             self.l += 1
             self.channels.append(t[0])
